@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const session = await requireAuth();
+    await requireAuth();
     const auth = await googleAuth("https://www.googleapis.com/auth/spreadsheets.readonly")
 
     const sheets = google.sheets({ version: "v4", auth });

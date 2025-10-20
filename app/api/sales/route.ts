@@ -13,7 +13,7 @@ type item = {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireAuth();
+    await requireAuth();
     
     const body = await req.json();
     const { details, items } = body; // items = [{ name, quantity, price, id }]
