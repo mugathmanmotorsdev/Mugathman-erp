@@ -85,7 +85,7 @@ export default function SalesPage() {
     }
     setMessage(`✅ ${data.message} (Transaction ID: ${data.transactionId})`);
     setCart([{ id: "", name: "", quantity: 1, price: 0 }]);
-    setCustomer({ name: "" });
+    setCustomer({ ...customer, name: "", phone: "" });
     setSalesPerson("");
     setPaymentMethod("");
     setRemark("");
