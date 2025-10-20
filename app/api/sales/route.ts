@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         item.quantity * item.price,
         details.paymentMethod,
         details.salesPerson,
+        details.remark,
       ]
     });
 
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
       totalPurchase
     ]]
 
+    //append salesRows to Sales sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
       range: "Sales!A:N",
@@ -62,12 +64,56 @@ export async function POST(req: NextRequest) {
       requestBody: { values: salesRows },
     });
 
+    //append customerRow to Customer sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
       range: "Customer!A:E",
       valueInputOption: "USER_ENTERED",
       requestBody: { values: customerRow },
     })
+
+    // Fetch inventory data
+    const inventoryData = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: "Inventory!A:F",
+    });
+    
+
+    const rows = inventoryData.data.values || [];
+    const data = rows.slice(1);
+
+    // Prepare batch updates for all sold products
+    const updates = [];
+   
+
+    for (const item of items) {
+      const idx = data.findIndex((r) => r[0] === item.id); // match Product_ID
+      if (idx === -1) continue;
+
+      const sheetRow = idx + 2; // +2 for header offset
+      const currentStock = Number(data[idx][2] || 0);
+      const newStock = currentStock - Number(item.quantity);
+      if (newStock < 0) {
+        throw new Error(`Insufficient stock for product: ${item.name}`);
+      }
+      const lastUpdated = new Date().toISOString();
+
+      updates.push({
+        range: `Inventory!C${sheetRow}:F${sheetRow}`,
+        values: [[newStock, , , lastUpdated]],
+      });
+    }
+
+    if (updates.length > 0) {
+      await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+        requestBody: {
+          valueInputOption: "USER_ENTERED",
+          data: updates,
+        },
+      });
+    }
+
 
     return NextResponse.json({
       success: true,

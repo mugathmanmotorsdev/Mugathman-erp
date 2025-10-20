@@ -41,6 +41,8 @@ export default function SalesPage() {
   const [message, setMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("")
   const [salesPerson, setSalesPerson] = useState("")
+  const [error, setError] = useState("")
+  const [remark, setRemark] = useState("")
 
   //fetch products
   useEffect(() => {
@@ -59,6 +61,9 @@ export default function SalesPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setMessage("")
+    setError("")
+
     e.preventDefault();
     const res = await fetch("/api/sales", {
       method: "POST",
@@ -67,13 +72,23 @@ export default function SalesPage() {
         details: {
           customer,
           salesPerson,
-          paymentMethod
-        }, 
-        items: cart 
+          paymentMethod,
+          remark
+        },
+        items: cart
       }),
     });
     const data = await res.json();
+    if (!data.success) {
+      setError(data.error || "Failed to submit sale");
+      return;
+    }
     setMessage(`✅ ${data.message} (Transaction ID: ${data.transactionId})`);
+    setCart([{ id: "", name: "", quantity: 1, price: 0 }]);
+    setCustomer({ name: "" });
+    setSalesPerson("");
+    setPaymentMethod("");
+    setRemark("");
   };
 
   return (
@@ -193,7 +208,11 @@ export default function SalesPage() {
           </div>
 
           <div className="my-5">
-            <Textarea placeholder="Enter a remark"></Textarea>
+            <Textarea 
+            placeholder="Enter a remark"
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
+            ></Textarea>
           </div>
           
 
@@ -212,7 +231,7 @@ export default function SalesPage() {
             Submit Sale
           </button>
         </form>
-
+        {error && <p className="mt-4 text-red-600">{error}</p>}
         {message && <p className="mt-4 text-green-600">{message}</p>}
       </div>
       <Footer />
