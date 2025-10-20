@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error(error);
-    return NextResponse.json({ success: false, error: error.message });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ success: false, error: message });
   }
 }

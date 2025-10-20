@@ -31,8 +31,9 @@ export async function GET() {
     }));
 
     return NextResponse.json({ success: true, data: inventory });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
-    return NextResponse.json({ success: false, error: error.message });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ success: false, error: message });
   }
 }
