@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       transactionId,
       message: "Sale submitted successfully!",
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ success: false, error: message });
