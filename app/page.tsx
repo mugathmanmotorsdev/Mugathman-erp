@@ -1,103 +1,221 @@
-import Image from "next/image";
+"use client";
+import Footer from "@/components/Footer";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/hooks/useauth";
+import { Trash } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+type item = {
+  id: string
+  name: string
+  quantity: number
+  price: number
+}
+
+type product = {
+  id: string
+  name: string
+  price: number
+  stock: number
+  category: string
+  lastupdated: string
+}
+
+type customer = {
+  name: string;
+  phone?: string;
+  email?: string;
+  address?: string
+}
+
+export default function SalesPage() {
+  //require auth here
+  useAuth()
+
+  const [products, setProducts] = useState<product[]>([])
+  const [cart, setCart] = useState<item[]>([{id: "", name: "", quantity: 1, price: 0}]);
+  const [customer, setCustomer] = useState<customer>({ name: "" });
+  const [message, setMessage] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("")
+  const [salesPerson, setSalesPerson] = useState("")
+
+  //fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await fetch("/api/inventory")
+      const data = await res.json()
+
+      setProducts(data.data || [])
+    }
+
+    fetchProducts()
+  }, [])
+
+  const addProduct = () => {
+    setCart([...cart, { id: "", name: "", quantity: 1, price: 0 }]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const res = await fetch("/api/sales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        details: {
+          customer,
+          salesPerson,
+          paymentMethod
+        }, 
+        items: cart 
+      }),
+    });
+    const data = await res.json();
+    setMessage(`✅ ${data.message} (Transaction ID: ${data.transactionId})`);
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="bg-gray-50">
+      <div className="p-6 max-w-4xl mx-auto min-h-screen bg-white">
+        <form action="#" onSubmit={handleSubmit} autoComplete="off" noValidate>
+          <h1 className="text-2xl font-bold mb-4">Sales Record</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Input
+            name="name"
+            type="text"
+            placeholder="Customer Name"
+            className="border p-2 w-full mb-3 rounded-md"
+            value={customer?.name}
+            onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+          />
+          <Input
+            name="phone_no"
+            type="text"
+            placeholder="Customer Phone No"
+            className="border p-2 w-full mb-3 rounded-md"
+            value={customer?.phone}
+            onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+          />
+          <Input
+            name="sales_person"
+            type="text"
+            placeholder="Sales person"
+            className="border p-2 w-full mb-3 rounded-md"
+            value={salesPerson}
+            onChange={(e) => setSalesPerson(e.target.value )}
+          />
+
+          <div>
+            <Select
+            onValueChange={(val) => {
+              setPaymentMethod(val)
+            }}
+            >
+              <SelectTrigger 
+              className="w-full my-5 py-5">
+                <SelectValue placeholder="Payment Method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cash">Cash</SelectItem>
+                <SelectItem value="transfer">Transfer</SelectItem>
+                <SelectItem value="pos">POS</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            {cart.map((item, index) => (
+              <div key={index} className="border p-3 mb-3 rounded">
+                <Label>Product {index + 1}</Label>
+                <Select onValueChange={(val) => {
+                  //find a selected product from product by selected product id
+                  const {id, name, price } = products.find((product: product) => product.id === val) as product
+                  setCart(
+                    cart.map((p, i) =>
+                      i === index ? { ...p, id: id, name: name, price: price } : p
+                    )
+                  )
+                }}>
+                  <SelectTrigger className="w-full my-5 py-5">
+                    <SelectValue placeholder="select a Products" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  {
+                    products.map((product: product) => (
+                        <SelectItem key={product.id} value={product.id}>{product.name} - ₦{product.price}</SelectItem>
+                    ))
+                  }
+                  </SelectContent>
+                </Select>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="quantity"
+                    className="border p-2 flex-1"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      setCart(
+                        cart.map((p, i) =>
+                          i === index ? { ...p, quantity: Number(e.target.value) } : p
+                        )
+                      )
+                    }
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Price"
+                    className="border p-2 flex-1"
+                    value={item.price}
+                    onChange={(e) =>
+                      setCart(
+                        cart.map((p, i) =>
+                          i === index ? { ...p, price: Number(e.target.value) } : p
+                        )
+                      )
+                    }
+                  />
+                </div> 
+                <div className="my-5">
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                    onClick={() =>
+                      setCart(cart.filter((_, i) => i !== index))
+                    }
+                  >
+                    <Trash size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="my-5">
+            <Textarea placeholder="Enter a remark"></Textarea>
+          </div>
+          
+
+          <button
+            onClick={addProduct}
+            className="bg-gray-200 px-4 py-2 rounded mb-4 mx-2"
+            type="button"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            + Add Product
+          </button>
+
+          <button 
+          type="submit"
+            className="bg-indigo-700 text-white px-6 py-2 rounded"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            Submit Sale
+          </button>
+        </form>
+
+        {message && <p className="mt-4 text-green-600">{message}</p>}
+      </div>
+      <Footer />
     </div>
   );
 }
