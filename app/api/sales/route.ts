@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
 
     const transactionId = "T-" + uuidv4().slice(0, 6).toUpperCase();
     const customerId = "C-" + uuidv4().slice(0, 6).toUpperCase();
+    const salesId = "S-" + uuidv4().slice(0, 6).toUpperCase();
 
     const auth = await googleAuth("https://www.googleapis.com/auth/spreadsheets")
 
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
       }
       return [
         transactionId,
-        `S${index + 1}`,
+        salesId,
         new Date().toLocaleString(),
         details.customer.name,
         details.customer.phone,
