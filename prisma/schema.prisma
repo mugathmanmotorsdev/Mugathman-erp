@@ -1,0 +1,177 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Models
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  full_name  String
+  password   String
+  is_active  Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  role                 Role
+  stock_movements      StockMovement[]
+  sales                Sale[]
+  stock_adjustments    StockAdjustment[]
+  userActivationTokens UserActivationToken[]
+
+  @@map("users")
+}
+
+model Customer {
+  id         String   @id @default(uuid())
+  full_name  String
+  phone      String   @unique
+  email      String?
+  address    String?
+  created_at DateTime @default(now())
+
+  sales Sale[]
+
+  @@map("customers")
+}
+
+model Product {
+  id            String     @id @default(uuid())
+  name          String
+  sku           String     @unique
+  department    Department
+  unit          String
+  reorder_level Int        @default(0)
+  is_active     Boolean    @default(true)
+
+  stock_movements StockMovement[]
+  sale_items      SaleItem[]
+
+  @@map("products")
+}
+
+model InventoryLocation {
+  id         String  @id @default(uuid())
+  name       String
+  department String
+  is_active  Boolean @default(true)
+
+  stock_movements StockMovement[]
+
+  @@map("inventory_locations")
+}
+
+model StockMovement {
+  id             String              @id @default(uuid())
+  product_id     String
+  location_id    String
+  quantity       Int
+  reason         StockMovementReason
+  reference_type ReferenceType?
+  reference_id   String?
+  performed_by   String
+  created_at     DateTime            @default(now())
+
+  product  Product           @relation(fields: [product_id], references: [id])
+  location InventoryLocation @relation(fields: [location_id], references: [id])
+  user     User              @relation(fields: [performed_by], references: [id])
+
+  @@map("stock_movements")
+}
+
+model Sale {
+  id          String     @id @default(uuid())
+  sale_number String     @unique
+  customer_id String
+  created_by  String
+  status      SaleStatus
+  created_at  DateTime   @default(now())
+
+  customer   Customer   @relation(fields: [customer_id], references: [id])
+  user       User       @relation(fields: [created_by], references: [id])
+  sale_items SaleItem[]
+
+  @@map("sales")
+}
+
+model SaleItem {
+  id         String  @id @default(uuid())
+  sale_id    String
+  product_id String
+  quantity   Int
+  unit_price Decimal @db.Decimal(10, 2)
+
+  sale    Sale    @relation(fields: [sale_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("sale_items")
+}
+
+model StockAdjustment {
+  id         String                @id @default(uuid())
+  reason     StockAdjustmentReason
+  notes      String?
+  created_by String
+  created_at DateTime              @default(now())
+
+  user User @relation(fields: [created_by], references: [id])
+
+  @@map("stock_adjustments")
+}
+
+model UserActivationToken {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("user_activation_tokens")
+}
+
+// Enums
+enum Role {
+  EDITOR
+  VIEWER
+}
+
+enum Department {
+  FERTILIZER
+  PLASTIC
+}
+
+enum StockMovementReason {
+  PURCHASE
+  SALE
+  DAMAGE
+  ADJUSTMENT
+}
+
+enum ReferenceType {
+  SALE
+  PURCHASE
+  ADJUSTMENT
+}
+
+enum SaleStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum StockAdjustmentReason {
+  DAMAGE
+  LOSS
+  COUNT_CORRECTION
+}
