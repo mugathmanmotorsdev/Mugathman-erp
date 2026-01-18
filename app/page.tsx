@@ -159,7 +159,10 @@ export default function SalesPage() {
                   <SelectContent>
                   {
                     products.map((product: product) => (
-                        <SelectItem key={product.id} value={product.id}>{product.name} - ₦{product.price}</SelectItem>
+                        <SelectItem key={product.id} value={product.id}>
+                        {product.name} - ₦{product.price}
+                        <p className="text-xs text-gray-500">{product.id}</p>
+                        </SelectItem>
                     ))
                   }
                   </SelectContent>
