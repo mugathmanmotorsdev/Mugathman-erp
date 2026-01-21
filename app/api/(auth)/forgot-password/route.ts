@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
                 expired_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
             }
         })
-        console.log("token created: ", tokenRow)
 
         const { data: emailData, error } = await resend.emails.send({
             from: "Welcome <noreply@mugathmanmotors.com>",
@@ -36,10 +35,12 @@ export async function POST(request: NextRequest) {
             subject: 'Reset your password',
             html: resetPasswordEmailHTML(user.full_name, tokenRow.token)
         })
-        console.log("Error sending email: ", error)
-        console.log("Email sent successfully", emailData)
 
-        return NextResponse.json({ user, token }, { status: 201 });
+        if (error) {
+            return NextResponse.json({ error: error }, { status: 500 });
+        }
+
+        return NextResponse.json({ message: "Password reset email sent successfully" }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
