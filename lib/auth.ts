@@ -1,9 +1,12 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import prisma from "./prisma"
-import { comparePassword } from "./password"
+import { comparePassword } from "./utils/password"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/signin",
+  },
   providers: [
     Credentials({
         credentials: {
@@ -49,6 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 role: user.role
             }
         }
-    })
-  ],
+    }),
+  ]
 })

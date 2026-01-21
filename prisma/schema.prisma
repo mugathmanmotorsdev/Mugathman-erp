@@ -28,6 +28,7 @@ model User {
   sales                Sale[]
   stock_adjustments    StockAdjustment[]
   userActivationTokens UserActivationToken[]
+  resetPasswordTokens  ResetPasswordToken[]
 
   @@map("users")
 }
@@ -132,12 +133,25 @@ model StockAdjustment {
 model UserActivationToken {
   id         String   @id @default(uuid())
   user_id    String
-  token      String
+  token      String   @unique
+  expired_at DateTime @default(now())
   created_at DateTime @default(now())
 
   user User @relation(fields: [user_id], references: [id])
 
   @@map("user_activation_tokens")
+}
+
+model ResetPasswordToken {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expired_at DateTime @default(now())
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("reset_password_tokens")
 }
 
 // Enums
