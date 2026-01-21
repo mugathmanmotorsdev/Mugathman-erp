@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
             }
         })
 
-        return NextResponse.json({ user: updatedUser }, { status: 200 });
+        return NextResponse.json({ message: "User activated successfully" }, { status: 200 });
     } catch (error) {
         console.log("Error activating user: ", error)
         return NextResponse.json({ error: error }, { status: 500 });
