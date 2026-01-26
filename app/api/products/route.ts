@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateSKU } from "@/lib/utils/sku-generator";
+import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
 
 export async function GET(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams
-    const skip = searchParams.get("skip")
-    const take = searchParams.get("take")
-    const search = searchParams.get("search")
-    const category = searchParams.get("category")
-    
     try {
+        const user = await requireAuth();
+
+        const searchParams = request.nextUrl.searchParams
+        const skip = searchParams.get("skip")
+        const take = searchParams.get("take")
+        const search = searchParams.get("search")
+        const category = searchParams.get("category") 
+
         const where: any = {}
         if (search) {
             where.OR = [
@@ -72,6 +75,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const user = await requireAuth();
+        await roleGuard(user, ["ADMIN", "EDITOR"])
+
         const body = await request.json()
         const { name, sku, category, unit, reorder_level, is_active, description, unit_price, tracking_type } = body || {}
         if (!name || !category || !unit || !unit_price || !tracking_type) {

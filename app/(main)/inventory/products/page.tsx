@@ -155,11 +155,6 @@ export default function ProductsPage() {
         <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
             {/* Header Section */}
             <div className="flex flex-col gap-2">
-                <nav className="text-sm text-slate-500 flex items-center gap-2">
-                    <Link href="/" className="hover:text-slate-900 transition-colors">Home</Link>
-                    <span>/</span>
-                    <span className="text-slate-900 font-medium">Inventory Catalog</span>
-                </nav>
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Product Catalog</h1>
                     <Link href="/inventory/products/new">

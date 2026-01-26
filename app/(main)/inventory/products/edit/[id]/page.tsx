@@ -145,22 +145,10 @@ export default function EditProductPage() {
         <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
             {/* Header */}
             <div className="flex flex-col gap-2">
-                <nav className="text-sm text-slate-500 flex items-center gap-2">
-                    <Link href="/inventory/products" className="hover:text-slate-900 transition-colors">Products</Link>
-                    <span>/</span>
-                    <span className="text-slate-900 font-medium">Edit Product</span>
-                </nav>
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Link href="/inventory/products">
-                            <Button variant="outline" size="icon" className="h-10 w-10 rounded-xl border-slate-200 shadow-sm bg-white">
-                                <ChevronLeft className="h-5 w-5" />
-                            </Button>
-                        </Link>
-                        <div>
-                            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Edit Product</h1>
-                            <p className="text-sm text-slate-500">Update product details, pricing and inventory settings.</p>
-                        </div>
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Edit Product</h1>
+                        <p className="text-sm text-slate-500">Update product details, pricing and inventory settings.</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <Button 
