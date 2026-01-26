@@ -25,9 +25,11 @@ export function AppSidebar() {
   const { data: session } = useSession()
 
   const links = [
-    { href: "/", label: "Sales", icon: Home },
-    { href: "/inventory", label: "Inventory", icon: Package },
-    { href: "https://lookerstudio.google.com/reporting/bd63e4d0-f4e1-4281-b2cf-217a05bd95bb", label: "Report", icon: FileChartColumn, external: true },
+    { href: "/dashboard", label: "Dashboard", icon: Home },
+    { href: "/inventory/products", label: "Inventory", icon: Package },
+    { href: "/orders", label: "Orders", icon: FileChartColumn },
+    { href: "/users", label: "Users", icon: User },
+    { href: "https://lookerstudio.google.com/reporting/bd63e4d0-f4e1-4281-b2cf-217a05bd95bb", label: "Analytics", icon: FileChartColumn, external: true },
   ]
 
   return (

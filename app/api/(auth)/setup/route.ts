@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
         full_name,
         email,
         password: hashedPassword,
-        role: 'EDITOR',
-        is_active: true,
+        role: 'ADMIN',
+        status: 'ACTIVE',
       },
       select: {
         id: true,

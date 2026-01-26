@@ -16,12 +16,13 @@ datasource db {
 // Models
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
+  id         String     @id @default(uuid())
+  email      String     @unique
   full_name  String
   password   String
-  is_active  Boolean  @default(false)
-  created_at DateTime @default(now())
+  status     UserStatus @default(PENDING)
+  created_at DateTime   @default(now())
+  image      String?
 
   role                 Role
   stock_movements      StockMovement[]
@@ -47,18 +48,37 @@ model Customer {
 }
 
 model Product {
-  id            String     @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String
-  sku           String     @unique
-  department    Department
+  sku           String       @unique
+  category      Category
+  description   String?
+  unit_price    Decimal      @default(0.00) @db.Decimal(10, 2)
   unit          String
-  reorder_level Int        @default(0)
-  is_active     Boolean    @default(true)
+  tracking_type TrackingType
+  reorder_level Int          @default(0)
+  is_active     Boolean      @default(true)
 
   stock_movements StockMovement[]
   sale_items      SaleItem[]
+  vehicles        Vehicle[]
 
   @@map("products")
+}
+
+model Vehicle {
+  id                    String        @id @default(uuid())
+  product_id            String
+  inventory_location_id String
+  vin                   String        @unique
+  status                VehicleStatus
+  created_at            DateTime      @default(now())
+
+  product            Product           @relation(fields: [product_id], references: [id])
+  inventory_location InventoryLocation @relation(fields: [inventory_location_id], references: [id])
+  stock_movement     StockMovement[]
+
+  @@map("vehicles")
 }
 
 model InventoryLocation {
@@ -68,6 +88,7 @@ model InventoryLocation {
   is_active  Boolean @default(true)
 
   stock_movements StockMovement[]
+  vehicles        Vehicle[]
 
   @@map("inventory_locations")
 }
@@ -76,6 +97,7 @@ model StockMovement {
   id             String              @id @default(uuid())
   product_id     String
   location_id    String
+  vehicle_id     String?
   quantity       Int
   reason         StockMovementReason
   reference_type ReferenceType?
@@ -84,6 +106,7 @@ model StockMovement {
   created_at     DateTime            @default(now())
 
   product  Product           @relation(fields: [product_id], references: [id])
+  vehicle  Vehicle?          @relation(fields: [vehicle_id], references: [id])
   location InventoryLocation @relation(fields: [location_id], references: [id])
   user     User              @relation(fields: [performed_by], references: [id])
 
@@ -155,14 +178,36 @@ model ResetPasswordToken {
 }
 
 // Enums
+enum UserStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+}
+
 enum Role {
+  ADMIN
   EDITOR
   VIEWER
 }
 
-enum Department {
-  FERTILIZER
-  PLASTIC
+enum TrackingType {
+  SERIAL
+  BATCH
+}
+
+enum Category {
+  HEAVY_DUTY @map("heavy_duty")
+  FERTILIZER @map("fertilizer")
+  PARTS      @map("parts")
+  TRUCK_HEAD @map("truck_head")
+  TIPPER     @map("tipper")
+  TRACTOR    @map("tractor")
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  SOLD
+  DAMAGED
 }
 
 enum StockMovementReason {
@@ -188,4 +233,9 @@ enum StockAdjustmentReason {
   DAMAGE
   LOSS
   COUNT_CORRECTION
+}
+
+enum Department {
+  FERTILIZER
+  PLASTIC
 }

@@ -1,4 +1,4 @@
-import { requireAuth } from "@/lib/authutils";
+import { requireAuth } from "@/lib/utils/auth-utils";
 import { googleAuth } from "@/lib/googleAuth";
 import { google } from "googleapis";
 import { NextResponse } from "next/server";

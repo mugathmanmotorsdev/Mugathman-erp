@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2 } from "lucide-react";
-import { userActivation } from "@/lib/validatoion/user"; // Preserving existing path with typo
+import { userActivationSchema } from "@/lib/validatoion/user"; // Preserving existing path with typo
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type ActivationFormValues = z.infer<typeof userActivation>;
+
+type ActivationFormValues = z.infer<typeof userActivationSchema>;
 
 function ActivationFormContent() {
   const searchParams = useSearchParams();
@@ -33,7 +34,7 @@ function ActivationFormContent() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ActivationFormValues>({
-    resolver: zodResolver(userActivation),
+    resolver: zodResolver(userActivationSchema),
   });
 
   async function onSubmit(data: ActivationFormValues) {

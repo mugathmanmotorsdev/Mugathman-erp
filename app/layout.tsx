@@ -31,8 +31,11 @@ export default function RootLayout({
       >
         <AuthProvider>
             {children}
+            <Toaster />
         </AuthProvider> 
       </body>
     </html>
   );
 }
+
+import { Toaster } from "@/components/ui/sonner";

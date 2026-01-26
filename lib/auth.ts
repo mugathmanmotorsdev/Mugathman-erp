@@ -45,6 +45,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 throw new Error("Invalid password")
             }
 
+            if (user.status !== "ACTIVE") {
+                throw new Error("User is not active")
+            }
+
             return {
                 id: user.id,
                 email: user.email,

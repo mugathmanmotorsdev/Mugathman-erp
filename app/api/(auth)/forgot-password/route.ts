@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { generateToken } from "@/lib/utils/token-generator";
 import { resend } from "@/lib/resend";
 import { resetPasswordEmailHTML } from "@/components/email-template/resetPasswordEmailTemplateHtml";
+import { setResetPasswordToken } from "@/lib/utils/auth-utils";
 
 export async function POST(request: NextRequest) {
     const data = await request.json()
@@ -20,20 +20,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const token = generateToken()
-        const tokenRow = await prisma.resetPasswordToken.create({
-            data: {
-                user_id: user.id,
-                token: token,
-                expired_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            }
-        })
+        const token = await setResetPasswordToken(user)
 
         const { data: emailData, error } = await resend.emails.send({
             from: "Welcome <noreply@mugathmanmotors.com>",
             to: [user.email],
             subject: 'Reset your password',
-            html: resetPasswordEmailHTML(user.full_name, tokenRow.token)
+            html: resetPasswordEmailHTML(user.full_name, token.token)
         })
 
         if (error) {

@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
                 id: token.user_id
             },
             data: {
-                is_active: true,
+                status: "ACTIVE",
                 password: hashedPassword
             }
         })
