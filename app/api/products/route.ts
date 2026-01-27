@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
 
         const products = await prisma.product.findMany({
             where,
-            skip: skip ? parseInt(skip) : 0,
-            take: take ? parseInt(take) : 10,
+            skip: skip ? parseInt(skip) : undefined,
+            take: take ? parseInt(take) : undefined,
             include: {
                 stock_movements: {
                     select: {
@@ -39,14 +39,7 @@ export async function GET(request: NextRequest) {
         })
 
         const productsWithStock = products.map(p => {
-            const currentStock = p.stock_movements.reduce((acc, mov) => {
-                // In this simplified model, we'll assume quantity is already signed or 
-                // we treat PURCHASE as positive and SALE/DAMAGE as negative.
-                // Let's check prisma schema again: StockMovementReason { PURCHASE, SALE, DAMAGE, ADJUSTMENT }
-                if (mov.reason === 'PURCHASE') return acc + mov.quantity
-                if (mov.reason === 'SALE' || mov.reason === 'DAMAGE') return acc - mov.quantity
-                return acc + mov.quantity // for ADJUSTMENT, we'll assume it's the delta
-            }, 0)
+            const currentStock = p.stock_movements.reduce((acc, mov) => acc + mov.quantity, 0)
             return {
                 ...p,
                 currentStock,
@@ -60,8 +53,8 @@ export async function GET(request: NextRequest) {
             products: productsWithStock, 
             pagination: {
                 total: totalCount,
-                skip: skip ? parseInt(skip) : 0,
-                take: take ? parseInt(take) : 10
+                skip: skip ? parseInt(skip) : undefined,
+                take: take ? parseInt(take) : undefined
             }
         }, { status: 200 });
     } catch (error) {

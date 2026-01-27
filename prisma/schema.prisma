@@ -74,18 +74,18 @@ model Vehicle {
   status                VehicleStatus
   created_at            DateTime      @default(now())
 
-  product            Product           @relation(fields: [product_id], references: [id])
-  inventory_location InventoryLocation @relation(fields: [inventory_location_id], references: [id])
-  stock_movement     StockMovement[]
+  product             Product             @relation(fields: [product_id], references: [id])
+  inventory_location  InventoryLocation   @relation(fields: [inventory_location_id], references: [id])
+  stock_movement      StockMovement[]
+  serialize_movements SerializeMovement[]
 
   @@map("vehicles")
 }
 
 model InventoryLocation {
-  id         String  @id @default(uuid())
-  name       String
-  department String
-  is_active  Boolean @default(true)
+  id        String  @id @default(uuid())
+  name      String
+  is_active Boolean @default(true)
 
   stock_movements StockMovement[]
   vehicles        Vehicle[]
@@ -99,18 +99,31 @@ model StockMovement {
   location_id    String
   vehicle_id     String?
   quantity       Int
+  type           StockMovementType
   reason         StockMovementReason
   reference_type ReferenceType?
   reference_id   String?
   performed_by   String
   created_at     DateTime            @default(now())
 
-  product  Product           @relation(fields: [product_id], references: [id])
-  vehicle  Vehicle?          @relation(fields: [vehicle_id], references: [id])
-  location InventoryLocation @relation(fields: [location_id], references: [id])
-  user     User              @relation(fields: [performed_by], references: [id])
+  product             Product             @relation(fields: [product_id], references: [id])
+  vehicle             Vehicle?            @relation(fields: [vehicle_id], references: [id])
+  location            InventoryLocation   @relation(fields: [location_id], references: [id])
+  user                User                @relation(fields: [performed_by], references: [id])
+  serialize_movements SerializeMovement[]
 
   @@map("stock_movements")
+}
+
+model SerializeMovement {
+  id                String @id @default(uuid())
+  stock_movement_id String
+  vehicle_id        String
+
+  stock_movement StockMovement @relation(fields: [stock_movement_id], references: [id])
+  vehicle        Vehicle       @relation(fields: [vehicle_id], references: [id])
+
+  @@map("serialize_movements")
 }
 
 model Sale {
@@ -208,6 +221,11 @@ enum VehicleStatus {
   AVAILABLE
   SOLD
   DAMAGED
+}
+
+enum StockMovementType {
+  IN
+  OUT
 }
 
 enum StockMovementReason {

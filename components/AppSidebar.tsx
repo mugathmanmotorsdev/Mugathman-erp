@@ -26,7 +26,7 @@ export function AppSidebar() {
 
   const links = [
     { href: "/admin/dashboard", label: "Dashboard", icon: Home, external: false },
-    { href: "/inventory/products", label: "Inventory", icon: Package, external: false },
+    { href: "/inventory", label: "Inventory", icon: Package, external: false },
     { href: "/users", label: "Users", icon: User, external: false },
     { href: "https://lookerstudio.google.com/reporting/bd63e4d0-f4e1-4281-b2cf-217a05bd95bb", label: "Analytics", icon: FileChartColumn, external: true },
   ]

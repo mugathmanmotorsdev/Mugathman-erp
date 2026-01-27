@@ -9,8 +9,6 @@ import {
   Users,
   Heart,
   Mail,
-  ChevronLeft,
-  ChevronRight,
   UserCheck,
   UserMinus,
   ShieldCheck,

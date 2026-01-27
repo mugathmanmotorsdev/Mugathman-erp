@@ -158,7 +158,7 @@ export default function ProductsPage() {
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Product Catalog</h1>
                     <Link href="/inventory/products/new">
-                        <Button className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white gap-2 px-4 shadow-sm">
+                        <Button className="bg-[#150150] hover:bg-[#150150]/80 text-white gap-2 px-4 shadow-sm">
                             <Plus className="h-4 w-4" />
                             Add New Product
                         </Button>
@@ -169,10 +169,10 @@ export default function ProductsPage() {
             {/* Filters Section */}
             <div className="grid grid-cols-1 md:flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div className="relative flex-1 group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#150150] transition-colors" />
                     <Input 
                         placeholder="Search by SKU, Name or Category..." 
-                        className="pl-10 bg-slate-50/50 border-slate-200 focus-visible:ring-blue-500 focus-visible:bg-white transition-all"
+                        className="pl-10 bg-slate-50/50 border-slate-200 focus-visible:ring-[#150150] focus-visible:bg-white transition-all"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -266,7 +266,7 @@ export default function ProductsPage() {
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-none font-semibold px-2.5 py-0.5 rounded-md uppercase text-[10px] tracking-wide">
+                                        <Badge variant="secondary" className="bg-[#150150] text-white hover:bg-[#150150]/80 border-none font-semibold px-2.5 py-0.5 rounded-md uppercase text-[10px] tracking-wide">
                                             {product.category.replace('_', ' ')}
                                         </Badge>
                                     </TableCell>
@@ -345,7 +345,7 @@ export default function ProductsPage() {
                                     key={i}
                                     variant={Math.floor(pagination.skip / pagination.take) === i ? "default" : "outline"}
                                     size="sm"
-                                    className={`h-8 w-8 rounded-lg ${Math.floor(pagination.skip / pagination.take) === i ? "bg-blue-600 shadow-sm" : "border-slate-200"}`}
+                                    className={`h-8 w-8 rounded-lg ${Math.floor(pagination.skip / pagination.take) === i ? "bg-[#150150] text-white shadow-sm" : "border-slate-200"}`}
                                     onClick={() => handlePageChange(i * pagination.take)}
                                 >
                                     {i + 1}
