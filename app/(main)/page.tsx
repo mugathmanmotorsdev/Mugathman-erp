@@ -1,243 +1,312 @@
 "use client";
-import Footer from "@/components/Footer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/hooks/useauth";
-import { Trash } from "lucide-react";
-import { useEffect, useState } from "react";
 
-type item = {
-  id: string
-  name: string
-  quantity: number
-  price: number
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  TrendingUp,
+  AlertTriangle,
+  ArrowRight,
+  Clock,
+  PlusCircle,
+  MoveUpRight,
+  MoveDownLeft,
+  Search,
+  Bell,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+
+interface Stats {
+  totalProducts: number;
+  totalCustomers: number;
+  totalRevenue: number;
+  lowStockItems: number;
 }
 
-type product = {
-  id: string
-  name: string
-  price: number
-  stock: number
-  category: string
-  lastupdated: string
+interface Activity {
+  id: string;
+  type: 'SALE' | 'MOVEMENT';
+  title: string;
+  description: string;
+  time: string;
 }
 
-type customer = {
-  name: string;
-  phone?: string;
-  email?: string;
-  address?: string
-}
+export default function Dashboard() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
 
-export default function SalesPage() {
-  //require auth here
-  useAuth()
-
-  const [products, setProducts] = useState<product[]>([])
-  const [cart, setCart] = useState<item[]>([{id: "", name: "", quantity: 1, price: 0}]);
-  const [customer, setCustomer] = useState<customer>({ name: "" });
-  const [message, setMessage] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("")
-  const [salesPerson, setSalesPerson] = useState("")
-  const [error, setError] = useState("")
-  const [remark, setRemark] = useState("")
-
-  //fetch products
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("/api/inventory")
-      const data = await res.json()
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch("/api/dashboard/stats");
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data.stats);
+          setActivities(data.recentActivity);
+        } else {
+          toast.error("Failed to load dashboard data");
+        }
+      } catch (error) {
+        console.error("Dashboard error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setProducts(data.data || [])
-    }
+    fetchDashboardData();
+  }, []);
 
-    fetchProducts()
-  }, [])
-
-  const addProduct = () => {
-    setCart([...cart, { id: "", name: "", quantity: 1, price: 0 }]);
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(amount);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setMessage("")
-    setError("")
+  const getTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-    e.preventDefault();
-    const res = await fetch("/api/sales", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        details: {
-          customer,
-          salesPerson,
-          paymentMethod,
-          remark
-        },
-        items: cart
-      }),
-    });
-    const data = await res.json();
-    if (!data.success) {
-      setError(data.error || "Failed to submit sale");
-      return;
-    }
-    setMessage(`✅ ${data.message} (Transaction ID: ${data.transactionId})`);
-    setCart([{ id: "", name: "", quantity: 1, price: 0 }]);
-    setCustomer({ ...customer, name: "", phone: "" });
-    setSalesPerson("");
-    setPaymentMethod("");
-    setRemark("");
+    if (diffInSeconds < 60) return "Just now";
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} mins ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return date.toLocaleDateString();
   };
+
+  if (loading) {
+    return (
+      <div className="p-8 space-y-8 bg-slate-50/50 min-h-screen">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-10 w-48 rounded-xl" />
+          <Skeleton className="h-12 w-32 rounded-2xl" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-32 rounded-3xl" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-[400px] lg:col-span-2 rounded-3xl" />
+          <Skeleton className="h-[400px] rounded-3xl" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-50">
-      <div className="p-6 max-w-4xl mx-auto min-h-screen bg-white">
-        <form action="#" onSubmit={handleSubmit} autoComplete="off" noValidate>
-          <h1 className="text-2xl font-bold mb-4">Sales Record</h1>
-
-          <Input
-            name="name"
-            type="text"
-            placeholder="Customer Name"
-            className="border p-2 w-full mb-3 rounded-md"
-            value={customer?.name}
-            onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-          />
-          <Input
-            name="phone_no"
-            type="text"
-            placeholder="Customer Phone No"
-            className="border p-2 w-full mb-3 rounded-md"
-            value={customer?.phone}
-            onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-          />
-          <Input
-            name="sales_person"
-            type="text"
-            placeholder="Sales person"
-            className="border p-2 w-full mb-3 rounded-md"
-            value={salesPerson}
-            onChange={(e) => setSalesPerson(e.target.value )}
-          />
-
-          <div>
-            <Select
-            onValueChange={(val) => {
-              setPaymentMethod(val)
-            }}
-            >
-              <SelectTrigger 
-              className="w-full my-5 py-5">
-                <SelectValue placeholder="Payment Method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="cash">Cash</SelectItem>
-                <SelectItem value="transfer">Transfer</SelectItem>
-                <SelectItem value="pos">POS</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            {cart.map((item, index) => (
-              <div key={index} className="border p-3 mb-3 rounded">
-                <Label>Product {index + 1}</Label>
-                <Select onValueChange={(val) => {
-                  //find a selected product from product by selected product id
-                  const {id, name, price } = products.find((product: product) => product.id === val) as product
-                  setCart(
-                    cart.map((p, i) =>
-                      i === index ? { ...p, id: id, name: name, price: price } : p
-                    )
-                  )
-                }}>
-                  <SelectTrigger className="w-full my-5 py-5">
-                    <SelectValue placeholder="select a Products" />
-                  </SelectTrigger>
-                  <SelectContent>
-                  {
-                    products.map((product: product) => (
-                        <SelectItem key={product.id} value={product.id}>
-                        {product.name} - ₦{product.price}
-                        <p className="text-xs text-gray-500">{product.id}</p>
-                        </SelectItem>
-                    ))
-                  }
-                  </SelectContent>
-                </Select>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    placeholder="quantity"
-                    className="border p-2 flex-1"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      setCart(
-                        cart.map((p, i) =>
-                          i === index ? { ...p, quantity: Number(e.target.value) } : p
-                        )
-                      )
-                    }
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Price"
-                    className="border p-2 flex-1"
-                    value={item.price}
-                    onChange={(e) =>
-                      setCart(
-                        cart.map((p, i) =>
-                          i === index ? { ...p, price: Number(e.target.value) } : p
-                        )
-                      )
-                    }
-                  />
-                </div> 
-                <div className="my-5">
-                  <button
-                    type="button"
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                    onClick={() =>
-                      setCart(cart.filter((_, i) => i !== index))
-                    }
-                  >
-                    <Trash size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="my-5">
-            <Textarea 
-            placeholder="Enter a remark"
-            value={remark}
-            onChange={(e) => setRemark(e.target.value)}
-            ></Textarea>
-          </div>
-          
-
-          <button
-            onClick={addProduct}
-            className="bg-gray-200 px-4 py-2 rounded mb-4 mx-2"
-            type="button"
+    <div className="flex flex-col gap-8 p-8 bg-slate-50/50 min-h-screen">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+            Operations Overview
+          </h1>
+          <p className="text-slate-500 font-medium">Monitoring Mugathman Motors productivity and stock.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="rounded-2xl h-12 px-5 border-slate-200 bg-white group">
+            <Bell className="h-5 w-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+          </Button>
+          <Button 
+            onClick={() => router.push("/sales/new")}
+            className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            + Add Product
-          </button>
-
-          <button 
-          type="submit"
-            className="bg-indigo-700 text-white px-6 py-2 rounded"
-          >
-            Submit Sale
-          </button>
-        </form>
-        {error && <p className="mt-4 text-red-600">{error}</p>}
-        {message && <p className="mt-4 text-green-600">{message}</p>}
+            <PlusCircle className="h-5 w-5 mr-2" />
+            Process Sale
+          </Button>
+        </div>
       </div>
-      <Footer />
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+          <CardContent className="p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div className="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <TrendingUp className="h-7 w-7" />
+              </div>
+              <Badge variant="outline" className="border-emerald-100 bg-emerald-50 text-emerald-600 font-bold px-2.5 py-1">
+                +12%
+              </Badge>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Total Revenue</p>
+              <h3 className="text-3xl font-black text-slate-900">{formatCurrency(stats?.totalRevenue || 0)}</h3>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+          <CardContent className="p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                <ShoppingCart className="h-7 w-7" />
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Active Orders</p>
+              <h3 className="text-3xl font-black text-slate-900">{activities.filter(a => a.type === 'SALE').length}</h3>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+          <CardContent className="p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div className="h-14 w-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                <Package className="h-7 w-7" />
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Product Fleet</p>
+              <h3 className="text-3xl font-black text-slate-900">{stats?.totalProducts || 0}</h3>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+          <CardContent className="p-8">
+            <div className="flex justify-between items-start mb-4">
+              <div className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-colors duration-300 ${stats?.lowStockItems ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' : 'bg-slate-50 text-slate-400'}`}>
+                <AlertTriangle className="h-7 w-7" />
+              </div>
+              {stats?.lowStockItems ? (
+                 <Badge className="bg-rose-500 text-white font-bold px-2.5 py-1">Critical</Badge>
+              ) : null}
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Low Stock Alerts</p>
+              <h3 className="text-3xl font-black text-slate-900">{stats?.lowStockItems || 0}</h3>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content Areas */}
+        <div className="lg:col-span-2 space-y-8">
+          <Card className="rounded-[2.5rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+            <CardHeader className="p-10 pb-4 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl font-black text-slate-900">Recent Transactions</CardTitle>
+                <CardDescription className="text-slate-500 mt-1">Latest sales and movements across all hubs.</CardDescription>
+              </div>
+              <Button variant="ghost" className="rounded-xl font-bold text-indigo-600" onClick={() => router.push("/sales")}>
+                View All <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </CardHeader>
+            <CardContent className="p-10 pt-0">
+              <div className="space-y-6">
+                {activities.length === 0 ? (
+                  <div className="py-20 text-center text-slate-400 border-2 border-dashed border-slate-100 rounded-3xl">
+                    <Clock className="h-12 w-12 mx-auto mb-4 opacity-10" />
+                    <p>No recent activity recorded yet.</p>
+                  </div>
+                ) : (
+                  activities.map((activity) => (
+                    <div key={activity.id} className="flex items-center gap-6 p-6 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-lg transition-all cursor-pointer group">
+                      <div className={`h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${activity.type === 'SALE' ? 'bg-indigo-600 text-white' : 'bg-white text-slate-900 border border-slate-200'}`}>
+                        {activity.type === 'SALE' ? <MoveUpRight className="h-6 w-6" /> : <MoveDownLeft className="h-6 w-6" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-black text-slate-900 truncate">{activity.title}</h4>
+                          <span className="text-xs font-bold text-slate-400 whitespace-nowrap">{getTimeAgo(activity.time)}</span>
+                        </div>
+                        <p className="text-sm text-slate-500 font-medium truncate">{activity.description}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-[#150150] text-white p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8">
+                  <Package className="h-20 w-20 text-white/5" />
+                </div>
+                <h4 className="text-xl font-black mb-2">Restock Inventory</h4>
+                <p className="text-indigo-200/60 text-sm mb-8 leading-relaxed">Recorded a shipment of parts or new truck heads into the warehouse?</p>
+                <Button 
+                  onClick={() => router.push("/inventory/movements/new")}
+                  className="w-full h-14 rounded-2xl bg-white text-[#150150] hover:bg-indigo-50 font-black text-sm uppercase tracking-widest shadow-2xl"
+                >
+                  Record Stock In
+                </Button>
+             </Card>
+             <Card className="rounded-[2rem] border-none shadow-xl shadow-slate-200/50 bg-emerald-600 text-white p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8">
+                  <Users className="h-20 w-20 text-white/5" />
+                </div>
+                <h4 className="text-xl font-black mb-2">Manage Customers</h4>
+                <p className="text-emerald-50/60 text-sm mb-8 leading-relaxed">Update customer profiles, contact info, or review their purchase history.</p>
+                <Button 
+                  onClick={() => router.push("/customers")}
+                  className="w-full h-14 rounded-2xl bg-white text-emerald-600 hover:bg-emerald-50 font-black text-sm uppercase tracking-widest shadow-2xl"
+                >
+                  Customer Directory
+                </Button>
+             </Card>
+          </div>
+        </div>
+
+        {/* Sidebar Widgets */}
+        <div className="space-y-8">
+          <Card className="rounded-[2.5rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl font-black text-slate-900">Quick Search</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 pt-0">
+               <div className="relative mb-6">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="SKU, Order #, or Name..."
+                  className="w-full h-14 pl-12 pr-4 rounded-2xl bg-slate-100 border-none text-slate-900 font-bold focus:ring-2 focus:ring-indigo-100 transition-all placeholder:text-slate-400"
+                />
+               </div>
+               <div className="space-y-4">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Jump To</p>
+                  {[
+                    { label: 'Fertilizers', count: 12, color: 'emerald' },
+                    { label: 'Truck Heads', count: 8, color: 'blue' },
+                    { label: 'Spare Parts', count: 145, color: 'indigo' },
+                  ].map((cat, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors group">
+                      <span className="font-bold text-slate-700 group-hover:text-slate-900">{cat.label}</span>
+                      <Badge className={`bg-${cat.color}-50 text-${cat.color}-600 border-none font-bold`}>{cat.count}</Badge>
+                    </div>
+                  ))}
+               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-[2.5rem] border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden p-8">
+            <div className="flex flex-col items-center text-center space-y-4 py-4">
+              <div className="h-20 w-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border-2 border-dashed border-slate-200">
+                <LayoutDashboard className="h-10 w-10" />
+              </div>
+              <div>
+                <h5 className="font-black text-slate-900">Standard View</h5>
+                <p className="text-xs text-slate-500 mt-1 px-4">You are currently using the operational dashboard. Admin powers are restricted here.</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

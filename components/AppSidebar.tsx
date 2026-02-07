@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Package, FileChartColumn, LogOut, User } from "lucide-react"
+import { Home, Package, LogOut, User, ShoppingCart, Users } from "lucide-react"
 import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
 
@@ -19,16 +19,20 @@ import {
   SidebarGroupContent,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/hooks/useauth"
 
 export function AppSidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
+  const { isAdmin } = useAuth()
+
 
   const links = [
-    { href: "/admin/dashboard", label: "Dashboard", icon: Home, external: false },
-    { href: "/inventory", label: "Inventory", icon: Package, external: false },
-    { href: "/users", label: "Users", icon: User, external: false },
-    { href: "https://lookerstudio.google.com/reporting/bd63e4d0-f4e1-4281-b2cf-217a05bd95bb", label: "Analytics", icon: FileChartColumn, external: true },
+    { href: "/", label: "Dashboard", icon: Home, external: false, adminOnly: false },
+    { href: "/inventory", label: "Inventory", icon: Package, external: false, adminOnly: false },
+    { href: "/sales", label: "Sales", icon: ShoppingCart, external: false, adminOnly: false },
+    { href: "/customers", label: "Customers", icon: Users, external: false, adminOnly: false },
+    { href: "/users", label: "Users", icon: User, external: false, adminOnly: true },
   ]
 
   return (
@@ -50,6 +54,8 @@ export function AppSidebar() {
               {links.map((link) => {
                 const Icon = link.icon
                 const isActive = pathname === link.href
+
+                if (link.adminOnly && !isAdmin) return null
 
                 return (
                   <SidebarMenuItem key={link.href}>

@@ -52,10 +52,10 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import PageHeading from "@/components/PageHeading";
 
 interface Product {
   id: string;
@@ -276,15 +276,9 @@ export default function InventoryPage() {
         {/* Header Section */}
         <div className="flex flex-col gap-1 mb-6">
           <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <h1 className="text-[32px] font-bold text-slate-900 tracking-tight">
-                Product Catalog
-              </h1>
-              <p className="text-slate-500 text-[15px] max-w-lg">
-                Centralized oversight for fleet components, maintenance parts, and
-                industrial chemical supplies.
-              </p>
-            </div>
+           <PageHeading 
+           title="Product Catalog" 
+           description="Centralized oversight for fleet components, maintenance parts, and industrial chemical supplies." />
             <div className="flex items-center gap-3">
               <Link href="/inventory/products">
                 <Button 

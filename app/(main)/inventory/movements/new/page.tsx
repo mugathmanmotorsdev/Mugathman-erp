@@ -89,7 +89,7 @@ export default function NewMovementPage() {
       try {
         const [prodRes, locRes] = await Promise.all([
           fetch("/api/products"),
-          fetch("/api/inventory-locations"),
+          fetch("/api/inventory/locations"),
         ]);
 
         if (prodRes.ok) {
@@ -184,7 +184,7 @@ export default function NewMovementPage() {
       }
 
       // Create movement
-      const movementRes = await fetch("/api/inventory-movement", {
+      const movementRes = await fetch("/api/inventory/movement", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
