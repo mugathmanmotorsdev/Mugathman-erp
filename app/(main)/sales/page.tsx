@@ -7,8 +7,6 @@ import {
   Search,
   ShoppingCart,
   Calendar,
-  User,
-  ArrowRight,
   MoreVertical,
   Download,
   Filter,
@@ -18,9 +16,6 @@ import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -30,6 +25,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import PageHeading from "@/components/PageHeading";
+import StatCard from "@/components/StatCard";
 
 interface Sale {
   id: string;
@@ -92,13 +89,13 @@ export default function SalesPage() {
   );
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+    <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Sales Orders</h1>
-          <p className="text-slate-500">Track and manage your customer transactions.</p>
-        </div>
+        <PageHeading
+          title="Sales Orders"
+          description="Track and manage your customer transactions."
+        />
         <div className="flex items-center gap-3">
           <Button
             onClick={() => router.push("/sales/new")}
@@ -112,54 +109,32 @@ export default function SalesPage() {
 
       {/* Stats overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Total Sales</p>
-                <h3 className="text-3xl font-black text-slate-900 mt-1">{sales.length}</h3>
-              </div>
-              <div className="h-12 w-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                <ShoppingCart className="h-6 w-6" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Revenue</p>
-                <h3 className="text-3xl font-black text-slate-900 mt-1">
-                  ${sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0).toLocaleString()}
-                </h3>
-              </div>
-              <div className="h-12 w-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                <div className="font-bold text-xl">$</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Avg. Order Value</p>
-                <h3 className="text-3xl font-black text-slate-900 mt-1">
-                  ${sales.length > 0 ? (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length).toLocaleString(undefined, {maximumFractionDigits: 0}) : 0}
-                </h3>
-              </div>
-              <div className="h-12 w-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600">
-                <Filter className="h-6 w-6" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* total sales */}
+        <StatCard
+        title="Total Sales" 
+        stat={sales.length} 
+        icon={<ShoppingCart className="h-6 w-6" />} 
+        iconBg="bg-indigo-50"
+        />
+        {/* revenue */}
+        <StatCard
+        title="Revenue"
+        stat={sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0).toLocaleString()}
+        icon={<div className="font-bold text-xl">$</div>}
+        iconBg="bg-emerald-50"
+        />
+        {/* avg order value */}
+        <StatCard
+        title="Avg. Order Value"
+        stat={sales.length > 0 ? (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length).toLocaleString(undefined, {maximumFractionDigits: 0}) : 0}
+        icon={<Filter className="h-6 w-6" />}
+        iconBg="bg-orange-50"
+        />
       </div>
 
-      {/* Filter Bar */}
-      <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white">
-        <CardContent className="p-4 flex flex-col md:flex-row gap-4">
+      {/* Search & Filter Bar */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
@@ -179,12 +154,11 @@ export default function SalesPage() {
               Export
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Sales Table */}
-      <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
-        <CardContent className="p-0">
+      <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-slate-50/50 border-y border-slate-100">
@@ -278,8 +252,7 @@ export default function SalesPage() {
               </tbody>
             </table>
           </div>
-        </CardContent>
-      </Card>
+      </div>
     </div>
   );
 }

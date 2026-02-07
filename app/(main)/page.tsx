@@ -105,7 +105,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex flex-col gap-8 p-8 bg-slate-50/50 min-h-screen">
+    <div className="flex flex-col gap-8 p-8 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

@@ -1,8 +1,8 @@
 import { Card, CardContent } from "./ui/card";
 
 export default function StatCard(
-    {title, stat, icon}: 
-    {title: string, stat: number, icon: React.ReactNode}
+    {title, stat, icon, iconBg}: 
+    {title: string, stat: number | string, icon: React.ReactNode, iconBg: string}
 ) {
     
     return (
@@ -16,7 +16,7 @@ export default function StatCard(
                     {stat}
                 </h3>
                 </div>
-                <div className="w-[60px] h-[60px] rounded-2xl bg-[#F1F3F9] flex items-center justify-center text-[#5C6170]">
+                <div className={`w-[60px] h-[60px] rounded-2xl flex items-center justify-center text-[#5C6170] ${iconBg}`}>
                     {icon}
                 </div>
             </CardContent>

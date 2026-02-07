@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { Home, Package, LogOut, User, ShoppingCart, Users } from "lucide-react"
 import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +14,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
@@ -36,8 +34,8 @@ export function AppSidebar() {
   ]
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b px-6 py-4">
+    <Sidebar className="bg-white">
+      <SidebarHeader className="px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="relative h-8 w-8">
             <Image src="/logo.png" alt="Logo" fill className="object-contain" />
@@ -46,9 +44,8 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent  className="px-2 mt-10">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {links.map((link) => {
@@ -58,15 +55,19 @@ export function AppSidebar() {
                 if (link.adminOnly && !isAdmin) return null
 
                 return (
-                  <SidebarMenuItem key={link.href}>
+                  <SidebarMenuItem key={link.href} className="mb-4">
                     <SidebarMenuButton 
                       asChild 
                       isActive={isActive}
                       tooltip={link.label}
+                      className="p-5"
                     >
-                      <Link href={link.href} target={link.external ? "_blank" : undefined}>
-                        <Icon />
-                        <span>{link.label}</span>
+                      <Link 
+                      href={link.href} 
+                      target={link.external ? "_blank" : undefined}
+                      className="flex items-center gap-4">
+                        <Icon size={24} />
+                        <span className="text-base">{link.label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

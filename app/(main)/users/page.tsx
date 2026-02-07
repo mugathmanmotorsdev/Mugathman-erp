@@ -213,7 +213,7 @@ export default function UsersPage() {
 
   return (
     <AdminOnly>
-      <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+      <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
         {/* Header Section */}
         <div className="flex justify-between items-end pb-2">
           <PageHeading 
@@ -235,19 +235,25 @@ export default function UsersPage() {
           <StatCard 
           title="Total Employees" 
           stat={users.length} 
-          icon={<Users size={30} strokeWidth={2.5} className="text-[#3E2792]" />} />
+          icon={<Users size={30} strokeWidth={2.5} className="text-[#3E2792]" />} 
+          iconBg="bg-[#F1F3F9]"
+          />
           
           {/* active users */}
           <StatCard 
           title="Active Now" 
           stat={users.filter((u) => u.status === "ACTIVE").length} 
-          icon={<Check size={30} strokeWidth={2.5} className="text-green-500" />} />
+          icon={<Check size={30} strokeWidth={2.5} className="text-green-500" />} 
+          iconBg="bg-green-50"
+          />
           
           {/* pending invites */}
           <StatCard 
           title="Pending Invite" 
           stat={users.filter((u) => u.status === "PENDING").length} 
-          icon={<Clock size={30} strokeWidth={2.5} className="text-yellow-500" />} />
+          icon={<Clock size={30} strokeWidth={2.5} className="text-yellow-500" />} 
+          iconBg="bg-yellow-50"
+          />
         </div>
 
         {/* Filters & Search Section */}
@@ -323,7 +329,7 @@ export default function UsersPage() {
         </div>
 
         {/* Users Table Card */}
-        <Card className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
+        <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader className="bg-slate-50/60 border-b border-slate-100">
@@ -527,7 +533,7 @@ export default function UsersPage() {
               </Button>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     </AdminOnly>
   );

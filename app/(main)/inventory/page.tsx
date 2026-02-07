@@ -5,17 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Search,
-  Plus,
-  MoreVertical,
-  Download,
   ArrowLeftRight,
   Package,
   AlertTriangle,
   ChevronLeft,
   ChevronRight,
-  Eye,
-  Pencil,
-  Trash2,
   ChevronDown,
   Filter,
 } from "lucide-react";
@@ -37,12 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -270,7 +258,7 @@ export default function InventoryPage() {
   const totalPages = Math.ceil(pagination.total / pagination.take);
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50/50">
+    <div className="flex flex-col min-h-screen bg-[#EFF3F4]">
       {/* Main Content */}
       <div className="flex-1 p-6">
         {/* Header Section */}
@@ -395,7 +383,7 @@ export default function InventoryPage() {
         </div>
 
         {/* Table Section */}
-        <Card className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
+        <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader className="bg-slate-50/60 border-b border-slate-100">
@@ -573,7 +561,7 @@ export default function InventoryPage() {
               </Button>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* Footer Stats Section */}
