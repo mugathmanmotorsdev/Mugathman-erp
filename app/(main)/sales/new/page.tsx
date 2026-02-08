@@ -53,7 +53,6 @@ interface Product {
 interface Location {
   id: string;
   name: string;
-  department?: string;
 }
 
 interface Customer {
@@ -160,7 +159,7 @@ export default function NewSalePage() {
       saleItems.map((item) => {
         if (item.id === id) {
           const updated = { ...item, ...updates };
-          
+
           // If product changed, update defaults
           if (updates.product_id) {
             const prod = products.find((p) => p.id === updates.product_id);
@@ -172,7 +171,7 @@ export default function NewSalePage() {
               updated.vin = "";
             }
           }
-          
+
           // If vehicle changed, update VIN
           if (updates.vehicle_id) {
             const veh = availableVehicles.find((v) => v.id === updates.vehicle_id);
@@ -206,9 +205,9 @@ export default function NewSalePage() {
     }
 
     // Check if all items are valid
-    const invalidItem = saleItems.find(item => 
-      !item.product_id || 
-      !item.location_id || 
+    const invalidItem = saleItems.find(item =>
+      !item.product_id ||
+      !item.location_id ||
       (item.tracking_type === "SERIAL" && !item.vehicle_id) ||
       item.quantity <= 0
     );
@@ -296,7 +295,7 @@ export default function NewSalePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Form */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* Customer Selection Card */}
           <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
@@ -321,7 +320,7 @@ export default function NewSalePage() {
                     New Customer
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="existing" className="space-y-4">
                   <div className="space-y-2">
                     <Label className="text-slate-600 font-bold ml-1">Select Client</Label>
@@ -342,16 +341,16 @@ export default function NewSalePage() {
                     </Select>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="new" className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-bold ml-1">Full Name *</Label>
                       <div className="relative">
-                        <Input 
-                          placeholder="Enter customer name" 
+                        <Input
+                          placeholder="Enter customer name"
                           value={newCustomer.full_name}
-                          onChange={(e) => setNewCustomer({...newCustomer, full_name: e.target.value})}
+                          onChange={(e) => setNewCustomer({ ...newCustomer, full_name: e.target.value })}
                           className="h-12 pl-10 border-slate-200 rounded-2xl bg-slate-50/50"
                         />
                         <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -360,10 +359,10 @@ export default function NewSalePage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-bold ml-1">Phone Number *</Label>
                       <div className="relative">
-                        <Input 
-                          placeholder="Enter phone number" 
+                        <Input
+                          placeholder="Enter phone number"
                           value={newCustomer.phone}
-                          onChange={(e) => setNewCustomer({...newCustomer, phone: e.target.value})}
+                          onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
                           className="h-12 pl-10 border-slate-200 rounded-2xl bg-slate-50/50"
                         />
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -372,10 +371,10 @@ export default function NewSalePage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-bold ml-1">Email (Optional)</Label>
                       <div className="relative">
-                        <Input 
-                          placeholder="customer@example.com" 
+                        <Input
+                          placeholder="customer@example.com"
                           value={newCustomer.email}
-                          onChange={(e) => setNewCustomer({...newCustomer, email: e.target.value})}
+                          onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
                           className="h-12 pl-10 border-slate-200 rounded-2xl bg-slate-50/50"
                         />
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -384,10 +383,10 @@ export default function NewSalePage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-bold ml-1">Address (Optional)</Label>
                       <div className="relative">
-                        <Input 
-                          placeholder="Residential address" 
+                        <Input
+                          placeholder="Residential address"
                           value={newCustomer.address}
-                          onChange={(e) => setNewCustomer({...newCustomer, address: e.target.value})}
+                          onChange={(e) => setNewCustomer({ ...newCustomer, address: e.target.value })}
                           className="h-12 pl-10 border-slate-200 rounded-2xl bg-slate-50/50"
                         />
                         <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -443,8 +442,8 @@ export default function NewSalePage() {
                       saleItems.map((item) => (
                         <tr key={item.id} className="group hover:bg-slate-50/30 transition-colors">
                           <td className="px-6 py-4 min-w-[200px]">
-                            <Select 
-                              value={item.product_id} 
+                            <Select
+                              value={item.product_id}
                               onValueChange={(val) => updateItem(item.id, { product_id: val })}
                             >
                               <SelectTrigger className="h-10 border-slate-200 rounded-xl bg-white shadow-sm">
@@ -463,8 +462,8 @@ export default function NewSalePage() {
                             </Select>
                           </td>
                           <td className="px-6 py-4 space-y-2">
-                            <Select 
-                              value={item.location_id} 
+                            <Select
+                              value={item.location_id}
                               onValueChange={(val) => updateItem(item.id, { location_id: val })}
                             >
                               <SelectTrigger className="h-9 border-slate-100 rounded-lg bg-slate-50/50 text-xs">
@@ -480,8 +479,8 @@ export default function NewSalePage() {
                             </Select>
 
                             {item.tracking_type === "SERIAL" && (
-                              <Select 
-                                value={item.vehicle_id} 
+                              <Select
+                                value={item.vehicle_id}
                                 onValueChange={(val) => updateItem(item.id, { vehicle_id: val })}
                               >
                                 <SelectTrigger className="h-9 border-indigo-100 rounded-lg bg-indigo-50/30 text-xs font-mono font-bold text-indigo-700">
@@ -494,7 +493,7 @@ export default function NewSalePage() {
                                       <SelectItem key={v.id} value={v.id} className="text-xs font-mono">
                                         {v.vin}
                                       </SelectItem>
-                                  ))}
+                                    ))}
                                   {availableVehicles.filter(v => v.product_id === item.product_id).length === 0 && (
                                     <div className="p-2 text-[10px] text-slate-400 text-center">No available units</div>
                                   )}
@@ -503,7 +502,7 @@ export default function NewSalePage() {
                             )}
                           </td>
                           <td className="px-6 py-4">
-                            <Input 
+                            <Input
                               type="number"
                               disabled={item.tracking_type === "SERIAL"}
                               value={item.quantity}
@@ -513,7 +512,7 @@ export default function NewSalePage() {
                           </td>
                           <td className="px-6 py-4 min-w-[120px]">
                             <div className="relative">
-                              <Input 
+                              <Input
                                 type="number"
                                 value={item.unit_price}
                                 onChange={(e) => updateItem(item.id, { unit_price: parseFloat(e.target.value) || 0 })}

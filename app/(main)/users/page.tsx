@@ -4,12 +4,7 @@ import React, { useState, useEffect } from "react";
 import {
   Search,
   Filter,
-  MoreHorizontal,
   Users,
-  UserCheck,
-  UserMinus,
-  ShieldCheck,
-  Eye,
   Check,
   Clock,
 } from "lucide-react";
@@ -24,15 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -41,8 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,18 +36,10 @@ import { AdminOnly } from "@/components/RoleGuard";
 import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
 import NewUserDialog from "@/components/NewUserDialog";
+import UserRow from "@/components/UserRow";
 
-type UserStatus = "ACTIVE" | "PENDING" | "INACTIVE";
-type Role = "ADMIN" | "EDITOR" | "VIEWER";
 
-interface User {
-  id: string;
-  full_name: string;
-  email: string;
-  role: Role;
-  status: UserStatus;
-  created_at: string;
-}
+import { User, Role, UserStatus } from "@/types/user";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -93,7 +69,12 @@ export default function UsersPage() {
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
       if (data.users) {
-        setUsers(data.users);
+        // Convert date strings to Date objects
+        const formattedUsers = data.users.map((user: any) => ({
+          ...user,
+          created_at: new Date(user.created_at),
+        }));
+        setUsers(formattedUsers);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -197,9 +178,9 @@ export default function UsersPage() {
     );
   };
 
-  const getTimeAgo = (date: string) => {
+  const getTimeAgo = (date: Date) => {
     const now = new Date();
-    const past = new Date(date);
+    const past = date; // Already a Date object
     const diff = now.getTime() - past.getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(minutes / 60);
@@ -216,43 +197,43 @@ export default function UsersPage() {
       <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
         {/* Header Section */}
         <div className="flex justify-between items-end pb-2">
-          <PageHeading 
-          title="Users"
-          description="Manage employee permissions and dealer access control." />
+          <PageHeading
+            title="Users"
+            description="Manage employee permissions and dealer access control." />
 
           {/* new user dialog */}
           <NewUserDialog
-          form={form}
-          onSubmit={onSubmit}
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
+            form={form}
+            onSubmit={onSubmit}
+            isDialogOpen={isDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
           />
         </div>
 
         {/* Stats Cards Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* users amount */}
-          <StatCard 
-          title="Total Employees" 
-          stat={users.length} 
-          icon={<Users size={30} strokeWidth={2.5} className="text-[#3E2792]" />} 
-          iconBg="bg-[#F1F3F9]"
+          <StatCard
+            title="Total Employees"
+            stat={users.length}
+            icon={<Users size={30} strokeWidth={2.5} className="text-[#3E2792]" />}
+            iconBg="bg-[#F1F3F9]"
           />
-          
+
           {/* active users */}
-          <StatCard 
-          title="Active Now" 
-          stat={users.filter((u) => u.status === "ACTIVE").length} 
-          icon={<Check size={30} strokeWidth={2.5} className="text-green-500" />} 
-          iconBg="bg-green-50"
+          <StatCard
+            title="Active Now"
+            stat={users.filter((u) => u.status === "ACTIVE").length}
+            icon={<Check size={30} strokeWidth={2.5} className="text-green-500" />}
+            iconBg="bg-green-50"
           />
-          
+
           {/* pending invites */}
-          <StatCard 
-          title="Pending Invite" 
-          stat={users.filter((u) => u.status === "PENDING").length} 
-          icon={<Clock size={30} strokeWidth={2.5} className="text-yellow-500" />} 
-          iconBg="bg-yellow-50"
+          <StatCard
+            title="Pending Invite"
+            stat={users.filter((u) => u.status === "PENDING").length}
+            icon={<Clock size={30} strokeWidth={2.5} className="text-yellow-500" />}
+            iconBg="bg-yellow-50"
           />
         </div>
 
@@ -421,89 +402,14 @@ export default function UsersPage() {
                   </TableRow>
                 ) : (
                   filteredUsers.map((user) => (
-                    <TableRow
+                    <UserRow
                       key={user.id}
-                      className="group hover:bg-[#F8F9FF]/40 border-b border-slate-50 transition-all duration-200"
-                    >
-                      <TableCell className="pl-8 py-4.5">
-                        <Checkbox className="rounded-md border-slate-200 w-5 h-5 data-[state=checked]:bg-[#3E2792] data-[state=checked]:border-[#3E2792]" />
-                      </TableCell>
-                      <TableCell className="py-4.5">
-                        <div className="flex items-center gap-3.5">
-                          <Avatar className="h-11 w-11 border-2 border-white shadow-sm ring-1 ring-slate-100 group-hover:ring-indigo-200 transition-all">
-                            <AvatarImage
-                              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.full_name}&backgroundColor=F1F3F9`}
-                            />
-                            <AvatarFallback className="bg-slate-100 text-slate-500 font-bold text-xs uppercase">
-                              {user.full_name
-                                ?.split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="font-black text-[#1A1C1E] text-[15px] tracking-tight group-hover:text-[#3E2792] transition-colors">
-                            {user.full_name}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="py-4.5 font-semibold text-slate-500 text-[14px]">
-                        {user.email}
-                      </TableCell>
-                      <TableCell className="py-4.5">
-                        {getRoleBadge(user.role)}
-                      </TableCell>
-                      <TableCell className="py-4.5">
-                        {getStatusContent(user.status)}
-                      </TableCell>
-                      <TableCell className="py-4.5 font-semibold text-slate-400 text-[14px]">
-                        {getTimeAgo(user.created_at)}
-                      </TableCell>
-                      <TableCell className="text-right pr-8 py-4.5">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="h-10 w-10 p-0 rounded-xl hover:bg-[#E8EBFD] text-slate-400 hover:text-[#3E2792] transition-all"
-                            >
-                              <MoreHorizontal size={22} strokeWidth={2.5} />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className="w-56 p-2 rounded-2xl border-slate-100 shadow-2xl animate-in fade-in-0 zoom-in-95"
-                          >
-                            <DropdownMenuLabel className="text-[11px] font-black text-slate-400 uppercase tracking-widest px-3 py-2">
-                              Account Control
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator className="bg-slate-50 mx-2" />
-                            <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-slate-700 text-[13px] px-3 focus:bg-indigo-50 focus:text-[#3E2792]">
-                              <Eye size={18} strokeWidth={2.5} />
-                              View Detailed Profile
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-slate-700 text-[13px] px-3 focus:bg-indigo-50 focus:text-[#3E2792]">
-                              <ShieldCheck size={18} strokeWidth={2.5} />
-                              Update Permissions
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-slate-50 mx-2" />
-                            {user.status !== "INACTIVE" && (
-                              <DropdownMenuItem
-                                onClick={() => deactivateUser(user.id)}
-                                className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-rose-600 text-[13px] px-3 focus:bg-rose-50 focus:text-rose-700"
-                              >
-                                <UserMinus size={18} strokeWidth={2.5} />
-                                Deactivate Account
-                              </DropdownMenuItem>
-                            )}
-                            {user.status === "INACTIVE" && (
-                              <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-emerald-600 text-[13px] px-3 focus:bg-emerald-50 focus:text-emerald-700">
-                                <UserCheck size={18} strokeWidth={2.5} />
-                                Re-activate Account
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+                      user={{ ...user }}
+                      deactivateUser={deactivateUser}
+                      getRoleBadge={getRoleBadge}
+                      getStatusContent={getStatusContent}
+                      getTimeAgo={getTimeAgo}
+                    />
                   ))
                 )}
               </TableBody>

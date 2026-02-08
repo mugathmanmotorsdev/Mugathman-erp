@@ -49,7 +49,6 @@ interface Product {
 interface Location {
   id: string;
   name: string;
-  department: string;
 }
 
 interface Vehicle {
@@ -257,22 +256,20 @@ export default function NewMovementPage() {
         <div className="flex items-center gap-2 p-1 bg-white border border-slate-200 rounded-2xl shadow-sm">
           <button
             onClick={() => setMovementType("IN")}
-            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-              movementType === "IN"
-                ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
-                : "text-slate-500 hover:bg-slate-50"
-            }`}
+            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${movementType === "IN"
+              ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
+              : "text-slate-500 hover:bg-slate-50"
+              }`}
           >
             <Plus className="h-4 w-4" />
             STOCKS IN
           </button>
           <button
             onClick={() => setMovementType("OUT")}
-            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-              movementType === "OUT"
-                ? "bg-rose-500 text-white shadow-lg shadow-rose-100"
-                : "text-slate-500 hover:bg-slate-50"
-            }`}
+            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${movementType === "OUT"
+              ? "bg-rose-500 text-white shadow-lg shadow-rose-100"
+              : "text-slate-500 hover:bg-slate-50"
+              }`}
           >
             <Minus className="h-4 w-4" />
             STOCKS OUT
@@ -290,13 +287,9 @@ export default function NewMovementPage() {
                   className={`h-12 w-12 rounded-2xl flex items-center justify-center ${movementType === "IN" ? "bg-emerald-50" : "bg-rose-50"}`}
                 >
                   {movementType === "IN" ? (
-                    <Plus
-                      className={`h-6 w-6 ${movementType === "IN" ? "text-emerald-600" : "text-rose-600"}`}
-                    />
+                    <Plus className="h-6 w-6 text-emerald-600" />
                   ) : (
-                    <Minus
-                      className={`h-6 w-6 ${movementType === "IN" ? "text-emerald-600" : "text-rose-600"}`}
-                    />
+                    <Minus className="h-6 w-6 text-rose-600" />
                   )}
                 </div>
                 <div>
@@ -379,9 +372,6 @@ export default function NewMovementPage() {
                           <div className="flex flex-col">
                             <span className="font-semibold text-slate-800">
                               {l.name}
-                            </span>
-                            <span className="text-[10px] text-slate-500 uppercase tracking-widest">
-                              {l.department}
                             </span>
                           </div>
                         </SelectItem>
@@ -633,11 +623,10 @@ export default function NewMovementPage() {
                 </div>
 
                 <Button
-                  className={`w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${
-                    movementType === "IN"
-                      ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200"
-                      : "bg-rose-600 hover:bg-rose-700 shadow-rose-200"
-                  }`}
+                  className={`w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${movementType === "IN"
+                    ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200"
+                    : "bg-rose-600 hover:bg-rose-700 shadow-rose-200"
+                    }`}
                   disabled={
                     loading ||
                     !formData.product_id ||

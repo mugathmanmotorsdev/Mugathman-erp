@@ -18,12 +18,16 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useauth"
+import { useAvatar } from "@/hooks/useAvatar"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 export function AppSidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { isAdmin } = useAuth()
 
+  // generate avatar for user
+  const avatar = useAvatar(session?.user?.email || "", 90)
 
   const links = [
     { href: "/", label: "Dashboard", icon: Home, external: false, adminOnly: false },
@@ -44,28 +48,29 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent  className="px-2 mt-10">
+      <SidebarContent className="px-2 mt-10">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {links.map((link) => {
                 const Icon = link.icon
                 const isActive = pathname === link.href
+                console.log(pathname, link.href, isActive)
 
                 if (link.adminOnly && !isAdmin) return null
 
                 return (
                   <SidebarMenuItem key={link.href} className="mb-4">
-                    <SidebarMenuButton 
-                      asChild 
+                    <SidebarMenuButton
+                      asChild
                       isActive={isActive}
                       tooltip={link.label}
-                      className="p-5"
+                      className="p-5 data-[active=true]:bg-[#150150]/90 data-[active=true]:text-white"
                     >
-                      <Link 
-                      href={link.href} 
-                      target={link.external ? "_blank" : undefined}
-                      className="flex items-center gap-4">
+                      <Link
+                        href={link.href}
+                        target={link.external ? "_blank" : undefined}
+                        className="flex items-center gap-4">
                         <Icon size={24} />
                         <span className="text-base">{link.label}</span>
                       </Link>
@@ -81,9 +86,15 @@ export function AppSidebar() {
       <SidebarFooter className="border-t p-4">
         {session?.user ? (
           <div className="flex items-center gap-3 mb-4 p-2 rounded-lg bg-sidebar-accent/50">
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <User className="h-4 w-4" />
-            </div>
+            <Avatar>
+              <AvatarImage src={avatar} />
+              <AvatarFallback className="bg-slate-100 text-slate-500 font-bold text-xs uppercase">
+                {session.user.name
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex flex-col overflow-hidden">
               <span className="text-sm font-medium truncate">{session.user.name || "User"}</span>
               <span className="text-xs text-muted-foreground truncate">{session.user.email}</span>

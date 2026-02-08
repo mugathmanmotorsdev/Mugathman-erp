@@ -19,11 +19,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
+        console.log("body: ", body);
         const { product_id, inventory_location_id, vin } = body;
         if (!product_id || !inventory_location_id || !vin) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
-        
+
         // check if product exists
         const product = await prisma.product.findUnique({
             where: {

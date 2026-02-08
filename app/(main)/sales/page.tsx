@@ -13,10 +13,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
@@ -111,24 +107,24 @@ export default function SalesPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* total sales */}
         <StatCard
-        title="Total Sales" 
-        stat={sales.length} 
-        icon={<ShoppingCart className="h-6 w-6" />} 
-        iconBg="bg-indigo-50"
+          title="Total Sales"
+          stat={sales.length}
+          icon={<ShoppingCart className="h-6 w-6" />}
+          iconBg="bg-indigo-50"
         />
         {/* revenue */}
         <StatCard
-        title="Revenue"
-        stat={sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0).toLocaleString()}
-        icon={<div className="font-bold text-xl">$</div>}
-        iconBg="bg-emerald-50"
+          title="Revenue"
+          stat={sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0).toLocaleString()}
+          icon={<div className="font-bold text-xl">$</div>}
+          iconBg="bg-emerald-50"
         />
         {/* avg order value */}
         <StatCard
-        title="Avg. Order Value"
-        stat={sales.length > 0 ? (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length).toLocaleString(undefined, {maximumFractionDigits: 0}) : 0}
-        icon={<Filter className="h-6 w-6" />}
-        iconBg="bg-orange-50"
+          title="Avg. Order Value"
+          stat={sales.length > 0 ? (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length).toLocaleString(undefined, { maximumFractionDigits: 0 }) : 0}
+          icon={<Filter className="h-6 w-6" />}
+          iconBg="bg-orange-50"
         />
       </div>
 
@@ -159,99 +155,98 @@ export default function SalesPage() {
 
       {/* Sales Table */}
       <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-slate-50/50 border-y border-slate-100">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="bg-slate-50/50 border-y border-slate-100">
+              <tr>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Order Info</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Customer</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Items</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i}>
+                    <td colSpan={6} className="px-6 py-4"><div className="h-12 w-full bg-slate-100 animate-pulse rounded-xl" /></td>
+                  </tr>
+                ))
+              ) : filteredSales.length === 0 ? (
                 <tr>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Order Info</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Customer</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Items</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                  <td colSpan={6} className="px-6 py-20 text-center text-slate-400">
+                    <ShoppingCart className="h-16 w-16 mx-auto mb-4 opacity-5" />
+                    <p className="text-lg font-medium">No sales orders found</p>
+                    <Button variant="link" onClick={() => router.push("/sales/new")} className="text-indigo-600 font-bold mt-2">
+                      Create your first sale
+                    </Button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i}>
-                      <td colSpan={6} className="px-6 py-4"><div className="h-12 w-full bg-slate-100 animate-pulse rounded-xl" /></td>
-                    </tr>
-                  ))
-                ) : filteredSales.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-20 text-center text-slate-400">
-                      <ShoppingCart className="h-16 w-16 mx-auto mb-4 opacity-5" />
-                      <p className="text-lg font-medium">No sales orders found</p>
-                      <Button variant="link" onClick={() => router.push("/sales/new")} className="text-indigo-600 font-bold mt-2">
-                        Create your first sale
-                      </Button>
+              ) : (
+                filteredSales.map((sale) => (
+                  <tr key={sale.id} className="group hover:bg-slate-50/50 transition-colors">
+                    <td className="px-6 py-5">
+                      <div className="flex flex-col">
+                        <span className="font-black text-slate-900">{sale.sale_number}</span>
+                        <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                          <Calendar className="h-3 w-3" />
+                          {new Date(sale.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-700">{sale.customer.full_name}</span>
+                        <span className="text-xs text-slate-500">{sale.customer.phone}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <Badge variant="secondary" className="bg-slate-100 text-slate-600 rounded-lg">
+                        {sale.sale_items.length} Products
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className="font-black text-slate-900">
+                        ${calculateTotal(sale.sale_items).toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5">
+                      <Badge
+                        className={`rounded-lg px-3 py-1 font-bold ${sale.status === "COMPLETED"
+                            ? "bg-emerald-50 text-emerald-600 border-none"
+                            : "bg-slate-100 text-slate-500 border-none"
+                          }`}
+                      >
+                        {sale.status}
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="rounded-xl">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
+                          <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                            <Search className="h-4 w-4 text-slate-400" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                            <Download className="h-4 w-4 text-slate-400" />
+                            Download Invoice
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
-                ) : (
-                  filteredSales.map((sale) => (
-                    <tr key={sale.id} className="group hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-5">
-                        <div className="flex flex-col">
-                          <span className="font-black text-slate-900">{sale.sale_number}</span>
-                          <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(sale.created_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-5">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-700">{sale.customer.full_name}</span>
-                          <span className="text-xs text-slate-500">{sale.customer.phone}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-5 text-center">
-                        <Badge variant="secondary" className="bg-slate-100 text-slate-600 rounded-lg">
-                          {sale.sale_items.length} Products
-                        </Badge>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className="font-black text-slate-900">
-                          ${calculateTotal(sale.sale_items).toLocaleString()}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5">
-                        <Badge
-                          className={`rounded-lg px-3 py-1 font-bold ${
-                            sale.status === "COMPLETED"
-                              ? "bg-emerald-50 text-emerald-600 border-none"
-                              : "bg-slate-100 text-slate-500 border-none"
-                          }`}
-                        >
-                          {sale.status}
-                        </Badge>
-                      </td>
-                      <td className="px-6 py-5 text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-xl">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
-                            <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                              <Search className="h-4 w-4 text-slate-400" />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                              <Download className="h-4 w-4 text-slate-400" />
-                              Download Invoice
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
