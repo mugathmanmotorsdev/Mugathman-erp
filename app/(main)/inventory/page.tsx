@@ -275,7 +275,7 @@ export default function InventoryPage() {
                   All Products
                 </Button>
               </Link>
-              <Link href="/inventory/movements/new">
+              <Link href="/inventory/new">
                 <Button className="h-11 px-5 gap-2.5 bg-[#150150] hover:bg-[#150150]/80 text-white font-semibold rounded-xl shadow-lg shadow-indigo-200 transition-all hover:-translate-y-0.5">
                   <ArrowLeftRight className="h-4 w-4" />
                   Stock In/Out

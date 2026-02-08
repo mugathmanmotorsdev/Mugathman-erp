@@ -1,4 +1,4 @@
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardHeader } from "./ui/card";
 
 export default function StatCard(
     {title, stat, icon, iconBg}: 
@@ -6,15 +6,17 @@ export default function StatCard(
 ) {
     
     return (
-        <Card className="border-none shadow-[0_2px_8px_rgba(0,0,0,0.02)] rounded-2xl overflow-hidden">
-            <CardContent className="p-7 flex justify-between items-center bg-white">
-                <div className="space-y-2">
+        <Card className="flex flex-col gap-2 flex-1 rounded-lg px-5 shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+            <CardHeader className="p-0">
                 <p className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">
                     {title}
                 </p>
-                <h3 className="text-[44px] font-black text-[#1A1C1E] leading-none tracking-tighter">
-                    {stat}
-                </h3>
+            </CardHeader>
+            <CardContent className="flex justify-between items-center">
+                <div className="space-y-2">
+                    <h3 className="text-[44px] font-black text-[#1A1C1E] leading-none tracking-tighter">
+                        {stat}
+                    </h3>
                 </div>
                 <div className={`w-[60px] h-[60px] rounded-2xl flex items-center justify-center text-[#5C6170] ${iconBg}`}>
                     {icon}

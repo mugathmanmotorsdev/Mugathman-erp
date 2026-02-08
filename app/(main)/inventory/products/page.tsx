@@ -152,7 +152,7 @@ export default function ProductsPage() {
     ];
 
     return (
-        <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+        <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
             {/* Header Section */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">

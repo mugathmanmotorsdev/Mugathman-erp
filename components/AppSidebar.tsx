@@ -55,7 +55,6 @@ export function AppSidebar() {
               {links.map((link) => {
                 const Icon = link.icon
                 const isActive = pathname === link.href
-                console.log(pathname, link.href, isActive)
 
                 if (link.adminOnly && !isAdmin) return null
 

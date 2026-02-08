@@ -36,7 +36,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface Product {
   id: string;
@@ -232,7 +231,7 @@ export default function NewMovementPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+    <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -302,8 +301,8 @@ export default function NewMovementPage() {
             </CardHeader>
             <CardContent className="p-8 space-y-8">
               {/* Product & Location Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3">
+              <div className="flex gap-8">
+                <div className="w-full space-y-2">
                   <Label className="text-slate-700 font-bold flex items-center gap-2">
                     <Package className="h-4 w-4 text-indigo-500" />
                     Select Product
@@ -312,7 +311,7 @@ export default function NewMovementPage() {
                     onValueChange={handleProductChange}
                     value={formData.product_id}
                   >
-                    <SelectTrigger className="h-12 border-slate-200 bg-slate-50/50 rounded-2xl focus:ring-2 focus:ring-indigo-100 transition-all">
+                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md focus:ring-2 focus:ring-indigo-100 transition-all">
                       <SelectValue
                         placeholder={
                           fetchingProducts
@@ -342,7 +341,7 @@ export default function NewMovementPage() {
                   </Select>
                 </div>
 
-                <div className="space-y-3">
+                <div className="w-full space-y-2">
                   <Label className="text-slate-700 font-bold flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-indigo-500" />
                     Inventory Location
@@ -353,7 +352,7 @@ export default function NewMovementPage() {
                     }
                     value={formData.location_id}
                   >
-                    <SelectTrigger className="h-12 border-slate-200 bg-slate-50/50 rounded-2xl focus:ring-2 focus:ring-indigo-100 transition-all">
+                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md focus:ring-2 focus:ring-indigo-100 transition-all">
                       <SelectValue
                         placeholder={
                           fetchingLocations
@@ -362,7 +361,7 @@ export default function NewMovementPage() {
                         }
                       />
                     </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-slate-200 shadow-2xl">
+                    <SelectContent className="rounded-md border-slate-200 shadow-2xl">
                       {locations.map((l) => (
                         <SelectItem
                           key={l.id}
@@ -500,8 +499,8 @@ export default function NewMovementPage() {
               )}
 
               {/* Reference Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="space-y-3">
+              <div className="flex gap-6">
+                <div className="space-y-3 w-full">
                   <Label className="text-slate-700 font-bold">
                     Movement Reason
                   </Label>
@@ -511,7 +510,7 @@ export default function NewMovementPage() {
                     }
                     value={formData.reason}
                   >
-                    <SelectTrigger className="h-12 border-slate-200 bg-slate-50/50 rounded-2xl">
+                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md">
                       <SelectValue placeholder="Select Reason" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-slate-200">
@@ -523,7 +522,7 @@ export default function NewMovementPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-3 w-full">
                   <Label className="text-slate-700 font-bold">
                     Reference Type
                   </Label>
@@ -533,7 +532,7 @@ export default function NewMovementPage() {
                     }
                     value={formData.reference_type}
                   >
-                    <SelectTrigger className="h-12 border-slate-200 bg-slate-50/50 rounded-2xl">
+                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md">
                       <SelectValue placeholder="Select Type" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-slate-200">
@@ -545,7 +544,7 @@ export default function NewMovementPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-3 w-full">
                   <Label className="text-slate-700 font-bold">
                     Reference ID
                   </Label>
@@ -559,7 +558,7 @@ export default function NewMovementPage() {
                           reference_id: e.target.value,
                         })
                       }
-                      className="h-12 pl-10 border-slate-200 bg-slate-50/50 rounded-2xl"
+                      className="w-full h-12 pl-10 border-slate-200 bg-slate-50/50 rounded-md"
                     />
                     <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   </div>
@@ -570,7 +569,7 @@ export default function NewMovementPage() {
         </div>
 
         {/* Sidebar Summary */}
-        <div className="space-y-6">
+        <div className="space-y-6 w-full">
           <Card className="border-none shadow-xl shadow-slate-200/50 bg-white rounded-3xl overflow-hidden">
             <CardHeader className="bg-[#150150] text-white min-h-[120px] pb-10 flex flex-col justify-end">
               <CardTitle className="text-lg opacity-80 font-medium">

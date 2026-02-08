@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { 
-    ChevronLeft, 
     Save, 
     X, 
     Package, 
@@ -78,31 +76,13 @@ export default function NewProductPage() {
     };
 
     return (
-        <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+        <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
             {/* Header */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create New Product</h1>
                         <p className="text-sm text-slate-500">Define your product details, pricing and inventory settings.</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Button 
-                            variant="ghost" 
-                            className="text-slate-600 hover:bg-slate-100 h-10 px-4 rounded-xl"
-                            onClick={() => router.back()}
-                        >
-                            <X className="mr-2 h-4 w-4" />
-                            Cancel
-                        </Button>
-                        <Button 
-                            className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white gap-2 px-6 h-10 shadow-md shadow-blue-100 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-                            onClick={handleSubmit}
-                            disabled={loading || !formData.name || !formData.category}
-                        >
-                            <Save className="h-4 w-4" />
-                            {loading ? "Creating..." : "Save Product"}
-                        </Button>
                     </div>
                 </div>
             </div>
@@ -182,55 +162,6 @@ export default function NewProductPage() {
                     <Card className="border-slate-200 shadow-sm rounded-2xl overflow-hidden">
                         <CardHeader className="bg-white border-b border-slate-50">
                             <div className="flex items-center gap-2">
-                                <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-                                    <DollarSign className="h-4 w-4 text-emerald-600" />
-                                </div>
-                                <CardTitle className="text-lg text-slate-800">Pricing & Units</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-6 grid grid-cols-2 gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="unit_price" className="text-slate-700 font-medium">Standard Unit Price (USD)</Label>
-                                <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
-                                    <Input 
-                                        id="unit_price" 
-                                        type="number"
-                                        step="0.01"
-                                        placeholder="0.00" 
-                                        className="h-11 pl-8 border-slate-200 bg-slate-50/30 focus-visible:bg-white transition-all rounded-xl"
-                                        value={formData.unit_price}
-                                        onChange={(e) => setFormData({...formData, unit_price: e.target.value})}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="unit" className="text-slate-700 font-medium">Unit of Measure</Label>
-                                <Select 
-                                    defaultValue="PCS"
-                                    onValueChange={(val) => setFormData({...formData, unit: val})}
-                                >
-                                    <SelectTrigger className="h-11 border-slate-200 bg-slate-50/30 transition-all rounded-xl">
-                                        <SelectValue placeholder="Select Unit" />
-                                    </SelectTrigger>
-                                    <SelectContent className="rounded-xl border-slate-200">
-                                        <SelectItem value="PCS">Pieces (PCS)</SelectItem>
-                                        <SelectItem value="KG">Kilograms (KG)</SelectItem>
-                                        <SelectItem value="BOX">Box/Case</SelectItem>
-                                        <SelectItem value="L">Liters (L)</SelectItem>
-                                        <SelectItem value="KIT">Kit</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Sidebar Settings */}
-                <div className="flex flex-col gap-6">
-                    <Card className="border-slate-200 shadow-sm rounded-2xl overflow-hidden">
-                        <CardHeader className="bg-white border-b border-slate-50">
-                            <div className="flex items-center gap-2">
                                 <div className="h-8 w-8 rounded-lg bg-orange-50 flex items-center justify-center">
                                     <Settings className="h-4 w-4 text-orange-600" />
                                 </div>
@@ -275,6 +206,76 @@ export default function NewProductPage() {
                             </div>
                         </CardContent>
                     </Card>
+
+                    <Card className="border-slate-200 shadow-sm rounded-2xl overflow-hidden">
+                        <CardHeader className="bg-white border-b border-slate-50">
+                            <div className="flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                                    <DollarSign className="h-4 w-4 text-emerald-600" />
+                                </div>
+                                <CardTitle className="text-lg text-slate-800">Pricing & Units</CardTitle>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="p-6 grid grid-cols-2 gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="unit_price" className="text-slate-700 font-medium">Standard Unit Price (USD)</Label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">₦</span>
+                                    <Input 
+                                        id="unit_price" 
+                                        type="number"
+                                        step="0.01"
+                                        placeholder="0.00" 
+                                        className="h-11 pl-8 border-slate-200 bg-slate-50/30 focus-visible:bg-white transition-all rounded-xl"
+                                        value={formData.unit_price}
+                                        onChange={(e) => setFormData({...formData, unit_price: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="unit" className="text-slate-700 font-medium">Unit of Measure</Label>
+                                <Select 
+                                    defaultValue="PCS"
+                                    onValueChange={(val) => setFormData({...formData, unit: val})}
+                                >
+                                    <SelectTrigger className="h-11 border-slate-200 bg-slate-50/30 transition-all rounded-xl">
+                                        <SelectValue placeholder="Select Unit" />
+                                    </SelectTrigger>
+                                    <SelectContent className="rounded-xl border-slate-200">
+                                        <SelectItem value="PCS">Pieces (PCS)</SelectItem>
+                                        <SelectItem value="KG">Kilograms (KG)</SelectItem>
+                                        <SelectItem value="BOX">Box/Case</SelectItem>
+                                        <SelectItem value="L">Liters (L)</SelectItem>
+                                        <SelectItem value="KIT">Kit</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <div className="flex items-center gap-3">
+                        <Button 
+                            variant="outline" 
+                            className="text-slate-600 hover:bg-slate-100 h-10 px-4 rounded-xl"
+                            onClick={() => router.back()}
+                        >
+                            <X className="mr-2 h-4 w-4" />
+                            Cancel
+                        </Button>
+                        <Button 
+                            className="bg-[#150150] hover:bg-[#150150]/80 text-white gap-2 px-6 h-10 shadow-md shadow-blue-100 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                            onClick={handleSubmit}
+                            disabled={loading || !formData.name || !formData.category}
+                        >
+                            <Save className="h-4 w-4" />
+                            {loading ? "Creating..." : "Save Product"}
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Sidebar Settings */}
+                <div className="flex flex-col gap-6">
+                    
 
                     <Card className="border-blue-100 bg-blue-50/30 rounded-2xl border shadow-none">
                         <CardContent className="p-4 flex gap-3 text-sm text-blue-700 leading-relaxed">
