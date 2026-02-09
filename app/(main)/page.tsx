@@ -37,6 +37,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import SkeletonUi from "@/components/SkeletonUi";
 
 interface Stats {
   totalProducts: number;
@@ -102,23 +103,7 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="p-8 space-y-8 bg-slate-50/50 min-h-screen">
-        <div className="flex justify-between items-center">
-          <Skeleton className="h-10 w-48 rounded-xl" />
-          <Skeleton className="h-12 w-32 rounded-2xl" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-32 rounded-3xl" />
-          ))}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Skeleton className="h-[400px] lg:col-span-2 rounded-3xl" />
-          <Skeleton className="h-[400px] rounded-3xl" />
-        </div>
-      </div>
-    );
+    <SkeletonUi />
   }
 
   return (
@@ -192,7 +177,7 @@ export default function Dashboard() {
             >
               <TrendingUp />
               +12%
-            </Badge> shadow-[0_
+            </Badge>
           </CardFooter>
         </Card>
 
@@ -232,7 +217,7 @@ export default function Dashboard() {
           <CardFooter className="m-0">
             <Badge
               variant="outline"
-              className="bg-rose-100 border-rose-200 text-rose-700 font-bold px-2.5 py-1"
+              className="bg-rose-50 border-rose-200 text-rose-700 font-bold px-2.5 py-1"
             >
               Critical
             </Badge>
@@ -277,7 +262,7 @@ export default function Dashboard() {
                   activities.slice(0, 3).map((activity) => (
                     <Item 
                     key={activity.id}
-                    className="flex items-center gap-6 px-6 rounded-lg bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-sm transition-all cursor-pointer group"
+                    className="flex items-center gap-6 px-6 rounded-lg bg-slate-50/50 border border-slate-100 hover:shadow-sm transition-all cursor-pointer group"
                     >
                       <ItemMedia>
                         <div

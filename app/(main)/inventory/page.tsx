@@ -440,7 +440,7 @@ export default function InventoryPage() {
                         className="group hover:bg-indigo-50/30 border-b border-slate-50 transition-colors"
                       >
                         <TableCell className="py-5 pl-6">
-                          <span className="font-mono text-sm font-semibold text-slate-700 bg-slate-100 px-2 py-1 rounded">
+                          <span className="font-mono text-sm text-slate-500">
                             {product.sku || "N/A"}
                           </span>
                         </TableCell>

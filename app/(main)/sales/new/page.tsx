@@ -8,12 +8,9 @@ import {
   Trash2,
   Package,
   User,
-  MapPin,
   CircleDollarSign,
   ShoppingCart,
-  Truck,
   Barcode,
-  Search,
   UserPlus,
   Users,
   Phone,
@@ -34,11 +31,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -269,7 +264,7 @@ export default function NewSalePage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-slate-50/50 min-h-screen">
+    <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

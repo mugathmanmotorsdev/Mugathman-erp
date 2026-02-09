@@ -40,6 +40,7 @@ import UserRow from "@/components/UserRow";
 
 
 import { User, Role, UserStatus } from "@/types/user";
+import SkeletonUi from "@/components/SkeletonUi";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -193,7 +194,9 @@ export default function UsersPage() {
   };
 
   return (
-    <AdminOnly>
+    <AdminOnly
+    loadingFallback={<SkeletonUi />}
+    >
       <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
         {/* Header Section */}
         <div className="flex justify-between items-end pb-2">
