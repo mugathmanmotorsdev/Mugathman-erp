@@ -4,7 +4,7 @@ import { User } from "@generated/prisma";
 import { redirect } from "next/navigation";
 
 export function useAuth() {
-    const {data: session, status} = useSession()
+    const { data: session, status } = useSession()
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
@@ -44,18 +44,4 @@ export function useAuth() {
         isAuthenticated: !!user,
         isAdmin: user?.role === "ADMIN"
     }
-}
-
-export function useRoleGuard() {
-    const { user } = useAuth()
-
-    if (!user) {
-       return false
-    }
-
-    if (!user.role) {
-        return false
-    }
-
-    return true
 }

@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import Link from "next/link";
 import {
@@ -260,9 +259,9 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   activities.slice(0, 3).map((activity) => (
-                    <Item 
-                    key={activity.id}
-                    className="flex items-center gap-6 px-6 rounded-lg bg-slate-50/50 border border-slate-100 hover:shadow-sm transition-all cursor-pointer group"
+                    <Item
+                      key={activity.id}
+                      className="flex items-center gap-6 px-6 rounded-lg bg-slate-50/50 border border-slate-100 hover:shadow-sm transition-all cursor-pointer group"
                     >
                       <ItemMedia>
                         <div
@@ -284,33 +283,6 @@ export default function Dashboard() {
                         </ItemDescription>
                       </ItemContent>
                     </Item>
-                    // <div
-                    //   key={activity.id}
-                    //   className="flex items-center gap-6 p-6 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-lg transition-all cursor-pointer group"
-                    // >
-                    //   <div
-                    //     className={`h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${activity.type === "SALE" ? "bg-indigo-600 text-white" : "bg-white text-slate-900 border border-slate-200"}`}
-                    //   >
-                    //     {activity.type === "SALE" ? (
-                    //       <MoveUpRight className="h-6 w-6" />
-                    //     ) : (
-                    //       <MoveDownLeft className="h-6 w-6" />
-                    //     )}
-                    //   </div>
-                    //   <div className="flex-1 min-w-0">
-                    //     <div className="flex items-center justify-between mb-1">
-                    //       <h4 className="font-black text-slate-900 truncate">
-                    //         {activity.title}
-                    //       </h4>
-                    //       <span className="text-xs font-bold text-slate-400 whitespace-nowrap">
-                    //         {getTimeAgo(activity.time)}
-                    //       </span>
-                    //     </div>
-                    //     <p className="text-sm text-slate-500 font-medium truncate">
-                    //       {activity.description}
-                    //     </p>
-                    //   </div>
-                    // </div>
                   ))
                 )}
               </div>
@@ -394,6 +366,31 @@ export default function Dashboard() {
                   </div>
                 ))}
               </div>
+              <Button
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/api/receipt?saleId=1234qwerty")
+                    if (!res.ok) throw new Error("Failed to fetch receipt")
+
+                    const blob = await res.blob()
+                    const url = window.URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = "receipt-1234qwerty.pdf"
+                    document.body.appendChild(a)
+                    a.click()
+                    window.URL.revokeObjectURL(url)
+                    document.body.removeChild(a)
+                  } catch (error) {
+                    console.error("Error downloading receipt:", error)
+                    toast.error("Failed to download receipt")
+                  }
+                }}
+                className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <PlusCircle className="h-5 w-5 mr-2" />
+                Print Receipt
+              </Button>
             </CardContent>
           </Card>
 
