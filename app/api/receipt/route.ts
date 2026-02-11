@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { chromium } from 'playwright'
 
-export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url)
+export async function GET(req: NextRequest) {
+    const searchParams = req.nextUrl.searchParams
     const saleId = searchParams.get('saleId')
 
     if (!saleId) {
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const browser = await chromium.launch()
     const page = await browser.newPage()
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/receipt`
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/receipt/${saleId}`
 
     await page.goto(url, { waitUntil: 'networkidle' })
 
@@ -22,6 +22,8 @@ export async function GET(req: Request) {
         margin: {
             top: '10mm',
             bottom: '10mm',
+            left: '0mm',
+            right: '0mm'
         }
     })
 

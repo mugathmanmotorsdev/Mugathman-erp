@@ -1,28 +1,16 @@
-import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { getSales } from "@/lib/actions/sales";
+import prisma from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams;
+    const skip = Number(searchParams.get("skip")) || 0;
+    const take = Number(searchParams.get("take")) || 10;
+
     try {
         await requireAuth();
-        const sales = await prisma.sale.findMany({
-            include: {
-                customer: true,
-                user: {
-                    select: {
-                        full_name: true
-                    }
-                },
-                sale_items: {
-                    include: {
-                        product: true
-                    }
-                }
-            },
-            orderBy: {
-                created_at: 'desc'
-            }
-        });
+        const sales = await getSales(skip, take);
         return NextResponse.json(sales);
     } catch (error) {
         console.error("Error fetching sales:", error);

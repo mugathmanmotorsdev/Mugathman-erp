@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { SidebarTrigger } from "./ui/sidebar";
 import {
   Breadcrumb,
@@ -28,18 +29,18 @@ export default function Header() {
                 const href =
                   index === 0
                     ? `/${item}`
-                    : `${path.slice(0, index).join("/")}/${item}`;
-                console.log(`${item}: ${index}: ${href}`);
+                    : `/${path.slice(0, index + 1).join("/")}`; // Fixed href logic slightly as well
+                
                 if (item === "" && index === 0)
                   return (
-                    <BreadcrumbItem key={index}>
+                    <BreadcrumbItem key="dashboard">
                       <BreadcrumbPage>Dashboard</BreadcrumbPage>
                     </BreadcrumbItem>
                   );
 
                 return (
-                  <>
-                    <BreadcrumbItem key={index}>
+                  <React.Fragment key={index}>
+                    <BreadcrumbItem>
                       {index === path.length - 1 ? (
                         <BreadcrumbPage>
                           {item.charAt(0).toUpperCase() + item.slice(1)}
@@ -53,7 +54,7 @@ export default function Header() {
                       )}
                     </BreadcrumbItem>
                     {index < path.length - 1 && <BreadcrumbSeparator />}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </BreadcrumbList>

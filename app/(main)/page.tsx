@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
-  ShoppingCart,
   Users,
   TrendingUp,
-  AlertTriangle,
   ArrowRight,
   Clock,
   PlusCircle,
@@ -368,22 +366,15 @@ export default function Dashboard() {
               </div>
               <Button
                 onClick={async () => {
-                  try {
-                    const res = await fetch("/api/receipt?saleId=1234qwerty")
-                    if (!res.ok) throw new Error("Failed to fetch receipt")
-
-                    const blob = await res.blob()
-                    const url = window.URL.createObjectURL(blob)
-                    const a = document.createElement('a')
-                    a.href = url
-                    a.download = "receipt-1234qwerty.pdf"
-                    document.body.appendChild(a)
-                    a.click()
-                    window.URL.revokeObjectURL(url)
-                    document.body.removeChild(a)
-                  } catch (error) {
-                    console.error("Error downloading receipt:", error)
-                    toast.error("Failed to download receipt")
+                  const res = await fetch(`/api/receipt?saleId=94bf32c2-4d1b-4f2a-82fb-c0f6c46eda2c`)
+                  const blob = await res.blob()
+                  const url = URL.createObjectURL(blob)
+                  const iframe = document.createElement('iframe')
+                  iframe.src = url
+                  iframe.style.display = 'none'
+                  document.body.appendChild(iframe)
+                  iframe.onload = () => {
+                    iframe.contentWindow?.print()
                   }
                 }}
                 className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"

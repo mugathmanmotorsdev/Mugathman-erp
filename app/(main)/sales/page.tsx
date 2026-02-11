@@ -10,6 +10,7 @@ import {
   MoreVertical,
   Download,
   Filter,
+  Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,28 +25,8 @@ import {
 import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Sale } from "@/types/sale";
 
-interface Sale {
-  id: string;
-  sale_number: string;
-  customer: {
-    full_name: string;
-    phone: string;
-  };
-  user: {
-    full_name: string;
-  };
-  status: string;
-  created_at: string;
-  sale_items: Array<{
-    id: string;
-    quantity: number;
-    unit_price: string;
-    product: {
-      name: string;
-    };
-  }>;
-}
 
 export default function SalesPage() {
   const router = useRouter();
@@ -231,13 +212,53 @@ export default function SalesPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
-                          <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                            <Search className="h-4 w-4 text-slate-400" />
-                            View Details
+                          <DropdownMenuItem 
+                          onClick={async () => {
+                            try {
+                              const res = await fetch(`/api/receipt?saleId=${sale.id}`)
+                              if (!res.ok) throw new Error("Failed to fetch receipt")
+          
+                              const blob = await res.blob()
+                              const url = URL.createObjectURL(blob)
+                              const iframe = document.createElement('iframe')
+                              iframe.src = url
+                              iframe.style.display = 'none'
+                              document.body.appendChild(iframe)
+                              iframe.onload = () => {
+                                iframe.contentWindow?.print()
+                              }
+                            } catch (error) {
+                              console.error("Error printing receipt:", error)
+                              toast.error("Failed to print receipt")
+                            }
+                          }}
+                          className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                            <Printer className="h-4 w-4 text-slate-400" />
+                            Print Receipt
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                          <DropdownMenuItem 
+                          onClick={async () => {
+                            try {
+                              const res = await fetch(`/api/receipt?saleId=${sale.id}`)
+                              if (!res.ok) throw new Error("Failed to fetch receipt")
+          
+                              const blob = await res.blob()
+                              const url = window.URL.createObjectURL(blob)
+                              const a = document.createElement('a')
+                              a.href = url
+                              a.download = `receipt-${sale.sale_number}.pdf`
+                              document.body.appendChild(a)
+                              a.click()
+                              window.URL.revokeObjectURL(url)
+                              document.body.removeChild(a)
+                            } catch (error) {
+                              console.error("Error downloading receipt:", error)
+                              toast.error("Failed to download receipt")
+                            }
+                          }}
+                          className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
                             <Download className="h-4 w-4 text-slate-400" />
-                            Download Invoice
+                            Download Receipt
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
