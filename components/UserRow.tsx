@@ -15,16 +15,21 @@ import { Role, User, UserStatus } from "@/types/user";
 import { useAvatar } from "@/hooks/useAvatar";
 
 
-export default function UserRow(
-    { user, getRoleBadge, getStatusContent, getTimeAgo, deactivateUser }:
-        {
-            user: User,
-            getRoleBadge: (role: Role) => React.ReactNode,
-            getStatusContent: (status: UserStatus) => React.ReactNode,
-            getTimeAgo: (date: Date) => string,
-            deactivateUser: (id: string) => void
-        }
-) {
+export default function UserRow({
+    user,
+    getRoleBadge,
+    getStatusContent,
+    getTimeAgo,
+    deactivateUser,
+    reactivateUser
+}: {
+    user: User,
+    getRoleBadge: (role: Role) => React.ReactNode,
+    getStatusContent: (status: UserStatus) => React.ReactNode,
+    getTimeAgo: (date: Date) => string,
+    deactivateUser: (id: string) => void,
+    reactivateUser: (id: string) => void
+}) {
     // generate avatar for user
     const avatar = useAvatar(user.email, 90)
 
@@ -84,16 +89,7 @@ export default function UserRow(
                             Account Control
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator className="bg-slate-50 mx-2" />
-                        <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-slate-700 text-[13px] px-3 focus:bg-indigo-50 focus:text-[#3E2792]">
-                            <Eye size={18} strokeWidth={2.5} />
-                            View Detailed Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-slate-700 text-[13px] px-3 focus:bg-indigo-50 focus:text-[#3E2792]">
-                            <ShieldCheck size={18} strokeWidth={2.5} />
-                            Update Permissions
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator className="bg-slate-50 mx-2" />
-                        {user.status !== "INACTIVE" && (
+                        {user.status !== "INACTIVE" && user.role !== "ADMIN" && (
                             <DropdownMenuItem
                                 onClick={() => deactivateUser(user.id)}
                                 className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-rose-600 text-[13px] px-3 focus:bg-rose-50 focus:text-rose-700"
@@ -103,7 +99,9 @@ export default function UserRow(
                             </DropdownMenuItem>
                         )}
                         {user.status === "INACTIVE" && (
-                            <DropdownMenuItem className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-emerald-600 text-[13px] px-3 focus:bg-emerald-50 focus:text-emerald-700">
+                            <DropdownMenuItem
+                                onClick={() => reactivateUser(user.id)}
+                                className="flex items-center gap-3 py-3 rounded-xl cursor-pointer font-bold text-emerald-600 text-[13px] px-3 focus:bg-emerald-50 focus:text-emerald-700">
                                 <UserCheck size={18} strokeWidth={2.5} />
                                 Re-activate Account
                             </DropdownMenuItem>

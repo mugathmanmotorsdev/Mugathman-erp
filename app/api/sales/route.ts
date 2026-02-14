@@ -41,6 +41,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    //check stock availability
+    for (const item of items) {
+      const { product_id, quantity, vehicle_id } = item;
+      const stock = await prisma.stockMovement.aggregate({
+        _sum: {
+          quantity: true,
+        },
+        where: {
+          product_id,
+          vehicle_id: vehicle_id || null,
+        },
+      });
+      if ((stock._sum.quantity ?? 0) < quantity) {
+        return NextResponse.json(
+          { error: "Insufficient stock" },
+          { status: 400 },
+        );
+      }
+    }
+
     // Generate sale number (e.g., SALE-20240127-001)
     const date = new Date();
     const dateString = date.toISOString().slice(0, 10).replace(/-/g, "");

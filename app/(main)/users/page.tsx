@@ -124,6 +124,21 @@ export default function UsersPage() {
     }
   };
 
+  const reactivateUser = async (id: string) => {
+    try {
+      const response = await fetch(`/api/users/${id}/activate`, {
+        method: "POST",
+      });
+
+      if (!response.ok) throw new Error("Failed to reactivate user");
+
+      toast.success("User reactivated successfully");
+      fetchUsers();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Action failed");
+    }
+  };
+
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -409,6 +424,7 @@ export default function UsersPage() {
                       key={user.id}
                       user={{ ...user }}
                       deactivateUser={deactivateUser}
+                      reactivateUser={reactivateUser}
                       getRoleBadge={getRoleBadge}
                       getStatusContent={getStatusContent}
                       getTimeAgo={getTimeAgo}

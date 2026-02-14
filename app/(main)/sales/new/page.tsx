@@ -292,7 +292,7 @@ export default function NewSalePage() {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Customer Selection Card */}
-          <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
@@ -320,7 +320,7 @@ export default function NewSalePage() {
                   <div className="space-y-2">
                     <Label className="text-slate-600 font-bold ml-1">Select Client</Label>
                     <Select value={selectedCustomerId} onValueChange={setSelectedCustomerId}>
-                      <SelectTrigger className="h-14 border-slate-200 bg-slate-50/50 rounded-2xl focus:ring-indigo-100">
+                      <SelectTrigger className="h-16 w-full border-slate-200 bg-slate-50/50 rounded-xl focus:ring-indigo-100">
                         <SelectValue placeholder="Search for a customer..." />
                       </SelectTrigger>
                       <SelectContent className="rounded-2xl border-slate-200 shadow-2xl">
@@ -394,7 +394,7 @@ export default function NewSalePage() {
           </Card>
 
           {/* Line Items Card */}
-          <Card className="rounded-3xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
@@ -543,7 +543,7 @@ export default function NewSalePage() {
 
         {/* Right Column - Summary */}
         <div className="space-y-6">
-          <Card className="border-none shadow-2xl shadow-indigo-200/50 bg-[#150150] text-white rounded-[2rem] overflow-hidden sticky top-6">
+          <Card className="border-none shadow-2xl shadow-indigo-200/50 bg-[#150150] text-white rounded-2xl overflow-hidden sticky top-6">
             <CardHeader className="pb-8 pt-12 px-10">
               <div className="flex items-center gap-2 text-indigo-200 text-[10px] font-black uppercase tracking-[0.2em]">
                 <CircleDollarSign className="h-4 w-4" />
@@ -592,7 +592,7 @@ export default function NewSalePage() {
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-xl shadow-slate-200/50 bg-white rounded-3xl p-6 overflow-hidden relative">
+          <Card className="border-none shadow-xl shadow-slate-200/50 bg-white rounded-2xl p-6 overflow-hidden relative">
             <div className="absolute top-0 right-0 h-24 w-24 bg-slate-50 rounded-bl-full -mr-12 -mt-12 transition-all group-hover:bg-indigo-50" />
             <div className="relative z-10 space-y-4">
               <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">Helpful Hint</h4>

@@ -11,6 +11,7 @@ import {
   Download,
   Filter,
   Printer,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,7 +99,7 @@ export default function SalesPage() {
         <StatCard
           title="Revenue"
           stat={sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0).toLocaleString()}
-          icon={<div className="font-bold text-xl">$</div>}
+          icon={<DollarSign className="h-6 w-6" />}
           iconBg="bg-emerald-50"
         />
         {/* avg order value */}

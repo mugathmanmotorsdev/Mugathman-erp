@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Search,
   ArrowLeftRight,
@@ -12,6 +11,8 @@ import {
   ChevronRight,
   ChevronDown,
   Filter,
+  DollarSign,
+  Heart,
 } from "lucide-react";
 import {
   Table,
@@ -39,11 +40,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Card } from "@/components/ui/card";
+} from "@/components/ui/dialog";  
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import PageHeading from "@/components/PageHeading";
+import StatCard from "@/components/StatCard";
+import { formatCurrency } from "@/lib/utils/currency-formatter";
+import { useAuth } from "@/hooks/useauth";
+import { useFetchProduct } from "@/hooks/usefetchproducts";
 
 interface Product {
   id: string;
@@ -59,12 +62,19 @@ interface Product {
 type StockStatus = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" | "NEAR_LIMIT";
 
 export default function InventoryPage() {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
+  useAuth();
+  const {
+    products,
+    loading,
+    search,
+    setSearch,
+    category,
+    setCategory,
+    pagination,
+    fetchProducts,
+    setPagination
+  } = useFetchProduct();
+
   const [statusFilter, setStatusFilter] = useState("all");
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
@@ -76,41 +86,7 @@ export default function InventoryPage() {
     productName: "",
   });
   const [deleting, setDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    total: 0,
-    skip: 0,
-    take: 10,
-  });
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const query = new URLSearchParams({
-        skip: pagination.skip.toString(),
-        take: pagination.take.toString(),
-        search: search,
-        category: category,
-      });
-      const response = await fetch(`/api/products?${query.toString()}`);
-      const data = await response.json();
-      if (data.products) {
-        setProducts(data.products);
-        if (data.pagination) setPagination(data.pagination);
-      }
-    } catch (error) {
-      console.error("Failed to fetch products", error);
-      toast.error("Failed to load inventory");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchProducts();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [search, category, pagination.skip]);
 
   const handlePageChange = (newSkip: number) => {
     setPagination((prev) => ({ ...prev, skip: newSkip }));
@@ -143,16 +119,6 @@ export default function InventoryPage() {
       setDeleting(false);
     }
   };
-
-  const categories = [
-    { label: "All Categories", value: "all" },
-    { label: "Parts", value: "PARTS" },
-    { label: "Fertilizer", value: "FERTILIZER" },
-    { label: "Heavy Duty", value: "HEAVY_DUTY" },
-    { label: "Truck Head", value: "TRUCK_HEAD" },
-    { label: "Tipper", value: "TIPPER" },
-    { label: "Tractor", value: "TRACTOR" },
-  ];
 
   const getStockStatus = (product: Product): StockStatus => {
     if (product.currentStock === 0) return "OUT_OF_STOCK";
@@ -283,6 +249,30 @@ export default function InventoryPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* stat section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <StatCard
+          title="Total Stock Value"
+          stat={formatCurrency(totalStockValue)}
+          icon={<DollarSign className="h-6 w-6" />}
+          iconBg="bg-emerald-50"
+          />
+          <StatCard
+          title="Low Stock Alerts"
+          stat={lowStockCount}
+          icon={<AlertTriangle className="h-6 w-6" />}
+          iconBg="bg-rose-100"
+          />
+          <StatCard
+          title="Inventory Health Score"
+          stat={healthScore}
+          icon={<Heart className="h-6 w-6" />}
+          iconBg="bg-green-100"
+          />
+
+
         </div>
 
         {/* Search and Filters */}
@@ -559,51 +549,6 @@ export default function InventoryPage() {
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer Stats Section */}
-      <div className="border-t border-slate-200 bg-white px-6 py-5">
-        <div className="flex items-center justify-between">
-          {/* Stats */}
-          <div className="flex items-center gap-20">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Total Stock Value
-              </span>
-              <span className="text-2xl font-black text-slate-900 tracking-tight">
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                }).format(totalStockValue)}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Low Stock Alerts
-              </span>
-              <span className="text-2xl font-black text-red-500 tracking-tight">
-                {lowStockCount} Items
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Inventory Health Score
-            </span>
-            <div className="flex items-center gap-3">
-              <div className="w-32 h-2.5 bg-slate-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all duration-500"
-                  style={{ width: `${healthScore}%` }}
-                />
-              </div>
-              <span className="text-lg font-bold text-indigo-600">
-                {healthScore}%
-              </span>
             </div>
           </div>
         </div>

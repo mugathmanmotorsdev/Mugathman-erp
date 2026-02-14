@@ -35,6 +35,9 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import SkeletonUi from "@/components/SkeletonUi";
+import { formatCurrency } from "@/lib/utils/currency-formatter";
+import { useFetchProduct } from "@/hooks/usefetchproducts";
+
 
 interface Stats {
   totalProducts: number;
@@ -57,6 +60,15 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  const {
+    products,
+    loading: productsLoading,
+  } = useFetchProduct();
+  const lowStockItems = 
+  products
+  .filter((product) => product.currentStock <= product.reorder_level)
+  .sort((a, b) => a.currentStock - b.currentStock);
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -77,14 +89,6 @@ export default function Dashboard() {
 
     fetchDashboardData();
   }, []);
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -116,12 +120,6 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            className="rounded-2xl h-12 px-5 border-slate-200 bg-white group"
-          >
-            <Bell className="h-5 w-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
-          </Button>
           <Button
             onClick={() => router.push("/sales/new")}
             className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -328,60 +326,28 @@ export default function Dashboard() {
           <Card className="rounded-lg border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl font-black text-slate-900">
-                Quick Search
+                Low Stock Items
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="relative mb-6">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="SKU, Order #, or Name..."
-                  className="w-full h-14 pl-12 pr-4 rounded-2xl bg-slate-100 border-none text-slate-900 font-bold focus:ring-2 focus:ring-indigo-100 transition-all placeholder:text-slate-400"
-                />
-              </div>
-              <div className="space-y-4">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">
-                  Jump To
-                </p>
-                {[
-                  { label: "Fertilizers", count: 12, color: "emerald" },
-                  { label: "Truck Heads", count: 8, color: "blue" },
-                  { label: "Spare Parts", count: 145, color: "indigo" },
-                ].map((cat, i) => (
+              <div className="space-y-4 overflow-y-auto h-64">
+                {
+                  lowStockItems.map((item, i) => (
                   <div
                     key={i}
                     className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors group"
                   >
                     <span className="font-bold text-slate-700 group-hover:text-slate-900">
-                      {cat.label}
+                      {item.name}
                     </span>
                     <Badge
-                      className={`bg-${cat.color}-50 text-${cat.color}-600 border-none font-bold`}
+                      className={`bg-red-50 text-red-600 border-none font-bold`}
                     >
-                      {cat.count}
+                      {item.currentStock}
                     </Badge>
                   </div>
                 ))}
               </div>
-              <Button
-                onClick={async () => {
-                  const res = await fetch(`/api/receipt?saleId=94bf32c2-4d1b-4f2a-82fb-c0f6c46eda2c`)
-                  const blob = await res.blob()
-                  const url = URL.createObjectURL(blob)
-                  const iframe = document.createElement('iframe')
-                  iframe.src = url
-                  iframe.style.display = 'none'
-                  document.body.appendChild(iframe)
-                  iframe.onload = () => {
-                    iframe.contentWindow?.print()
-                  }
-                }}
-                className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <PlusCircle className="h-5 w-5 mr-2" />
-                Print Receipt
-              </Button>
             </CardContent>
           </Card>
 
