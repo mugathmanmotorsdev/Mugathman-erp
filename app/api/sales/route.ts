@@ -167,13 +167,12 @@ export async function POST(request: NextRequest) {
     const pdfBuffer = await generateReceipt(sale?.id || "");
 
     // upload pdf to whatsapp
-    const media = await uploadMedia(pdfBuffer, "receipt.pdf");
+    const media = await uploadMedia(pdfBuffer, `${sale?.sale_number}.pdf`);
     // send whatsapp thank message
     await sendWhatsappThankMsg(
-      sale?.id || "",
       sale?.customer?.full_name || "",
       sale?.customer?.phone || "",
-      media?.id || "",
+      sale?.sale_number || "",
       totalAmount || 0,
       media?.id || "",
     );
