@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-export const getSales = async (skip = 0, take = 10) => {
+export const getSales = async (skip = 0, take = 100) => {
     return await prisma.sale.findMany({
         include: {
             customer: true,
