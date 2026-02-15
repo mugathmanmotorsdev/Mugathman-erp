@@ -1,129 +1,188 @@
-import { requireAuth } from "@/lib/authutils";
-import { googleAuth } from "@/lib/googleAuth";
-import { google } from "googleapis";
+import { requireAuth } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
+import { getSale, getSales } from "@/lib/actions/sales";
+import prisma from "@/lib/prisma";
+import { sendWhatsappThankMsg, uploadMedia } from "@/lib/services/whatsapp";
+import { generateReceipt } from "@/lib/services/receipt-generator";
 
-type item = {
-  id: string,
-  name: string,
-  quantity: number,
-  price: number
-}
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const skip = Number(searchParams.get("skip")) || 0;
+  const take = Number(searchParams.get("take")) || 10;
 
-export async function POST(req: NextRequest) {
   try {
     await requireAuth();
-    
-    const body = await req.json();
-    const { details, items } = body; // items = [{ name, quantity, price, id }]
+    const sales = await getSales(skip, take);
+    return NextResponse.json(sales);
+  } catch (error) {
+    console.error("Error fetching sales:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
 
-    const transactionId = "T-" + uuidv4().slice(0, 6).toUpperCase();
-    const customerId = "C-" + uuidv4().slice(0, 6).toUpperCase();
-    const salesId = "S-" + uuidv4().slice(0, 6).toUpperCase();
+export async function POST(request: NextRequest) {
+  try {
+    const user = await requireAuth();
+    const body = await request.json();
+    const { customer_id, customer_details, items, status = "COMPLETED" } = body;
 
-    const auth = await googleAuth("https://www.googleapis.com/auth/spreadsheets")
-
-    const sheets = google.sheets({ version: "v4", auth });
-
-    const salesRows = items.map((item: item, index: number) => {
-      if (!item.quantity || !item.price || !item.name) {
-        throw new Error("Quantity and Price are required for all items.");
-      }
-      return [
-        transactionId,
-        salesId,
-        new Date().toLocaleString(),
-        details.customer.name,
-        details.customer.phone,
-        item.id,
-        item.name,
-        item.quantity,
-        item.price,
-        item.quantity * item.price,
-        details.paymentMethod,
-        details.salesPerson,
-        details.remark,
-      ]
-    });
-
-    const totalPurchase = items.reduce((total: number, item: item) => total + (item.quantity * item.price), 0);
-
-    const customerRow = [[
-      customerId,
-      details.customer.name,
-      details.customer.phone,
-      undefined,
-      totalPurchase
-    ]]
-
-    //append salesRows to Sales sheet
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Sales!A:N",
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: salesRows },
-    });
-
-    //append customerRow to Customer sheet
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Customer!A:E",
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: customerRow },
-    })
-
-    // Fetch inventory data
-    const inventoryData = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Inventory!A:F",
-    });
-    
-
-    const rows = inventoryData.data.values || [];
-    const data = rows.slice(1);
-
-    // Prepare batch updates for all sold products
-    const updates = [];
-   
-
-    for (const item of items) {
-      const idx = data.findIndex((r) => r[0] === item.id); // match Product_ID
-      if (idx === -1) continue;
-
-      const sheetRow = idx + 2; // +2 for header offset
-      const currentStock = Number(data[idx][2] || 0);
-      const newStock = currentStock - Number(item.quantity);
-      if (newStock < 0) {
-        throw new Error(`Insufficient stock for product: ${item.name}`);
-      }
-      const lastUpdated = new Date().toISOString();
-
-      updates.push({
-        range: `Inventory!C${sheetRow}:F${sheetRow}`,
-        values: [[newStock, , , lastUpdated]],
-      });
+    if (
+      (!customer_id && !customer_details) ||
+      !items ||
+      !Array.isArray(items) ||
+      items.length === 0
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields: customer info and items" },
+        { status: 400 },
+      );
     }
 
-    if (updates.length > 0) {
-      await sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        requestBody: {
-          valueInputOption: "USER_ENTERED",
-          data: updates,
+    //check stock availability
+    for (const item of items) {
+      const { product_id, quantity, vehicle_id } = item;
+      const stock = await prisma.stockMovement.aggregate({
+        _sum: {
+          quantity: true,
+        },
+        where: {
+          product_id,
+          vehicle_id: vehicle_id || null,
         },
       });
+      if ((stock._sum.quantity ?? 0) < quantity) {
+        return NextResponse.json(
+          { error: "Insufficient stock" },
+          { status: 400 },
+        );
+      }
     }
 
-
-    return NextResponse.json({
-      success: true,
-      transactionId,
-      message: "Sale submitted successfully!",
+    // Generate sale number (e.g., SALE-20240127-001)
+    const date = new Date();
+    const dateString = date.toISOString().slice(0, 10).replace(/-/g, "");
+    const count = await prisma.sale.count({
+      where: {
+        created_at: {
+          gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        },
+      },
     });
-  } catch (error) {
-    console.error(error);
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ success: false, error: message });
+    const sale_number = `SALE-${dateString}-${(count + 1).toString().padStart(3, "0")}`;
+
+    const result = await prisma.$transaction(async (tx) => {
+      let final_customer_id = customer_id;
+
+      // 1. Create Customer if details provided
+      if (!final_customer_id && customer_details) {
+        // Check if customer with phone exists
+        const existing = await tx.customer.findUnique({
+          where: { phone: customer_details.phone },
+        });
+
+        if (existing) {
+          final_customer_id = existing.id;
+        } else {
+          const newCustomer = await tx.customer.create({
+            data: {
+              full_name: customer_details.full_name,
+              phone: customer_details.phone,
+              email: customer_details.email,
+              address: customer_details.address,
+            },
+          });
+          final_customer_id = newCustomer.id;
+        }
+      }
+
+      // 2. Create the Sale
+      const sale = await tx.sale.create({
+        data: {
+          sale_number,
+          customer_id: final_customer_id,
+          created_by: user.id,
+          status: status,
+        },
+      });
+
+      // 2. Process each SaleItem
+      for (const item of items) {
+        const { product_id, quantity, unit_price, vehicle_id, location_id } =
+          item;
+
+        // Create SaleItem
+        await tx.saleItem.create({
+          data: {
+            sale_id: sale.id,
+            product_id,
+            quantity: Number(quantity),
+            unit_price: Number(unit_price),
+          },
+        });
+
+        // Create StockMovement (Deduction)
+        const movement = await tx.stockMovement.create({
+          data: {
+            product_id,
+            location_id,
+            vehicle_id: vehicle_id || null,
+            quantity: -Math.abs(Number(quantity)),
+            type: "OUT",
+            reason: "SALE",
+            reference_type: "SALE",
+            reference_id: sale.id,
+            performed_by: user.id,
+          },
+        });
+
+        // If it's a vehicle (serialized product), update vehicle status
+        if (vehicle_id) {
+          await tx.vehicle.update({
+            where: { id: vehicle_id },
+            data: {
+              status: "SOLD",
+            },
+          });
+
+          // Optional: Link movement to vehicle if not already done by prisma schema relations
+          // Actually, stock_movement already has vehicle_id.
+        }
+      }
+
+      return sale;
+    });
+
+    const sale = await getSale(result.id);
+    // calculate total amount
+    const totalAmount = sale?.sale_items.reduce(
+      (acc, item) =>
+        acc + Number(item?.product?.unit_price || 0) * item.quantity,
+      0,
+    );
+
+    // generate pdf
+    const pdfBuffer = await generateReceipt(sale?.id || "");
+
+    // upload pdf to whatsapp
+    const media = await uploadMedia(pdfBuffer, `${sale?.sale_number}.pdf`);
+    // send whatsapp thank message
+    await sendWhatsappThankMsg(
+      sale?.customer?.full_name || "",
+      sale?.customer?.phone || "",
+      sale?.sale_number || "",
+      totalAmount || 0,
+      media?.id || "",
+    );
+
+    return NextResponse.json(result);
+  } catch (error: any) {
+    console.error("Error creating sale:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 },
+    );
   }
 }
