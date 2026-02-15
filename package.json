@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "npm run migrate:prod && next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
+    "migrate:prod": "prisma migrate deploy"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
