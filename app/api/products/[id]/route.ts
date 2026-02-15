@@ -12,6 +12,7 @@ export async function GET(
                 stock_movements: {
                     select: {
                         quantity: true,
+                        type: true,
                         reason: true
                     }
                 }
@@ -26,16 +27,15 @@ export async function GET(
         }
 
         const currentStock = product.stock_movements.reduce((acc, mov) => {
-            if (mov.reason === 'PURCHASE') return acc + mov.quantity;
-            if (mov.reason === 'SALE' || mov.reason === 'DAMAGE') return acc - mov.quantity;
-            return acc + mov.quantity;
+            return mov.type === 'IN' ? acc + mov.quantity : acc - mov.quantity
         }, 0);
 
         return NextResponse.json({ 
             product: {
                 ...product,
+                unit_price: Number(product.unit_price),
                 currentStock,
-                stock_movements: undefined
+                stock_movements: null
             }
         }, { status: 200 });
     } catch (error) {

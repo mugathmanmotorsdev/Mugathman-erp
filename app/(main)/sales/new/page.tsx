@@ -597,7 +597,7 @@ export default function NewSalePage() {
             <div className="relative z-10 space-y-4">
               <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">Helpful Hint</h4>
               <p className="text-xs text-slate-500 leading-relaxed">
-                You can create a new customer by switching to the "New Customer" tab above. Fill their basic info and they'll be saved automatically.
+                You can create a new customer by switching to the &quot;New Customer&quot; tab above. Fill their basic info and they&apos;ll be saved automatically.
               </p>
             </div>
           </Card>

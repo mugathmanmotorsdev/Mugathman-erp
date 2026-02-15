@@ -1,4 +1,3 @@
-import { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -59,7 +58,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        const data: any = {
+        const data = {
             product_id,
             location_id,
             quantity,
@@ -68,11 +67,8 @@ export async function POST(request: NextRequest) {
             reference_type,
             reference_id,
             performed_by,
-        }
-
-        if (vehicle_id) {
-            data.vehicle_id = vehicle_id;
-        }
+            ...(vehicle_id && { vehicle_id }),
+        };
 
         // create stock movement
         const stock_movement = await prisma.stockMovement.create({

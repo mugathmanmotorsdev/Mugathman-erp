@@ -1,4 +1,6 @@
-interface Product {
+import { StockMovement } from "@/generated/prisma/client";
+
+export interface Product {
   id: string;
   name: string;
   sku: string | null;
@@ -7,6 +9,7 @@ interface Product {
   currentStock: number;
   reorder_level: number;
   is_active: boolean;
+  stock_movements: StockMovement[] | null;
 }
 
-type StockStatus = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" | "NEAR_LIMIT";
+export type StockStatus = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" | "NEAR_LIMIT";

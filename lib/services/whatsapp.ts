@@ -63,12 +63,13 @@ export async function sendWhatsappThankMsg(
       },
     );
     const data = await res.json();
+    return data;
   } catch (error) {
     console.log("whatsapp error: ", error);
   }
 }
 
-export async function uploadMedia(pdfBuffer: Buffer, filename: string) {
+export async function uploadMedia(pdfBuffer: Buffer) {
   const formData = new FormData();
   const blob = new Blob([new Uint8Array(pdfBuffer)], {
     type: "application/pdf",

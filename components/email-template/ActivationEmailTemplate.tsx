@@ -78,7 +78,7 @@ export function ActivationEmailTemplate({
           </div>
           
           <p style={{ fontSize: '14px', color: '#666', lineHeight: '22px' }}>
-            If the button above doesn't work, copy and paste the following link into your browser:
+            If the button above doesn&apos;t work, copy and paste the following link into your browser:
             <br />
             <a href={activationLink} style={{ color: '#0066cc', textDecoration: 'none', wordBreak: 'break-all' }}>
               {activationLink}
@@ -86,7 +86,7 @@ export function ActivationEmailTemplate({
           </p>
           
           <p style={{ fontSize: '14px', color: '#666', marginTop: '30px' }}>
-            This link will expire in 24 hours. If you didn't create an account with us, please ignore this email.
+            This link will expire in 24 hours. If you didn&apos;t create an account with us, please ignore this email.
           </p>
         </div>
         

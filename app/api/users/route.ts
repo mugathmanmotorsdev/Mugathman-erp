@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
         const token = await setActivationToken(newUser)
     
-        const { data, error } = await resend.emails.send({
+        await resend.emails.send({
             from: "Welcome <noreply@mugathmanmotors.com>",
             to: [newUser.email],
             subject: 'Activate your account',

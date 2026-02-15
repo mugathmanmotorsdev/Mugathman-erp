@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const userCreateSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters long"),
-    email: z.email("Invalid email address"),
+    email: z.string().email("Invalid email address"),
     role: z.enum(["ADMIN", "EDITOR", "VIEWER"]),
 })
 

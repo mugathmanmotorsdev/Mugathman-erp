@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Eye, ShieldCheck, UserMinus, UserCheck } from "lucide-react";
+import { MoreHorizontal, UserMinus, UserCheck } from "lucide-react";
 import { Role, User, UserStatus } from "@/types/user";
 import { useAvatar } from "@/hooks/useAvatar";
 

@@ -30,14 +30,23 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 
+import { UseFormReturn } from "react-hook-form";
+import { Role } from "@/types/user";
+
+interface InviteUserData {
+    name: string;
+    email: string;
+    role: Role;
+}
+
 export default function NewUserDialog({
     form,
     onSubmit = f => f,
     isDialogOpen,
     setIsDialogOpen = f => f
 }: {
-    form: any;
-    onSubmit: (data: any) => void;
+    form: UseFormReturn<InviteUserData>;
+    onSubmit: (data: InviteUserData) => void;
     isDialogOpen: boolean;
     setIsDialogOpen: (value: boolean) => void;
 }) {

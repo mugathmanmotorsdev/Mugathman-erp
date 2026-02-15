@@ -1,4 +1,4 @@
-import { useAuth, useRoleGuard } from "@/hooks/useauth";
+import { useAuth } from "@/hooks/useauth";
 
 export function RoleGuard({
   children,

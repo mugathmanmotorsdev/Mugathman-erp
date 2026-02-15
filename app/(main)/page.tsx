@@ -62,7 +62,6 @@ export default function Dashboard() {
   console.log(stats);
   const {
     products,
-    loading: productsLoading,
   } = useFetchProduct();
   const lowStockItems = 
   products

@@ -51,7 +51,8 @@ interface Location {
 }
 
 interface Vehicle {
-  id: string;
+  product_id: string;
+  inventory_location_id: string;
   vin: string;
   status: string;
 }
@@ -121,7 +122,7 @@ export default function NewMovementPage() {
             const data = await res.json();
             // Filter by product_id if needed, though the API returns all available
             const filtered = data.filter(
-              (v: any) => v.product_id === selectedProduct.id,
+              (v: Vehicle) => v.product_id === selectedProduct.id,
             );
             setAvailableVehicles(filtered);
           }
@@ -209,9 +210,10 @@ export default function NewMovementPage() {
         const error = await movementRes.json();
         toast.error(error.error || "Failed to record movement");
       }
-    } catch (error: any) {
-      console.error("Error submitting movement", error);
-      toast.error(error.message || "An unexpected error occurred");
+    } catch (err) {
+      console.error("Error submitting movement", err);
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -479,8 +481,8 @@ export default function NewMovementPage() {
                               ) : (
                                 availableVehicles.map((v) => (
                                   <SelectItem
-                                    key={v.id}
-                                    value={v.id}
+                                    key={v.product_id}
+                                    value={v.product_id}
                                     className="py-2 rounded-xl h-12"
                                   >
                                     <span className="font-mono font-bold">

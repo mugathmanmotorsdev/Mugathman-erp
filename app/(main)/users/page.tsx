@@ -71,7 +71,7 @@ export default function UsersPage() {
       const data = await response.json();
       if (data.users) {
         // Convert date strings to Date objects
-        const formattedUsers = data.users.map((user: any) => ({
+        const formattedUsers = data.users.map((user: User) => ({
           ...user,
           created_at: new Date(user.created_at),
         }));
@@ -402,7 +402,7 @@ export default function UsersPage() {
                         No match found
                       </p>
                       <p className="text-slate-500 text-sm max-w-xs mx-auto">
-                        We couldn't find any users matching your current
+                        We couldn&apos;t find any users matching your current
                         filters. Try adjusting your search criteria.
                       </p>
                       <Button

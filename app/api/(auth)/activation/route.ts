@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         }
 
         // update user
-        const updatedUser = await prisma.user.update({
+        await prisma.user.update({
             where: {
                 id: token.user_id
             },

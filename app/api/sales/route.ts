@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
         });
 
         // Create StockMovement (Deduction)
-        const movement = await tx.stockMovement.create({
+        await tx.stockMovement.create({
           data: {
             product_id,
             location_id,
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
     const pdfBuffer = await generateReceipt(sale?.id || "");
 
     // upload pdf to whatsapp
-    const media = await uploadMedia(pdfBuffer, `${sale?.sale_number}.pdf`);
+    const media = await uploadMedia(pdfBuffer);
     // send whatsapp thank message
     await sendWhatsappThankMsg(
       sale?.customer?.full_name || "",
@@ -178,10 +178,11 @@ export async function POST(request: NextRequest) {
     );
 
     return NextResponse.json(result);
-  } catch (error: any) {
-    console.error("Error creating sale:", error);
+  } catch (err) {
+    console.error("Error creating sale:", err);
+    const errorMessage = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      { error: errorMessage },
       { status: 500 },
     );
   }

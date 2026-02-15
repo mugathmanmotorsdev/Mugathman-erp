@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { generateSKU } from "@/lib/utils/sku-generator";
 import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
 
 export async function GET(request: NextRequest) {
     try {
-        const user = await requireAuth();
+        await requireAuth();
 
         const searchParams = request.nextUrl.searchParams
         const skip = searchParams.get("skip")
@@ -13,15 +14,14 @@ export async function GET(request: NextRequest) {
         const search = searchParams.get("search")
         const category = searchParams.get("category") 
 
-        const where: any = {}
-        if (search) {
-            where.OR = [
-                { name: { contains: search, mode: 'insensitive' } },
-                { sku: { contains: search, mode: 'insensitive' } },
-            ]
-        }
-        if (category && category !== 'all') {
-            where.category = category
+        const where: Prisma.ProductWhereInput = {
+            ...(search && {
+                OR: [
+                    { name: { contains: search, mode: 'insensitive' as Prisma.QueryMode } },
+                    { sku: { contains: search, mode: 'insensitive' as Prisma.QueryMode } },
+                ]
+            }),
+            ...(category && category !== 'all' && { category: category as Prisma.EnumCategoryFilter })
         }
 
         const products = await prisma.product.findMany({
@@ -32,18 +32,23 @@ export async function GET(request: NextRequest) {
                 stock_movements: {
                     select: {
                         quantity: true,
+                        type: true,
                         reason: true
                     }
                 }
             }
         })
 
-        const productsWithStock = products.map(p => {
-            const currentStock = p.stock_movements.reduce((acc, mov) => acc + mov.quantity, 0)
+        const productsWithStock = products.map((p) => {
+            const currentStock = (p.stock_movements || []).reduce((acc: number, mov) => {
+                return mov.type === 'IN' ? acc + mov.quantity : acc - mov.quantity
+            }, 0)
+            
             return {
                 ...p,
+                unit_price: Number(p.unit_price),
                 currentStock,
-                stock_movements: undefined // remove movements from output to keep it clean
+                stock_movements: null
             }
         })
 

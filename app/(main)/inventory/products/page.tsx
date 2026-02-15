@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -51,24 +51,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-
-interface Product {
-  id: string;
-  name: string;
-  sku: string | null;
-  category: string;
-  unit_price: number;
-  currentStock: number;
-  reorder_level: number;
-  is_active: boolean;
-}
+import { useFetchProduct } from "@/hooks/usefetchproducts";
 
 export default function ProductsPage() {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
     productId: string | null;
@@ -79,40 +65,17 @@ export default function ProductsPage() {
     productName: "",
   });
   const [deleting, setDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    total: 0,
-    skip: 0,
-    take: 10,
-  });
-
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const query = new URLSearchParams({
-        skip: pagination.skip.toString(),
-        take: pagination.take.toString(),
-        search: search,
-        category: category,
-      });
-      const response = await fetch(`/api/products?${query.toString()}`);
-      const data = await response.json();
-      if (data.products) {
-        setProducts(data.products);
-        if (data.pagination) setPagination(data.pagination);
-      }
-    } catch (error) {
-      console.error("Failed to fetch products", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchProducts();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [search, category, pagination.skip]);
+  const { 
+    products, 
+    loading, 
+    search, 
+    category, 
+    pagination,
+    setPagination,
+    setSearch,
+    setCategory,
+    fetchProducts
+  } = useFetchProduct();
 
   const handlePageChange = (newSkip: number) => {
     setPagination((prev) => ({ ...prev, skip: newSkip }));

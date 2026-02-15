@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
         const token = await setResetPasswordToken(user)
 
-        const { data: emailData, error } = await resend.emails.send({
+        const { error } = await resend.emails.send({
             from: "Welcome <noreply@mugathmanmotors.com>",
             to: [user.email],
             subject: 'Reset your password',
