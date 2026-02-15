@@ -12,9 +12,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { userActivation } from "@/lib/validatoion/user" // Note: validation typo in path is consistent with project structure
+import { userActivationSchema } from "@/lib/validatoion/user" // Note: validation typo in path is consistent with project structure
 
-type ResetPasswordValues = z.infer<typeof userActivation>
+type ResetPasswordValues = z.infer<typeof userActivationSchema>
 
 function ResetPasswordForm() {
     const searchParams = useSearchParams()
@@ -32,7 +32,7 @@ function ResetPasswordForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<ResetPasswordValues>({
-    resolver: zodResolver(userActivation),
+    resolver: zodResolver(userActivationSchema),
   })
 
   async function onSubmit(data: ResetPasswordValues) {

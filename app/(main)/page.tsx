@@ -12,8 +12,6 @@ import {
   PlusCircle,
   MoveUpRight,
   MoveDownLeft,
-  Search,
-  Bell,
 } from "lucide-react";
 import {
   Card,
