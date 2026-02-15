@@ -33,6 +33,27 @@ export async function GET(request: NextRequest) {
             }, 0);
         }, 0);
 
+        // comparison with with previous month
+        const lastMonthAgo = new Date();
+        lastMonthAgo.setDate(lastMonthAgo.getDate() - 60);
+
+        const lastMonthSales = await prisma.sale.findMany({
+            where: {
+                created_at: { gte: lastMonthAgo, lte: thirtyDaysAgo }
+            },
+            include: {
+                sale_items: true
+            }
+        });
+
+        const lastMonthRevenue = lastMonthSales.reduce((acc, sale) => {
+            return acc + sale.sale_items.reduce((itemAcc, item) => {
+                return itemAcc + (item.quantity * Number(item.unit_price));
+            }, 0);
+        }, 0);
+
+        const revenueGrowth = ((totalRevenue - lastMonthRevenue) / lastMonthRevenue) * 100;
+
         // 4. Low stock items (less than reorder level)
         // We need to calculate current stock for each product
         const productsWithStockMovements = await prisma.product.findMany({
@@ -87,7 +108,8 @@ export async function GET(request: NextRequest) {
                 totalProducts,
                 totalCustomers,
                 totalRevenue,
-                lowStockItems
+                lowStockItems,
+                revenueGrowth
             },
             recentActivity
         });

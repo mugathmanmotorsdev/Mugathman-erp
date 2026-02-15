@@ -44,6 +44,7 @@ interface Stats {
   totalCustomers: number;
   totalRevenue: number;
   lowStockItems: number;
+  revenueGrowth: number;
 }
 
 interface Activity {
@@ -60,6 +61,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  console.log(stats);
   const {
     products,
     loading: productsLoading,
@@ -131,7 +133,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="flex flex-col items-center md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         <Card className="flex flex-col gap-2 flex-1 rounded-lg px-5 shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
           <CardHeader className="m-0">
             <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
@@ -149,7 +151,7 @@ export default function Dashboard() {
               className="flex border-emerald-100 bg-emerald-50 text-emerald-600 font-bold py-1"
             >
               <TrendingUp />
-              +12%
+              {stats?.revenueGrowth?.toFixed(2) || 0}%
             </Badge>
           </CardFooter>
         </Card>
@@ -165,15 +167,6 @@ export default function Dashboard() {
               {activities.filter((a) => a.type === "SALE").length}
             </h3>
           </CardContent>
-          <CardFooter className="m-0">
-            <Badge
-              variant="outline"
-              className="flex items-center gap-2 border-emerald-100 bg-emerald-50 text-emerald-600 font-bold py-1"
-            >
-              <TrendingUp />
-              +12%
-            </Badge>
-          </CardFooter>
         </Card>
 
         <Card className="flex flex-col gap-2 flex-1 rounded-lg px-5 shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
@@ -187,15 +180,6 @@ export default function Dashboard() {
               {stats?.totalProducts || 0}
             </h3>
           </CardContent>
-          <CardFooter className="m-0">
-            <Badge
-              variant="outline"
-              className="flex items-center gap-2 border-emerald-100 bg-emerald-50 text-emerald-600 font-bold py-1"
-            >
-              <TrendingUp />
-              +12%
-            </Badge>
-          </CardFooter>
         </Card>
 
         <Card className="flex flex-col gap-2 flex-1 rounded-lg px-5 shadow-xl shadow-slate-200/50 bg-white overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
