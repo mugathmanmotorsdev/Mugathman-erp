@@ -29,8 +29,9 @@ export type UserMinAggregateOutputType = {
   email: string | null
   full_name: string | null
   password: string | null
-  is_active: boolean | null
+  status: $Enums.UserStatus | null
   created_at: Date | null
+  image: string | null
   role: $Enums.Role | null
 }
 
@@ -39,8 +40,9 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   full_name: string | null
   password: string | null
-  is_active: boolean | null
+  status: $Enums.UserStatus | null
   created_at: Date | null
+  image: string | null
   role: $Enums.Role | null
 }
 
@@ -49,8 +51,9 @@ export type UserCountAggregateOutputType = {
   email: number
   full_name: number
   password: number
-  is_active: number
+  status: number
   created_at: number
+  image: number
   role: number
   _all: number
 }
@@ -61,8 +64,9 @@ export type UserMinAggregateInputType = {
   email?: true
   full_name?: true
   password?: true
-  is_active?: true
+  status?: true
   created_at?: true
+  image?: true
   role?: true
 }
 
@@ -71,8 +75,9 @@ export type UserMaxAggregateInputType = {
   email?: true
   full_name?: true
   password?: true
-  is_active?: true
+  status?: true
   created_at?: true
+  image?: true
   role?: true
 }
 
@@ -81,8 +86,9 @@ export type UserCountAggregateInputType = {
   email?: true
   full_name?: true
   password?: true
-  is_active?: true
+  status?: true
   created_at?: true
+  image?: true
   role?: true
   _all?: true
 }
@@ -164,8 +170,9 @@ export type UserGroupByOutputType = {
   email: string
   full_name: string
   password: string
-  is_active: boolean
+  status: $Enums.UserStatus
   created_at: Date
+  image: string | null
   role: $Enums.Role
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -195,13 +202,15 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   full_name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  is_active?: Prisma.BoolFilter<"User"> | boolean
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   stock_movements?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
   stock_adjustments?: Prisma.StockAdjustmentListRelationFilter
   userActivationTokens?: Prisma.UserActivationTokenListRelationFilter
+  resetPasswordTokens?: Prisma.ResetPasswordTokenListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -209,13 +218,15 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   stock_movements?: Prisma.StockMovementOrderByRelationAggregateInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
   stock_adjustments?: Prisma.StockAdjustmentOrderByRelationAggregateInput
   userActivationTokens?: Prisma.UserActivationTokenOrderByRelationAggregateInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -226,13 +237,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   full_name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  is_active?: Prisma.BoolFilter<"User"> | boolean
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   stock_movements?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
   stock_adjustments?: Prisma.StockAdjustmentListRelationFilter
   userActivationTokens?: Prisma.UserActivationTokenListRelationFilter
+  resetPasswordTokens?: Prisma.ResetPasswordTokenListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -240,8 +253,9 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -256,8 +270,9 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   full_name?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  is_active?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
 }
 
@@ -266,13 +281,15 @@ export type UserCreateInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -280,13 +297,15 @@ export type UserUncheckedCreateInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -294,13 +313,15 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -308,13 +329,15 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -322,8 +345,9 @@ export type UserCreateManyInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
 }
 
@@ -332,8 +356,9 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
 }
 
@@ -342,8 +367,9 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
 }
 
@@ -352,8 +378,9 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
 }
 
@@ -362,8 +389,9 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
 }
 
@@ -372,8 +400,9 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
 }
 
@@ -386,12 +415,16 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type EnumUserStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UserStatus
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
@@ -454,17 +487,33 @@ export type UserUpdateOneRequiredWithoutUserActivationTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserActivationTokensInput, Prisma.UserUpdateWithoutUserActivationTokensInput>, Prisma.UserUncheckedUpdateWithoutUserActivationTokensInput>
 }
 
+export type UserCreateNestedOneWithoutResetPasswordTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResetPasswordTokensInput, Prisma.UserUncheckedCreateWithoutResetPasswordTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResetPasswordTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutResetPasswordTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutResetPasswordTokensInput, Prisma.UserUncheckedCreateWithoutResetPasswordTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutResetPasswordTokensInput
+  upsert?: Prisma.UserUpsertWithoutResetPasswordTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutResetPasswordTokensInput, Prisma.UserUpdateWithoutResetPasswordTokensInput>, Prisma.UserUncheckedUpdateWithoutResetPasswordTokensInput>
+}
+
 export type UserCreateWithoutStock_movementsInput = {
   id?: string
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStock_movementsInput = {
@@ -472,12 +521,14 @@ export type UserUncheckedCreateWithoutStock_movementsInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStock_movementsInput = {
@@ -501,12 +552,14 @@ export type UserUpdateWithoutStock_movementsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStock_movementsInput = {
@@ -514,12 +567,14 @@ export type UserUncheckedUpdateWithoutStock_movementsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSalesInput = {
@@ -527,12 +582,14 @@ export type UserCreateWithoutSalesInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSalesInput = {
@@ -540,12 +597,14 @@ export type UserUncheckedCreateWithoutSalesInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSalesInput = {
@@ -569,12 +628,14 @@ export type UserUpdateWithoutSalesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSalesInput = {
@@ -582,12 +643,14 @@ export type UserUncheckedUpdateWithoutSalesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStock_adjustmentsInput = {
@@ -595,12 +658,14 @@ export type UserCreateWithoutStock_adjustmentsInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStock_adjustmentsInput = {
@@ -608,12 +673,14 @@ export type UserUncheckedCreateWithoutStock_adjustmentsInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStock_adjustmentsInput = {
@@ -637,12 +704,14 @@ export type UserUpdateWithoutStock_adjustmentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStock_adjustmentsInput = {
@@ -650,12 +719,14 @@ export type UserUncheckedUpdateWithoutStock_adjustmentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserActivationTokensInput = {
@@ -663,12 +734,14 @@ export type UserCreateWithoutUserActivationTokensInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserActivationTokensInput = {
@@ -676,12 +749,14 @@ export type UserUncheckedCreateWithoutUserActivationTokensInput = {
   email: string
   full_name: string
   password: string
-  is_active?: boolean
+  status?: $Enums.UserStatus
   created_at?: Date | string
+  image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserActivationTokensInput = {
@@ -705,12 +780,14 @@ export type UserUpdateWithoutUserActivationTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserActivationTokensInput = {
@@ -718,12 +795,90 @@ export type UserUncheckedUpdateWithoutUserActivationTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   full_name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
   stock_adjustments?: Prisma.StockAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutResetPasswordTokensInput = {
+  id?: string
+  email: string
+  full_name: string
+  password: string
+  status?: $Enums.UserStatus
+  created_at?: Date | string
+  image?: string | null
+  role: $Enums.Role
+  stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
+  sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  stock_adjustments?: Prisma.StockAdjustmentCreateNestedManyWithoutUserInput
+  userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutResetPasswordTokensInput = {
+  id?: string
+  email: string
+  full_name: string
+  password: string
+  status?: $Enums.UserStatus
+  created_at?: Date | string
+  image?: string | null
+  role: $Enums.Role
+  stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  stock_adjustments?: Prisma.StockAdjustmentUncheckedCreateNestedManyWithoutUserInput
+  userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutResetPasswordTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutResetPasswordTokensInput, Prisma.UserUncheckedCreateWithoutResetPasswordTokensInput>
+}
+
+export type UserUpsertWithoutResetPasswordTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutResetPasswordTokensInput, Prisma.UserUncheckedUpdateWithoutResetPasswordTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutResetPasswordTokensInput, Prisma.UserUncheckedCreateWithoutResetPasswordTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutResetPasswordTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutResetPasswordTokensInput, Prisma.UserUncheckedUpdateWithoutResetPasswordTokensInput>
+}
+
+export type UserUpdateWithoutResetPasswordTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  stock_adjustments?: Prisma.StockAdjustmentUpdateManyWithoutUserNestedInput
+  userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutResetPasswordTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
+  stock_adjustments?: Prisma.StockAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+  userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -736,6 +891,7 @@ export type UserCountOutputType = {
   sales: number
   stock_adjustments: number
   userActivationTokens: number
+  resetPasswordTokens: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -743,6 +899,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sales?: boolean | UserCountOutputTypeCountSalesArgs
   stock_adjustments?: boolean | UserCountOutputTypeCountStock_adjustmentsArgs
   userActivationTokens?: boolean | UserCountOutputTypeCountUserActivationTokensArgs
+  resetPasswordTokens?: boolean | UserCountOutputTypeCountResetPasswordTokensArgs
 }
 
 /**
@@ -783,19 +940,28 @@ export type UserCountOutputTypeCountUserActivationTokensArgs<ExtArgs extends run
   where?: Prisma.UserActivationTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountResetPasswordTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResetPasswordTokenWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   full_name?: boolean
   password?: boolean
-  is_active?: boolean
+  status?: boolean
   created_at?: boolean
+  image?: boolean
   role?: boolean
   stock_movements?: boolean | Prisma.User$stock_movementsArgs<ExtArgs>
   sales?: boolean | Prisma.User$salesArgs<ExtArgs>
   stock_adjustments?: boolean | Prisma.User$stock_adjustmentsArgs<ExtArgs>
   userActivationTokens?: boolean | Prisma.User$userActivationTokensArgs<ExtArgs>
+  resetPasswordTokens?: boolean | Prisma.User$resetPasswordTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -804,8 +970,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   full_name?: boolean
   password?: boolean
-  is_active?: boolean
+  status?: boolean
   created_at?: boolean
+  image?: boolean
   role?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -814,8 +981,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   full_name?: boolean
   password?: boolean
-  is_active?: boolean
+  status?: boolean
   created_at?: boolean
+  image?: boolean
   role?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -824,17 +992,19 @@ export type UserSelectScalar = {
   email?: boolean
   full_name?: boolean
   password?: boolean
-  is_active?: boolean
+  status?: boolean
   created_at?: boolean
+  image?: boolean
   role?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "full_name" | "password" | "is_active" | "created_at" | "role", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "full_name" | "password" | "status" | "created_at" | "image" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | Prisma.User$stock_movementsArgs<ExtArgs>
   sales?: boolean | Prisma.User$salesArgs<ExtArgs>
   stock_adjustments?: boolean | Prisma.User$stock_adjustmentsArgs<ExtArgs>
   userActivationTokens?: boolean | Prisma.User$userActivationTokensArgs<ExtArgs>
+  resetPasswordTokens?: boolean | Prisma.User$resetPasswordTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -847,14 +1017,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sales: Prisma.$SalePayload<ExtArgs>[]
     stock_adjustments: Prisma.$StockAdjustmentPayload<ExtArgs>[]
     userActivationTokens: Prisma.$UserActivationTokenPayload<ExtArgs>[]
+    resetPasswordTokens: Prisma.$ResetPasswordTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
     full_name: string
     password: string
-    is_active: boolean
+    status: $Enums.UserStatus
     created_at: Date
+    image: string | null
     role: $Enums.Role
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1254,6 +1426,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stock_adjustments<T extends Prisma.User$stock_adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stock_adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userActivationTokens<T extends Prisma.User$userActivationTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userActivationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resetPasswordTokens<T extends Prisma.User$resetPasswordTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resetPasswordTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResetPasswordTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1287,8 +1460,9 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly full_name: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
-  readonly is_active: Prisma.FieldRef<"User", 'Boolean'>
+  readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly created_at: Prisma.FieldRef<"User", 'DateTime'>
+  readonly image: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
 }
     
@@ -1771,6 +1945,30 @@ export type User$userActivationTokensArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.UserActivationTokenScalarFieldEnum | Prisma.UserActivationTokenScalarFieldEnum[]
+}
+
+/**
+ * User.resetPasswordTokens
+ */
+export type User$resetPasswordTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResetPasswordToken
+   */
+  select?: Prisma.ResetPasswordTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResetPasswordToken
+   */
+  omit?: Prisma.ResetPasswordTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResetPasswordTokenInclude<ExtArgs> | null
+  where?: Prisma.ResetPasswordTokenWhereInput
+  orderBy?: Prisma.ResetPasswordTokenOrderByWithRelationInput | Prisma.ResetPasswordTokenOrderByWithRelationInput[]
+  cursor?: Prisma.ResetPasswordTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResetPasswordTokenScalarFieldEnum | Prisma.ResetPasswordTokenScalarFieldEnum[]
 }
 
 /**

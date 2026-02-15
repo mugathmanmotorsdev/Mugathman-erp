@@ -33,6 +33,11 @@ export type Customer = Prisma.CustomerModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model Vehicle
+ * 
+ */
+export type Vehicle = Prisma.VehicleModel
+/**
  * Model InventoryLocation
  * 
  */
@@ -42,6 +47,11 @@ export type InventoryLocation = Prisma.InventoryLocationModel
  * 
  */
 export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model SerializeMovement
+ * 
+ */
+export type SerializeMovement = Prisma.SerializeMovementModel
 /**
  * Model Sale
  * 
@@ -62,3 +72,8 @@ export type StockAdjustment = Prisma.StockAdjustmentModel
  * 
  */
 export type UserActivationToken = Prisma.UserActivationTokenModel
+/**
+ * Model ResetPasswordToken
+ * 
+ */
+export type ResetPasswordToken = Prisma.ResetPasswordTokenModel

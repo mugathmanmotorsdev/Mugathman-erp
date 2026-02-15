@@ -54,12 +54,15 @@ export const ModelName = {
   User: 'User',
   Customer: 'Customer',
   Product: 'Product',
+  Vehicle: 'Vehicle',
   InventoryLocation: 'InventoryLocation',
   StockMovement: 'StockMovement',
+  SerializeMovement: 'SerializeMovement',
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   StockAdjustment: 'StockAdjustment',
-  UserActivationToken: 'UserActivationToken'
+  UserActivationToken: 'UserActivationToken',
+  ResetPasswordToken: 'ResetPasswordToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -83,8 +86,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   full_name: 'full_name',
   password: 'password',
-  is_active: 'is_active',
+  status: 'status',
   created_at: 'created_at',
+  image: 'image',
   role: 'role'
 } as const
 
@@ -107,8 +111,11 @@ export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
   sku: 'sku',
-  department: 'department',
+  category: 'category',
+  description: 'description',
+  unit_price: 'unit_price',
   unit: 'unit',
+  tracking_type: 'tracking_type',
   reorder_level: 'reorder_level',
   is_active: 'is_active'
 } as const
@@ -116,10 +123,21 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const VehicleScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  inventory_location_id: 'inventory_location_id',
+  vin: 'vin',
+  status: 'status',
+  created_at: 'created_at'
+} as const
+
+export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
+
+
 export const InventoryLocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  department: 'department',
   is_active: 'is_active'
 } as const
 
@@ -130,7 +148,9 @@ export const StockMovementScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   location_id: 'location_id',
+  vehicle_id: 'vehicle_id',
   quantity: 'quantity',
+  type: 'type',
   reason: 'reason',
   reference_type: 'reference_type',
   reference_id: 'reference_id',
@@ -139,6 +159,15 @@ export const StockMovementScalarFieldEnum = {
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
+
+
+export const SerializeMovementScalarFieldEnum = {
+  id: 'id',
+  stock_movement_id: 'stock_movement_id',
+  vehicle_id: 'vehicle_id'
+} as const
+
+export type SerializeMovementScalarFieldEnum = (typeof SerializeMovementScalarFieldEnum)[keyof typeof SerializeMovementScalarFieldEnum]
 
 
 export const SaleScalarFieldEnum = {
@@ -179,10 +208,22 @@ export const UserActivationTokenScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   token: 'token',
+  expired_at: 'expired_at',
   created_at: 'created_at'
 } as const
 
 export type UserActivationTokenScalarFieldEnum = (typeof UserActivationTokenScalarFieldEnum)[keyof typeof UserActivationTokenScalarFieldEnum]
+
+
+export const ResetPasswordTokenScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token: 'token',
+  expired_at: 'expired_at',
+  created_at: 'created_at'
+} as const
+
+export type ResetPasswordTokenScalarFieldEnum = (typeof ResetPasswordTokenScalarFieldEnum)[keyof typeof ResetPasswordTokenScalarFieldEnum]
 
 
 export const SortOrder = {

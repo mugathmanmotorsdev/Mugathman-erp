@@ -27,10 +27,12 @@ export type AggregateProduct = {
 }
 
 export type ProductAvgAggregateOutputType = {
+  unit_price: runtime.Decimal | null
   reorder_level: number | null
 }
 
 export type ProductSumAggregateOutputType = {
+  unit_price: runtime.Decimal | null
   reorder_level: number | null
 }
 
@@ -38,8 +40,11 @@ export type ProductMinAggregateOutputType = {
   id: string | null
   name: string | null
   sku: string | null
-  department: $Enums.Department | null
+  category: $Enums.Category | null
+  description: string | null
+  unit_price: runtime.Decimal | null
   unit: string | null
+  tracking_type: $Enums.TrackingType | null
   reorder_level: number | null
   is_active: boolean | null
 }
@@ -48,8 +53,11 @@ export type ProductMaxAggregateOutputType = {
   id: string | null
   name: string | null
   sku: string | null
-  department: $Enums.Department | null
+  category: $Enums.Category | null
+  description: string | null
+  unit_price: runtime.Decimal | null
   unit: string | null
+  tracking_type: $Enums.TrackingType | null
   reorder_level: number | null
   is_active: boolean | null
 }
@@ -58,8 +66,11 @@ export type ProductCountAggregateOutputType = {
   id: number
   name: number
   sku: number
-  department: number
+  category: number
+  description: number
+  unit_price: number
   unit: number
+  tracking_type: number
   reorder_level: number
   is_active: number
   _all: number
@@ -67,10 +78,12 @@ export type ProductCountAggregateOutputType = {
 
 
 export type ProductAvgAggregateInputType = {
+  unit_price?: true
   reorder_level?: true
 }
 
 export type ProductSumAggregateInputType = {
+  unit_price?: true
   reorder_level?: true
 }
 
@@ -78,8 +91,11 @@ export type ProductMinAggregateInputType = {
   id?: true
   name?: true
   sku?: true
-  department?: true
+  category?: true
+  description?: true
+  unit_price?: true
   unit?: true
+  tracking_type?: true
   reorder_level?: true
   is_active?: true
 }
@@ -88,8 +104,11 @@ export type ProductMaxAggregateInputType = {
   id?: true
   name?: true
   sku?: true
-  department?: true
+  category?: true
+  description?: true
+  unit_price?: true
   unit?: true
+  tracking_type?: true
   reorder_level?: true
   is_active?: true
 }
@@ -98,8 +117,11 @@ export type ProductCountAggregateInputType = {
   id?: true
   name?: true
   sku?: true
-  department?: true
+  category?: true
+  description?: true
+  unit_price?: true
   unit?: true
+  tracking_type?: true
   reorder_level?: true
   is_active?: true
   _all?: true
@@ -195,8 +217,11 @@ export type ProductGroupByOutputType = {
   id: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description: string | null
+  unit_price: runtime.Decimal
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level: number
   is_active: boolean
   _count: ProductCountAggregateOutputType | null
@@ -228,24 +253,32 @@ export type ProductWhereInput = {
   id?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
   sku?: Prisma.StringFilter<"Product"> | string
-  department?: Prisma.EnumDepartmentFilter<"Product"> | $Enums.Department
+  category?: Prisma.EnumCategoryFilter<"Product"> | $Enums.Category
+  description?: Prisma.StringNullableFilter<"Product"> | string | null
+  unit_price?: Prisma.DecimalFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFilter<"Product"> | string
+  tracking_type?: Prisma.EnumTrackingTypeFilter<"Product"> | $Enums.TrackingType
   reorder_level?: Prisma.IntFilter<"Product"> | number
   is_active?: Prisma.BoolFilter<"Product"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
-  department?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  unit_price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  tracking_type?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   stock_movements?: Prisma.StockMovementOrderByRelationAggregateInput
   sale_items?: Prisma.SaleItemOrderByRelationAggregateInput
+  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -255,20 +288,27 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProductWhereInput[]
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   name?: Prisma.StringFilter<"Product"> | string
-  department?: Prisma.EnumDepartmentFilter<"Product"> | $Enums.Department
+  category?: Prisma.EnumCategoryFilter<"Product"> | $Enums.Category
+  description?: Prisma.StringNullableFilter<"Product"> | string | null
+  unit_price?: Prisma.DecimalFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFilter<"Product"> | string
+  tracking_type?: Prisma.EnumTrackingTypeFilter<"Product"> | $Enums.TrackingType
   reorder_level?: Prisma.IntFilter<"Product"> | number
   is_active?: Prisma.BoolFilter<"Product"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }, "id" | "sku">
 
 export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
-  department?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  unit_price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  tracking_type?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
@@ -285,8 +325,11 @@ export type ProductScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Product"> | string
   name?: Prisma.StringWithAggregatesFilter<"Product"> | string
   sku?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  department?: Prisma.EnumDepartmentWithAggregatesFilter<"Product"> | $Enums.Department
+  category?: Prisma.EnumCategoryWithAggregatesFilter<"Product"> | $Enums.Category
+  description?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  unit_price?: Prisma.DecimalWithAggregatesFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringWithAggregatesFilter<"Product"> | string
+  tracking_type?: Prisma.EnumTrackingTypeWithAggregatesFilter<"Product"> | $Enums.TrackingType
   reorder_level?: Prisma.IntWithAggregatesFilter<"Product"> | number
   is_active?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
 }
@@ -295,56 +338,75 @@ export type ProductCreateInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
 }
@@ -353,8 +415,11 @@ export type ProductUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -363,8 +428,11 @@ export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -373,13 +441,17 @@ export type ProductCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
-  department?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  unit_price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  tracking_type?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
 
 export type ProductAvgOrderByAggregateInput = {
+  unit_price?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
 }
 
@@ -387,8 +459,11 @@ export type ProductMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
-  department?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  unit_price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  tracking_type?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
@@ -397,13 +472,17 @@ export type ProductMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
-  department?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  unit_price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  tracking_type?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
 
 export type ProductSumOrderByAggregateInput = {
+  unit_price?: Prisma.SortOrder
   reorder_level?: Prisma.SortOrder
 }
 
@@ -412,8 +491,20 @@ export type ProductScalarRelationFilter = {
   isNot?: Prisma.ProductWhereInput
 }
 
-export type EnumDepartmentFieldUpdateOperationsInput = {
-  set?: $Enums.Department
+export type EnumCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.Category
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type EnumTrackingTypeFieldUpdateOperationsInput = {
+  set?: $Enums.TrackingType
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -422,6 +513,24 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type ProductCreateNestedOneWithoutVehiclesInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutVehiclesInput, Prisma.ProductUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutVehiclesInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutVehiclesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutVehiclesInput, Prisma.ProductUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutVehiclesInput
+  upsert?: Prisma.ProductUpsertWithoutVehiclesInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutVehiclesInput, Prisma.ProductUpdateWithoutVehiclesInput>, Prisma.ProductUncheckedUpdateWithoutVehiclesInput>
 }
 
 export type ProductCreateNestedOneWithoutStock_movementsInput = {
@@ -452,26 +561,110 @@ export type ProductUpdateOneRequiredWithoutSale_itemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutSale_itemsInput, Prisma.ProductUpdateWithoutSale_itemsInput>, Prisma.ProductUncheckedUpdateWithoutSale_itemsInput>
 }
 
+export type ProductCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  sku: string
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit: string
+  tracking_type: $Enums.TrackingType
+  reorder_level?: number
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  sku: string
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit: string
+  tracking_type: $Enums.TrackingType
+  reorder_level?: number
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutVehiclesInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutVehiclesInput, Prisma.ProductUncheckedCreateWithoutVehiclesInput>
+}
+
+export type ProductUpsertWithoutVehiclesInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutVehiclesInput, Prisma.ProductUncheckedUpdateWithoutVehiclesInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutVehiclesInput, Prisma.ProductUncheckedCreateWithoutVehiclesInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutVehiclesInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutVehiclesInput, Prisma.ProductUncheckedUpdateWithoutVehiclesInput>
+}
+
+export type ProductUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
+  reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
+  reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
 export type ProductCreateWithoutStock_movementsInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutStock_movementsInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutStock_movementsInput = {
@@ -494,44 +687,60 @@ export type ProductUpdateWithoutStock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutStock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutSale_itemsInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutSale_itemsInput = {
   id?: string
   name: string
   sku: string
-  department: $Enums.Department
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit: string
+  tracking_type: $Enums.TrackingType
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutSale_itemsInput = {
@@ -554,22 +763,30 @@ export type ProductUpdateWithoutSale_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutSale_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.EnumDepartmentFieldUpdateOperationsInput | $Enums.Department
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
 
 
@@ -580,11 +797,13 @@ export type ProductUncheckedUpdateWithoutSale_itemsInput = {
 export type ProductCountOutputType = {
   stock_movements: number
   sale_items: number
+  vehicles: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | ProductCountOutputTypeCountStock_movementsArgs
   sale_items?: boolean | ProductCountOutputTypeCountSale_itemsArgs
+  vehicles?: boolean | ProductCountOutputTypeCountVehiclesArgs
 }
 
 /**
@@ -611,17 +830,28 @@ export type ProductCountOutputTypeCountSale_itemsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.SaleItemWhereInput
 }
 
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VehicleWhereInput
+}
+
 
 export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   sku?: boolean
-  department?: boolean
+  category?: boolean
+  description?: boolean
+  unit_price?: boolean
   unit?: boolean
+  tracking_type?: boolean
   reorder_level?: boolean
   is_active?: boolean
   stock_movements?: boolean | Prisma.Product$stock_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Product$sale_itemsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.Product$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
@@ -629,8 +859,11 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   name?: boolean
   sku?: boolean
-  department?: boolean
+  category?: boolean
+  description?: boolean
+  unit_price?: boolean
   unit?: boolean
+  tracking_type?: boolean
   reorder_level?: boolean
   is_active?: boolean
 }, ExtArgs["result"]["product"]>
@@ -639,8 +872,11 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   name?: boolean
   sku?: boolean
-  department?: boolean
+  category?: boolean
+  description?: boolean
+  unit_price?: boolean
   unit?: boolean
+  tracking_type?: boolean
   reorder_level?: boolean
   is_active?: boolean
 }, ExtArgs["result"]["product"]>
@@ -649,16 +885,20 @@ export type ProductSelectScalar = {
   id?: boolean
   name?: boolean
   sku?: boolean
-  department?: boolean
+  category?: boolean
+  description?: boolean
+  unit_price?: boolean
   unit?: boolean
+  tracking_type?: boolean
   reorder_level?: boolean
   is_active?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "department" | "unit" | "reorder_level" | "is_active", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "category" | "description" | "unit_price" | "unit" | "tracking_type" | "reorder_level" | "is_active", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | Prisma.Product$stock_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Product$sale_itemsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.Product$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -669,13 +909,17 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     stock_movements: Prisma.$StockMovementPayload<ExtArgs>[]
     sale_items: Prisma.$SaleItemPayload<ExtArgs>[]
+    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     sku: string
-    department: $Enums.Department
+    category: $Enums.Category
+    description: string | null
+    unit_price: runtime.Decimal
     unit: string
+    tracking_type: $Enums.TrackingType
     reorder_level: number
     is_active: boolean
   }, ExtArgs["result"]["product"]>
@@ -1074,6 +1318,7 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stock_movements<T extends Prisma.Product$stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sale_items<T extends Prisma.Product$sale_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$sale_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vehicles<T extends Prisma.Product$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1106,8 +1351,11 @@ export interface ProductFieldRefs {
   readonly id: Prisma.FieldRef<"Product", 'String'>
   readonly name: Prisma.FieldRef<"Product", 'String'>
   readonly sku: Prisma.FieldRef<"Product", 'String'>
-  readonly department: Prisma.FieldRef<"Product", 'Department'>
+  readonly category: Prisma.FieldRef<"Product", 'Category'>
+  readonly description: Prisma.FieldRef<"Product", 'String'>
+  readonly unit_price: Prisma.FieldRef<"Product", 'Decimal'>
   readonly unit: Prisma.FieldRef<"Product", 'String'>
+  readonly tracking_type: Prisma.FieldRef<"Product", 'TrackingType'>
   readonly reorder_level: Prisma.FieldRef<"Product", 'Int'>
   readonly is_active: Prisma.FieldRef<"Product", 'Boolean'>
 }
@@ -1543,6 +1791,30 @@ export type Product$sale_itemsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
+}
+
+/**
+ * Product.vehicles
+ */
+export type Product$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicle
+   */
+  select?: Prisma.VehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vehicle
+   */
+  omit?: Prisma.VehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehicleInclude<ExtArgs> | null
+  where?: Prisma.VehicleWhereInput
+  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
+  cursor?: Prisma.VehicleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
 }
 
 /**

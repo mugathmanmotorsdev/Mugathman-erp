@@ -387,12 +387,15 @@ export const ModelName = {
   User: 'User',
   Customer: 'Customer',
   Product: 'Product',
+  Vehicle: 'Vehicle',
   InventoryLocation: 'InventoryLocation',
   StockMovement: 'StockMovement',
+  SerializeMovement: 'SerializeMovement',
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   StockAdjustment: 'StockAdjustment',
-  UserActivationToken: 'UserActivationToken'
+  UserActivationToken: 'UserActivationToken',
+  ResetPasswordToken: 'ResetPasswordToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "customer" | "product" | "inventoryLocation" | "stockMovement" | "sale" | "saleItem" | "stockAdjustment" | "userActivationToken"
+    modelProps: "user" | "customer" | "product" | "vehicle" | "inventoryLocation" | "stockMovement" | "serializeMovement" | "sale" | "saleItem" | "stockAdjustment" | "userActivationToken" | "resetPasswordToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -634,6 +637,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Vehicle: {
+      payload: Prisma.$VehiclePayload<ExtArgs>
+      fields: Prisma.VehicleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VehicleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VehicleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        findFirst: {
+          args: Prisma.VehicleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VehicleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        findMany: {
+          args: Prisma.VehicleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>[]
+        }
+        create: {
+          args: Prisma.VehicleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        createMany: {
+          args: Prisma.VehicleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VehicleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>[]
+        }
+        delete: {
+          args: Prisma.VehicleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        update: {
+          args: Prisma.VehicleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        deleteMany: {
+          args: Prisma.VehicleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VehicleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VehicleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>[]
+        }
+        upsert: {
+          args: Prisma.VehicleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehiclePayload>
+        }
+        aggregate: {
+          args: Prisma.VehicleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVehicle>
+        }
+        groupBy: {
+          args: Prisma.VehicleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VehicleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VehicleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VehicleCountAggregateOutputType> | number
+        }
+      }
+    }
     InventoryLocation: {
       payload: Prisma.$InventoryLocationPayload<ExtArgs>
       fields: Prisma.InventoryLocationFieldRefs
@@ -779,6 +856,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.StockMovementCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.StockMovementCountAggregateOutputType> | number
+        }
+      }
+    }
+    SerializeMovement: {
+      payload: Prisma.$SerializeMovementPayload<ExtArgs>
+      fields: Prisma.SerializeMovementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SerializeMovementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SerializeMovementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        findFirst: {
+          args: Prisma.SerializeMovementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SerializeMovementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        findMany: {
+          args: Prisma.SerializeMovementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>[]
+        }
+        create: {
+          args: Prisma.SerializeMovementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        createMany: {
+          args: Prisma.SerializeMovementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SerializeMovementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>[]
+        }
+        delete: {
+          args: Prisma.SerializeMovementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        update: {
+          args: Prisma.SerializeMovementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        deleteMany: {
+          args: Prisma.SerializeMovementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SerializeMovementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SerializeMovementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>[]
+        }
+        upsert: {
+          args: Prisma.SerializeMovementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SerializeMovementPayload>
+        }
+        aggregate: {
+          args: Prisma.SerializeMovementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSerializeMovement>
+        }
+        groupBy: {
+          args: Prisma.SerializeMovementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SerializeMovementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SerializeMovementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SerializeMovementCountAggregateOutputType> | number
         }
       }
     }
@@ -1078,6 +1229,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ResetPasswordToken: {
+      payload: Prisma.$ResetPasswordTokenPayload<ExtArgs>
+      fields: Prisma.ResetPasswordTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResetPasswordTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResetPasswordTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.ResetPasswordTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResetPasswordTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        findMany: {
+          args: Prisma.ResetPasswordTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>[]
+        }
+        create: {
+          args: Prisma.ResetPasswordTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        createMany: {
+          args: Prisma.ResetPasswordTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResetPasswordTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.ResetPasswordTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        update: {
+          args: Prisma.ResetPasswordTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.ResetPasswordTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResetPasswordTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResetPasswordTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.ResetPasswordTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResetPasswordTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.ResetPasswordTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResetPasswordToken>
+        }
+        groupBy: {
+          args: Prisma.ResetPasswordTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResetPasswordTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResetPasswordTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResetPasswordTokenCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1122,8 +1347,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   full_name: 'full_name',
   password: 'password',
-  is_active: 'is_active',
+  status: 'status',
   created_at: 'created_at',
+  image: 'image',
   role: 'role'
 } as const
 
@@ -1146,8 +1372,11 @@ export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
   sku: 'sku',
-  department: 'department',
+  category: 'category',
+  description: 'description',
+  unit_price: 'unit_price',
   unit: 'unit',
+  tracking_type: 'tracking_type',
   reorder_level: 'reorder_level',
   is_active: 'is_active'
 } as const
@@ -1155,10 +1384,21 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const VehicleScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  inventory_location_id: 'inventory_location_id',
+  vin: 'vin',
+  status: 'status',
+  created_at: 'created_at'
+} as const
+
+export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
+
+
 export const InventoryLocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  department: 'department',
   is_active: 'is_active'
 } as const
 
@@ -1169,7 +1409,9 @@ export const StockMovementScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   location_id: 'location_id',
+  vehicle_id: 'vehicle_id',
   quantity: 'quantity',
+  type: 'type',
   reason: 'reason',
   reference_type: 'reference_type',
   reference_id: 'reference_id',
@@ -1178,6 +1420,15 @@ export const StockMovementScalarFieldEnum = {
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
+
+
+export const SerializeMovementScalarFieldEnum = {
+  id: 'id',
+  stock_movement_id: 'stock_movement_id',
+  vehicle_id: 'vehicle_id'
+} as const
+
+export type SerializeMovementScalarFieldEnum = (typeof SerializeMovementScalarFieldEnum)[keyof typeof SerializeMovementScalarFieldEnum]
 
 
 export const SaleScalarFieldEnum = {
@@ -1218,10 +1469,22 @@ export const UserActivationTokenScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   token: 'token',
+  expired_at: 'expired_at',
   created_at: 'created_at'
 } as const
 
 export type UserActivationTokenScalarFieldEnum = (typeof UserActivationTokenScalarFieldEnum)[keyof typeof UserActivationTokenScalarFieldEnum]
+
+
+export const ResetPasswordTokenScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token: 'token',
+  expired_at: 'expired_at',
+  created_at: 'created_at'
+} as const
+
+export type ResetPasswordTokenScalarFieldEnum = (typeof ResetPasswordTokenScalarFieldEnum)[keyof typeof ResetPasswordTokenScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1269,9 +1532,16 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'UserStatus'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'UserStatus[]'
+ */
+export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
     
 
 
@@ -1304,16 +1574,44 @@ export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Department'
+ * Reference to a field of type 'Category'
  */
-export type EnumDepartmentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Department'>
+export type EnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category'>
     
 
 
 /**
- * Reference to a field of type 'Department[]'
+ * Reference to a field of type 'Category[]'
  */
-export type ListEnumDepartmentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Department[]'>
+export type ListEnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TrackingType'
+ */
+export type EnumTrackingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrackingType'>
+    
+
+
+/**
+ * Reference to a field of type 'TrackingType[]'
+ */
+export type ListEnumTrackingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrackingType[]'>
     
 
 
@@ -1328,6 +1626,41 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'VehicleStatus'
+ */
+export type EnumVehicleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VehicleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VehicleStatus[]'
+ */
+export type ListEnumVehicleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VehicleStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StockMovementType'
+ */
+export type EnumStockMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockMovementType'>
+    
+
+
+/**
+ * Reference to a field of type 'StockMovementType[]'
+ */
+export type ListEnumStockMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockMovementType[]'>
     
 
 
@@ -1370,20 +1703,6 @@ export type EnumSaleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'SaleStatus[]'
  */
 export type ListEnumSaleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SaleStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -1512,12 +1831,15 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   customer?: Prisma.CustomerOmit
   product?: Prisma.ProductOmit
+  vehicle?: Prisma.VehicleOmit
   inventoryLocation?: Prisma.InventoryLocationOmit
   stockMovement?: Prisma.StockMovementOmit
+  serializeMovement?: Prisma.SerializeMovementOmit
   sale?: Prisma.SaleOmit
   saleItem?: Prisma.SaleItemOmit
   stockAdjustment?: Prisma.StockAdjustmentOmit
   userActivationToken?: Prisma.UserActivationTokenOmit
+  resetPasswordToken?: Prisma.ResetPasswordTokenOmit
 }
 
 /* Types for Logging */

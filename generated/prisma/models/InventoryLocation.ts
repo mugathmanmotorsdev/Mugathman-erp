@@ -27,21 +27,18 @@ export type AggregateInventoryLocation = {
 export type InventoryLocationMinAggregateOutputType = {
   id: string | null
   name: string | null
-  department: string | null
   is_active: boolean | null
 }
 
 export type InventoryLocationMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  department: string | null
   is_active: boolean | null
 }
 
 export type InventoryLocationCountAggregateOutputType = {
   id: number
   name: number
-  department: number
   is_active: number
   _all: number
 }
@@ -50,21 +47,18 @@ export type InventoryLocationCountAggregateOutputType = {
 export type InventoryLocationMinAggregateInputType = {
   id?: true
   name?: true
-  department?: true
   is_active?: true
 }
 
 export type InventoryLocationMaxAggregateInputType = {
   id?: true
   name?: true
-  department?: true
   is_active?: true
 }
 
 export type InventoryLocationCountAggregateInputType = {
   id?: true
   name?: true
-  department?: true
   is_active?: true
   _all?: true
 }
@@ -144,7 +138,6 @@ export type InventoryLocationGroupByArgs<ExtArgs extends runtime.Types.Extension
 export type InventoryLocationGroupByOutputType = {
   id: string
   name: string
-  department: string
   is_active: boolean
   _count: InventoryLocationCountAggregateOutputType | null
   _min: InventoryLocationMinAggregateOutputType | null
@@ -172,17 +165,17 @@ export type InventoryLocationWhereInput = {
   NOT?: Prisma.InventoryLocationWhereInput | Prisma.InventoryLocationWhereInput[]
   id?: Prisma.StringFilter<"InventoryLocation"> | string
   name?: Prisma.StringFilter<"InventoryLocation"> | string
-  department?: Prisma.StringFilter<"InventoryLocation"> | string
   is_active?: Prisma.BoolFilter<"InventoryLocation"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }
 
 export type InventoryLocationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   stock_movements?: Prisma.StockMovementOrderByRelationAggregateInput
+  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
 }
 
 export type InventoryLocationWhereUniqueInput = Prisma.AtLeast<{
@@ -191,15 +184,14 @@ export type InventoryLocationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.InventoryLocationWhereInput[]
   NOT?: Prisma.InventoryLocationWhereInput | Prisma.InventoryLocationWhereInput[]
   name?: Prisma.StringFilter<"InventoryLocation"> | string
-  department?: Prisma.StringFilter<"InventoryLocation"> | string
   is_active?: Prisma.BoolFilter<"InventoryLocation"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }, "id">
 
 export type InventoryLocationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   _count?: Prisma.InventoryLocationCountOrderByAggregateInput
   _max?: Prisma.InventoryLocationMaxOrderByAggregateInput
@@ -212,87 +204,94 @@ export type InventoryLocationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.InventoryLocationScalarWhereWithAggregatesInput | Prisma.InventoryLocationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"InventoryLocation"> | string
   name?: Prisma.StringWithAggregatesFilter<"InventoryLocation"> | string
-  department?: Prisma.StringWithAggregatesFilter<"InventoryLocation"> | string
   is_active?: Prisma.BoolWithAggregatesFilter<"InventoryLocation"> | boolean
 }
 
 export type InventoryLocationCreateInput = {
   id?: string
   name: string
-  department: string
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutLocationInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutInventory_locationInput
 }
 
 export type InventoryLocationUncheckedCreateInput = {
   id?: string
   name: string
-  department: string
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutLocationInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutInventory_locationInput
 }
 
 export type InventoryLocationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutLocationNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutInventory_locationNestedInput
 }
 
 export type InventoryLocationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutLocationNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutInventory_locationNestedInput
 }
 
 export type InventoryLocationCreateManyInput = {
   id?: string
   name: string
-  department: string
   is_active?: boolean
 }
 
 export type InventoryLocationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type InventoryLocationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type InventoryLocationScalarRelationFilter = {
+  is?: Prisma.InventoryLocationWhereInput
+  isNot?: Prisma.InventoryLocationWhereInput
 }
 
 export type InventoryLocationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
 
 export type InventoryLocationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
 
 export type InventoryLocationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
 }
 
-export type InventoryLocationScalarRelationFilter = {
-  is?: Prisma.InventoryLocationWhereInput
-  isNot?: Prisma.InventoryLocationWhereInput
+export type InventoryLocationCreateNestedOneWithoutVehiclesInput = {
+  create?: Prisma.XOR<Prisma.InventoryLocationCreateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.InventoryLocationCreateOrConnectWithoutVehiclesInput
+  connect?: Prisma.InventoryLocationWhereUniqueInput
+}
+
+export type InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryLocationCreateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.InventoryLocationCreateOrConnectWithoutVehiclesInput
+  upsert?: Prisma.InventoryLocationUpsertWithoutVehiclesInput
+  connect?: Prisma.InventoryLocationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryLocationUpdateToOneWithWhereWithoutVehiclesInput, Prisma.InventoryLocationUpdateWithoutVehiclesInput>, Prisma.InventoryLocationUncheckedUpdateWithoutVehiclesInput>
 }
 
 export type InventoryLocationCreateNestedOneWithoutStock_movementsInput = {
@@ -309,18 +308,62 @@ export type InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryLocationUpdateToOneWithWhereWithoutStock_movementsInput, Prisma.InventoryLocationUpdateWithoutStock_movementsInput>, Prisma.InventoryLocationUncheckedUpdateWithoutStock_movementsInput>
 }
 
+export type InventoryLocationCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementCreateNestedManyWithoutLocationInput
+}
+
+export type InventoryLocationUncheckedCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type InventoryLocationCreateOrConnectWithoutVehiclesInput = {
+  where: Prisma.InventoryLocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.InventoryLocationCreateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedCreateWithoutVehiclesInput>
+}
+
+export type InventoryLocationUpsertWithoutVehiclesInput = {
+  update: Prisma.XOR<Prisma.InventoryLocationUpdateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedUpdateWithoutVehiclesInput>
+  create: Prisma.XOR<Prisma.InventoryLocationCreateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedCreateWithoutVehiclesInput>
+  where?: Prisma.InventoryLocationWhereInput
+}
+
+export type InventoryLocationUpdateToOneWithWhereWithoutVehiclesInput = {
+  where?: Prisma.InventoryLocationWhereInput
+  data: Prisma.XOR<Prisma.InventoryLocationUpdateWithoutVehiclesInput, Prisma.InventoryLocationUncheckedUpdateWithoutVehiclesInput>
+}
+
+export type InventoryLocationUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUpdateManyWithoutLocationNestedInput
+}
+
+export type InventoryLocationUncheckedUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutLocationNestedInput
+}
+
 export type InventoryLocationCreateWithoutStock_movementsInput = {
   id?: string
   name: string
-  department: string
   is_active?: boolean
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutInventory_locationInput
 }
 
 export type InventoryLocationUncheckedCreateWithoutStock_movementsInput = {
   id?: string
   name: string
-  department: string
   is_active?: boolean
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutInventory_locationInput
 }
 
 export type InventoryLocationCreateOrConnectWithoutStock_movementsInput = {
@@ -342,15 +385,15 @@ export type InventoryLocationUpdateToOneWithWhereWithoutStock_movementsInput = {
 export type InventoryLocationUpdateWithoutStock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vehicles?: Prisma.VehicleUpdateManyWithoutInventory_locationNestedInput
 }
 
 export type InventoryLocationUncheckedUpdateWithoutStock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutInventory_locationNestedInput
 }
 
 
@@ -360,10 +403,12 @@ export type InventoryLocationUncheckedUpdateWithoutStock_movementsInput = {
 
 export type InventoryLocationCountOutputType = {
   stock_movements: number
+  vehicles: number
 }
 
 export type InventoryLocationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | InventoryLocationCountOutputTypeCountStock_movementsArgs
+  vehicles?: boolean | InventoryLocationCountOutputTypeCountVehiclesArgs
 }
 
 /**
@@ -383,40 +428,45 @@ export type InventoryLocationCountOutputTypeCountStock_movementsArgs<ExtArgs ext
   where?: Prisma.StockMovementWhereInput
 }
 
+/**
+ * InventoryLocationCountOutputType without action
+ */
+export type InventoryLocationCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VehicleWhereInput
+}
+
 
 export type InventoryLocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  department?: boolean
   is_active?: boolean
   stock_movements?: boolean | Prisma.InventoryLocation$stock_movementsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.InventoryLocation$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryLocationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inventoryLocation"]>
 
 export type InventoryLocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  department?: boolean
   is_active?: boolean
 }, ExtArgs["result"]["inventoryLocation"]>
 
 export type InventoryLocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  department?: boolean
   is_active?: boolean
 }, ExtArgs["result"]["inventoryLocation"]>
 
 export type InventoryLocationSelectScalar = {
   id?: boolean
   name?: boolean
-  department?: boolean
   is_active?: boolean
 }
 
-export type InventoryLocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "department" | "is_active", ExtArgs["result"]["inventoryLocation"]>
+export type InventoryLocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "is_active", ExtArgs["result"]["inventoryLocation"]>
 export type InventoryLocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | Prisma.InventoryLocation$stock_movementsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.InventoryLocation$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryLocationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InventoryLocationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -426,11 +476,11 @@ export type $InventoryLocationPayload<ExtArgs extends runtime.Types.Extensions.I
   name: "InventoryLocation"
   objects: {
     stock_movements: Prisma.$StockMovementPayload<ExtArgs>[]
+    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    department: string
     is_active: boolean
   }, ExtArgs["result"]["inventoryLocation"]>
   composites: {}
@@ -827,6 +877,7 @@ readonly fields: InventoryLocationFieldRefs;
 export interface Prisma__InventoryLocationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stock_movements<T extends Prisma.InventoryLocation$stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryLocation$stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vehicles<T extends Prisma.InventoryLocation$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryLocation$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -858,7 +909,6 @@ export interface Prisma__InventoryLocationClient<T, Null = never, ExtArgs extend
 export interface InventoryLocationFieldRefs {
   readonly id: Prisma.FieldRef<"InventoryLocation", 'String'>
   readonly name: Prisma.FieldRef<"InventoryLocation", 'String'>
-  readonly department: Prisma.FieldRef<"InventoryLocation", 'String'>
   readonly is_active: Prisma.FieldRef<"InventoryLocation", 'Boolean'>
 }
     
@@ -1269,6 +1319,30 @@ export type InventoryLocation$stock_movementsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
+}
+
+/**
+ * InventoryLocation.vehicles
+ */
+export type InventoryLocation$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicle
+   */
+  select?: Prisma.VehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vehicle
+   */
+  omit?: Prisma.VehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehicleInclude<ExtArgs> | null
+  where?: Prisma.VehicleWhereInput
+  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
+  cursor?: Prisma.VehicleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
 }
 
 /**
