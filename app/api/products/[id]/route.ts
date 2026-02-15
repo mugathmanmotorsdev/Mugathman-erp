@@ -49,14 +49,14 @@ export async function GET(
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const body = await request.json();
         const { name, sku, category, unit, reorder_level, is_active, description, unit_price, tracking_type } = body || {};
 
         const product = await prisma.product.update({
-            where: { id: params.id },
+            where: { id: (await params).id },
             data: {
                 ...(name !== undefined && { name }),
                 ...(sku !== undefined && { sku }),
@@ -82,12 +82,12 @@ export async function PUT(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         // Check if product exists
         const product = await prisma.product.findUnique({
-            where: { id: params.id },
+            where: { id: (await params).id },
             include: {
                 stock_movements: true,
                 sale_items: true,
@@ -111,7 +111,7 @@ export async function DELETE(
         }
 
         await prisma.product.delete({
-            where: { id: params.id }
+            where: { id: (await params).id }
         });
 
         return NextResponse.json({ success: true }, { status: 200 });
