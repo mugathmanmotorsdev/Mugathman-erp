@@ -9,7 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
 export const Role = {
+  ADMIN: 'ADMIN',
   EDITOR: 'EDITOR',
   VIEWER: 'VIEWER'
 } as const
@@ -17,12 +27,41 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const Department = {
-  FERTILIZER: 'FERTILIZER',
-  PLASTIC: 'PLASTIC'
+export const TrackingType = {
+  SERIAL: 'SERIAL',
+  BATCH: 'BATCH'
 } as const
 
-export type Department = (typeof Department)[keyof typeof Department]
+export type TrackingType = (typeof TrackingType)[keyof typeof TrackingType]
+
+
+export const Category = {
+  HEAVY_DUTY: 'heavy_duty',
+  FERTILIZER: 'fertilizer',
+  PARTS: 'parts',
+  TRUCK_HEAD: 'truck_head',
+  TIPPER: 'tipper',
+  TRACTOR: 'tractor'
+} as const
+
+export type Category = (typeof Category)[keyof typeof Category]
+
+
+export const VehicleStatus = {
+  AVAILABLE: 'AVAILABLE',
+  SOLD: 'SOLD',
+  DAMAGED: 'DAMAGED'
+} as const
+
+export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
+
+
+export const StockMovementType = {
+  IN: 'IN',
+  OUT: 'OUT'
+} as const
+
+export type StockMovementType = (typeof StockMovementType)[keyof typeof StockMovementType]
 
 
 export const StockMovementReason = {
@@ -60,3 +99,11 @@ export const StockAdjustmentReason = {
 } as const
 
 export type StockAdjustmentReason = (typeof StockAdjustmentReason)[keyof typeof StockAdjustmentReason]
+
+
+export const Department = {
+  FERTILIZER: 'FERTILIZER',
+  PLASTIC: 'PLASTIC'
+} as const
+
+export type Department = (typeof Department)[keyof typeof Department]

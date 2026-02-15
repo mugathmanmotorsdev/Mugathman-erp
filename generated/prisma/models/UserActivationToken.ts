@@ -28,6 +28,7 @@ export type UserActivationTokenMinAggregateOutputType = {
   id: string | null
   user_id: string | null
   token: string | null
+  expired_at: Date | null
   created_at: Date | null
 }
 
@@ -35,6 +36,7 @@ export type UserActivationTokenMaxAggregateOutputType = {
   id: string | null
   user_id: string | null
   token: string | null
+  expired_at: Date | null
   created_at: Date | null
 }
 
@@ -42,6 +44,7 @@ export type UserActivationTokenCountAggregateOutputType = {
   id: number
   user_id: number
   token: number
+  expired_at: number
   created_at: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type UserActivationTokenMinAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  expired_at?: true
   created_at?: true
 }
 
@@ -58,6 +62,7 @@ export type UserActivationTokenMaxAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  expired_at?: true
   created_at?: true
 }
 
@@ -65,6 +70,7 @@ export type UserActivationTokenCountAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  expired_at?: true
   created_at?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type UserActivationTokenGroupByOutputType = {
   id: string
   user_id: string
   token: string
+  expired_at: Date
   created_at: Date
   _count: UserActivationTokenCountAggregateOutputType | null
   _min: UserActivationTokenMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type UserActivationTokenWhereInput = {
   id?: Prisma.StringFilter<"UserActivationToken"> | string
   user_id?: Prisma.StringFilter<"UserActivationToken"> | string
   token?: Prisma.StringFilter<"UserActivationToken"> | string
+  expired_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -181,25 +189,28 @@ export type UserActivationTokenOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  expired_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type UserActivationTokenWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  token?: string
   AND?: Prisma.UserActivationTokenWhereInput | Prisma.UserActivationTokenWhereInput[]
   OR?: Prisma.UserActivationTokenWhereInput[]
   NOT?: Prisma.UserActivationTokenWhereInput | Prisma.UserActivationTokenWhereInput[]
   user_id?: Prisma.StringFilter<"UserActivationToken"> | string
-  token?: Prisma.StringFilter<"UserActivationToken"> | string
+  expired_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+}, "id" | "token">
 
 export type UserActivationTokenOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  expired_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.UserActivationTokenCountOrderByAggregateInput
   _max?: Prisma.UserActivationTokenMaxOrderByAggregateInput
@@ -213,12 +224,14 @@ export type UserActivationTokenScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"UserActivationToken"> | string
   user_id?: Prisma.StringWithAggregatesFilter<"UserActivationToken"> | string
   token?: Prisma.StringWithAggregatesFilter<"UserActivationToken"> | string
+  expired_at?: Prisma.DateTimeWithAggregatesFilter<"UserActivationToken"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"UserActivationToken"> | Date | string
 }
 
 export type UserActivationTokenCreateInput = {
   id?: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUserActivationTokensInput
 }
@@ -227,12 +240,14 @@ export type UserActivationTokenUncheckedCreateInput = {
   id?: string
   user_id: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
 }
 
 export type UserActivationTokenUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUserActivationTokensNestedInput
 }
@@ -241,6 +256,7 @@ export type UserActivationTokenUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -248,12 +264,14 @@ export type UserActivationTokenCreateManyInput = {
   id?: string
   user_id: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
 }
 
 export type UserActivationTokenUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -261,6 +279,7 @@ export type UserActivationTokenUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -278,6 +297,7 @@ export type UserActivationTokenCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  expired_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -285,6 +305,7 @@ export type UserActivationTokenMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  expired_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -292,6 +313,7 @@ export type UserActivationTokenMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  expired_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -340,12 +362,14 @@ export type UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput = {
 export type UserActivationTokenCreateWithoutUserInput = {
   id?: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
 }
 
 export type UserActivationTokenUncheckedCreateWithoutUserInput = {
   id?: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
 }
 
@@ -382,30 +406,35 @@ export type UserActivationTokenScalarWhereInput = {
   id?: Prisma.StringFilter<"UserActivationToken"> | string
   user_id?: Prisma.StringFilter<"UserActivationToken"> | string
   token?: Prisma.StringFilter<"UserActivationToken"> | string
+  expired_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
   created_at?: Prisma.DateTimeFilter<"UserActivationToken"> | Date | string
 }
 
 export type UserActivationTokenCreateManyUserInput = {
   id?: string
   token: string
+  expired_at?: Date | string
   created_at?: Date | string
 }
 
 export type UserActivationTokenUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserActivationTokenUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserActivationTokenUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  expired_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -415,6 +444,7 @@ export type UserActivationTokenSelect<ExtArgs extends runtime.Types.Extensions.I
   id?: boolean
   user_id?: boolean
   token?: boolean
+  expired_at?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivationToken"]>
@@ -423,6 +453,7 @@ export type UserActivationTokenSelectCreateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   user_id?: boolean
   token?: boolean
+  expired_at?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivationToken"]>
@@ -431,6 +462,7 @@ export type UserActivationTokenSelectUpdateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   user_id?: boolean
   token?: boolean
+  expired_at?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivationToken"]>
@@ -439,10 +471,11 @@ export type UserActivationTokenSelectScalar = {
   id?: boolean
   user_id?: boolean
   token?: boolean
+  expired_at?: boolean
   created_at?: boolean
 }
 
-export type UserActivationTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "token" | "created_at", ExtArgs["result"]["userActivationToken"]>
+export type UserActivationTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "token" | "expired_at" | "created_at", ExtArgs["result"]["userActivationToken"]>
 export type UserActivationTokenInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -462,6 +495,7 @@ export type $UserActivationTokenPayload<ExtArgs extends runtime.Types.Extensions
     id: string
     user_id: string
     token: string
+    expired_at: Date
     created_at: Date
   }, ExtArgs["result"]["userActivationToken"]>
   composites: {}
@@ -890,6 +924,7 @@ export interface UserActivationTokenFieldRefs {
   readonly id: Prisma.FieldRef<"UserActivationToken", 'String'>
   readonly user_id: Prisma.FieldRef<"UserActivationToken", 'String'>
   readonly token: Prisma.FieldRef<"UserActivationToken", 'String'>
+  readonly expired_at: Prisma.FieldRef<"UserActivationToken", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"UserActivationToken", 'DateTime'>
 }
     

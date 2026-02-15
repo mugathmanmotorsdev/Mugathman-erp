@@ -1,10 +1,20 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
+import prisma from "./prisma"
+import { comparePassword } from "./utils/password"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/signin",
+  },
   providers: [
     Credentials({
         credentials: {
+            email: {
+                type: "email",
+                label: "Email",
+                placeholder: "example@gmail.com"
+            },
             password: {
                 type: "password",
                 label: "Password",
@@ -13,22 +23,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
 
         authorize: async (credentials) => {
-    
-            // logic to verify if the user exists
-            const isAuth = credentials?.password === process.env.GENERAL_PASS
-    
-            if (!isAuth) {
-            // No user found, so this is their first attempt to login
-            // Optionally, this is also the place you could do a user registration
-            throw new Error("Invalid credentials.")
+            const { email, password } = credentials as Record<"email" | "password", string>
+
+            if (!email || !password) {
+                throw new Error("Invalid credentials")
             }
-    
-            // return user object with their profile data (must match NextAuth's User shape)
+
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+
+            if (!user) {
+                throw new Error("No user found")
+            }
+
+            const isPasswordValid = await comparePassword(password, user.password)
+
+            if (!isPasswordValid) {
+                throw new Error("Invalid password")
+            }
+
+            if (user.status !== "ACTIVE") {
+                throw new Error("User is not active")
+            }
+
             return {
-                username: process.env.USER_NAME || "admin",
-                email: "info@mugathmanmotors.com"
+                id: user.id,
+                email: user.email,
+                name: user.full_name,
+                role: user.role
             }
         }
-    })
-  ],
+    }),
+  ]
 })
