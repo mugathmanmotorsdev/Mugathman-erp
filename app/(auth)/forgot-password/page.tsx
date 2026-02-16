@@ -3,20 +3,24 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Loader2, CheckCircle, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle
+} from "@/components/ui/card"
+import { 
+  ForgotPasswordValues, 
+  forgotPasswordSchema 
+} from "@/lib/validatoion/user"
 
-const forgotPasswordSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-})
-
-type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>
 
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -45,18 +49,18 @@ export default function ForgotPasswordPage() {
       })
 
       if (!response.ok) {
-         // handle specific error cases if needed, otherwise fallback to generic
-         const result = await response.json().catch(() => ({}))
-         throw new Error(result.error || "Failed to send reset link")
+        // handle specific error cases if needed, otherwise fallback to generic
+        const result = await response.json().catch(() => ({}))
+        throw new Error(result.error || "Failed to send reset link")
       }
 
       setIsSuccess(true)
     } catch (err) {
-        if (err instanceof Error) {
-            setError(err.message)
-        } else {
-             setError("An unknown error occurred")
-        }
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError("An unknown error occurred")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -103,7 +107,7 @@ export default function ForgotPasswordPage() {
                 type="email"
                 placeholder="name@example.com"
                 {...register("email")}
-                 className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
+                className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 animate-shake">{errors.email.message}</p>
@@ -123,11 +127,11 @@ export default function ForgotPasswordPage() {
           </form>
         </CardContent>
         <CardFooter>
-            <Button variant="link" className="w-full" asChild>
-                <Link href="/api/auth/signin" className="flex items-center gap-2">
-                    <ArrowLeft className="h-4 w-4" /> Back to Login
-                </Link>
-            </Button>
+          <Button variant="link" className="w-full" asChild>
+            <Link href="/api/auth/signin" className="flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" /> Back to Login
+            </Link>
+          </Button>
         </CardFooter>
       </Card>
     </div>

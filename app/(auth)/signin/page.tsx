@@ -3,19 +3,17 @@
 import { useState, Suspense } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Loader2, Eye, EyeOff, LogIn } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { signInSchema } from "@/lib/validatoion/user"
+import { SignInValues } from "@/lib/validatoion/user"
 
-type SignInValues = z.infer<typeof signInSchema>
 
 function SignInForm() {
   const router = useRouter()
@@ -50,9 +48,9 @@ function SignInForm() {
 
       if (result?.error) {
         if (result.error === "CredentialsSignin") {
-            setError("Invalid email or password")
+          setError("Invalid email or password")
         } else {
-            setError(result.error)
+          setError("Something goes wrong")
         }
       } else {
         router.push(callbackUrl)
@@ -75,7 +73,10 @@ function SignInForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            autoCapitalize="off"
+            className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -83,7 +84,7 @@ function SignInForm() {
                 type="email"
                 placeholder="name@example.com"
                 {...register("email")}
-                className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
+                className={errors.email ? "border-red-400 focus-visible:ring-red-400" : ""}
                 disabled={isLoading}
               />
               {errors.email && (
@@ -107,7 +108,7 @@ function SignInForm() {
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   {...register("password")}
-                  className={errors.password ? "border-red-500 pr-10" : "pr-10"}
+                  className={errors.password ? "border-red-400 focus-visible:ring-red-400 pr-10" : "pr-10"}
                   disabled={isLoading}
                 />
                 <button
