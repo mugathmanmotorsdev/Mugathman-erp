@@ -50,8 +50,10 @@ export default function Receipt({
 
                     <div className="text-left">
                         <p className="font-bold text-slate-800">Office Address</p>
-                        <p>Main street, Number 06/B,</p>
-                        <p>South Mountain, YK</p>
+                        <p>
+                            Danladi Nasidit, Housing Estate, <br />
+                            Kumbotso, Kano State, Nigeria
+                        </p>
                     </div>
                 </div>
             </div>
@@ -110,31 +112,15 @@ export default function Receipt({
                 <div className="flex-1">
                     <h4 className="font-bold text-slate-800 mb-3 text-sm">Questions?</h4>
                     <div className="space-y-1 text-slate-500">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
                             <span className="font-bold text-slate-700 min-w-[60px]">Email us</span>
-                            <span>: info@mugathmanmotors.com</span>
+                            <span> : info@mugathmanmotors.com</span>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
                             <span className="font-bold text-slate-700 min-w-[60px]">Call us</span>
-                            <span>: +628 123 456 789</span>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <span className="font-bold text-slate-800 min-w-[60px]">Office Address</span>
-                            <span>
-                                : Danladi Nasidit, Housing Estate, <br />
-                                Kumbotso, Kano State, Nigeria
-                            </span>
-
+                            <span> : +628 123 456 789</span>
                         </div>
                     </div>
-                </div>
-
-                {/* Notes */}
-                <div className="flex-1">
-                    <h4 className="font-bold text-slate-800 mb-2 text-xs uppercase tracking-wider">Note:</h4>
-                    <p className="text-xs text-slate-500 max-w-md leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt autem vel eum iriure dolor in hendrerit
-                    </p>
                 </div>
 
             </div>
