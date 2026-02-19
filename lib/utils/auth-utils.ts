@@ -9,7 +9,7 @@ export async function requireAuth() {
   if (!session?.user?.email) {
     throw new Error('Authentication required')
   }
-  
+
   const user = await prisma.user.findUnique({
     where: {
       email: session.user.email,
@@ -58,24 +58,5 @@ export async function roleGuard(user: User, roles: Role[]) {
   if (!roles.includes(user.role)) {
     throw new Error('Unauthorized')
   }
-}
-
-export async function canAccessRoute(user: User, route: string) {
-  const routeRoles: Record<string, Role[]> = {
-    "/users": ["ADMIN"],
-    "/users/[id]": ["ADMIN"],
-    "/users/[id]/deactivate": ["ADMIN"],
-    "/users/[id]/activate": ["ADMIN"],
-  }
-
-  if (!user) {
-    return false
-  }
-
-  if (routeRoles[route]?.includes(user.role)) {
-    return true
-  }
-
-  return false
 }
 

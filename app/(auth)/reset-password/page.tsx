@@ -3,28 +3,24 @@
 import { useState, Suspense } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Loader2, CheckCircle, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { userActivationSchema } from "@/lib/validatoion/user" // Note: validation typo in path is consistent with project structure
-
-type ResetPasswordValues = z.infer<typeof userActivationSchema>
+import { userActivationSchema, ResetPasswordValues } from "@/lib/validatoion/user" // Note: validation typo in path is consistent with project structure
 
 function ResetPasswordForm() {
-    const searchParams = useSearchParams()
-    const token = searchParams.get("token")
-    
-    const [isLoading, setIsLoading] = useState(false)
-    const [isSuccess, setIsSuccess] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
 
   const {
@@ -37,8 +33,8 @@ function ResetPasswordForm() {
 
   async function onSubmit(data: ResetPasswordValues) {
     if (!token) {
-        setError("Invalid or missing token")
-        return
+      setError("Invalid or missing token")
+      return
     }
 
     setIsLoading(true)
@@ -51,8 +47,8 @@ function ResetPasswordForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            token,
-            password: data.password
+          token,
+          password: data.password
         }),
       })
 
@@ -63,17 +59,17 @@ function ResetPasswordForm() {
 
       setIsSuccess(true)
     } catch (err) {
-        if (err instanceof Error) {
-            setError(err.message)
-        } else {
-             setError("An unknown error occurred")
-        }
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError("Something went wrong")
+      }
     } finally {
       setIsLoading(false)
     }
   }
-  
-    if (isSuccess) {
+
+  if (isSuccess) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
         <Card className="w-full max-w-md animate-fade-in border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-900">
@@ -96,25 +92,25 @@ function ResetPasswordForm() {
     )
   }
 
-    if (!token) {
-        return (
-             <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
-                <Card className="w-full max-w-md border-red-200">
-                    <CardHeader>
-                        <CardTitle className="text-red-500">Invalid Link</CardTitle>
-                        <CardDescription>
-                            This password reset link is invalid or missing the token. Please request a new one.
-                        </CardDescription>
-                    </CardHeader>
-                     <CardFooter>
-                        <Button asChild className="w-full" variant="outline">
-                        <Link href="/forgot-password">Go to Forgot Password</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-             </div>
-        )
-    }
+  if (!token) {
+    return (
+      <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
+        <Card className="w-full max-w-md border-red-200">
+          <CardHeader>
+            <CardTitle className="text-red-500">Invalid Link</CardTitle>
+            <CardDescription>
+              This password reset link is invalid or missing the token. Please request a new one.
+            </CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Button asChild className="w-full" variant="outline">
+              <Link href="/forgot-password">Go to Forgot Password</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
@@ -127,54 +123,54 @@ function ResetPasswordForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          
-           <div className="space-y-2">
+
+            <div className="space-y-2">
               <Label htmlFor="password">New Password</Label>
               <div className="relative">
                 <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                    className={errors.password ? "border-red-500 pr-10" : "pr-10"}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={errors.password ? "border-red-500 pr-10" : "pr-10"}
                 />
-                 <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
               {errors.password && (
                 <p className="text-sm text-red-500 animate-shake">{errors.password.message}</p>
               )}
             </div>
-            
-             <div className="space-y-2">
+
+            <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
-               <div className="relative">
+              <div className="relative">
                 <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    {...register("confirmPassword")}
-                     className={errors.confirmPassword ? "border-red-500 pr-10" : "pr-10"}
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...register("confirmPassword")}
+                  className={errors.confirmPassword ? "border-red-500 pr-10" : "pr-10"}
                 />
-                 <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  >
-                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-               </div>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500 animate-shake">{errors.confirmPassword.message}</p>
               )}
@@ -198,9 +194,9 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
-    return (
-        <Suspense fallback={<div className="flex min-h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
-            <ResetPasswordForm />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<div className="flex min-h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+      <ResetPasswordForm />
+    </Suspense>
+  )
 }

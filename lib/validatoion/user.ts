@@ -24,5 +24,6 @@ export const forgotPasswordSchema = z.object({
     email: z.string().email({ message: "Please enter a valid email address" }),
 })
 
+export type ResetPasswordValues = z.infer<typeof userActivationSchema>
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>
 export type SignInValues = z.infer<typeof signInSchema>
