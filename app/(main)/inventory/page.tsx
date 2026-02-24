@@ -40,13 +40,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";  
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
-import { formatCurrency } from "@/lib/utils/currency-formatter";
 import { useAuth } from "@/hooks/useauth";
 import { useFetchProduct } from "@/hooks/usefetchproducts";
+import { useFormatCurrency } from "@/hooks/use-formatcurrency";
 
 interface Product {
   id: string;
@@ -201,13 +201,15 @@ export default function InventoryPage() {
     (acc, p) => acc + p.currentStock * p.unit_price,
     0
   );
+  const { formattedAmountWithUnit: formattedTotalStockValue } = useFormatCurrency(totalStockValue);
+
   const lowStockCount = products.filter(
     (p) => getStockStatus(p) === "LOW_STOCK" || getStockStatus(p) === "OUT_OF_STOCK"
   ).length;
   const healthScore = products.length > 0
     ? Math.round(
-        ((products.length - lowStockCount) / products.length) * 100
-      )
+      ((products.length - lowStockCount) / products.length) * 100
+    )
     : 100;
 
   // Filter products based on status
@@ -230,14 +232,14 @@ export default function InventoryPage() {
         {/* Header Section */}
         <div className="flex flex-col gap-1 mb-6">
           <div className="flex justify-between items-start">
-           <PageHeading 
-           title="Product Catalog" 
-           description="Centralized oversight for fleet components, maintenance parts, and industrial chemical supplies." />
+            <PageHeading
+              title="Product Catalog"
+              description="Centralized oversight for fleet components, maintenance parts, and industrial chemical supplies." />
             <div className="flex items-center gap-3">
               <Link href="/inventory/products">
-                <Button 
-                variant="outline"
-                className="h-11 px-5 gap-2.5 text-[#150150] font-semibold rounded-xl">
+                <Button
+                  variant="outline"
+                  className="h-11 px-5 gap-2.5 text-[#150150] font-semibold rounded-xl">
                   All Products
                 </Button>
               </Link>
@@ -254,22 +256,22 @@ export default function InventoryPage() {
         {/* stat section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <StatCard
-          title="Total Stock Value"
-          stat={formatCurrency(totalStockValue)}
-          icon={<DollarSign className="h-6 w-6" />}
-          iconBg="bg-emerald-50"
+            title="Total Stock Value"
+            stat={formattedTotalStockValue}
+            icon={<DollarSign className="h-6 w-6" />}
+            iconBg="bg-emerald-50"
           />
           <StatCard
-          title="Low Stock Alerts"
-          stat={lowStockCount}
-          icon={<AlertTriangle className="h-6 w-6" />}
-          iconBg="bg-rose-100"
+            title="Low Stock Alerts"
+            stat={lowStockCount}
+            icon={<AlertTriangle className="h-6 w-6" />}
+            iconBg="bg-rose-100"
           />
           <StatCard
-          title="Inventory Health Score"
-          stat={healthScore}
-          icon={<Heart className="h-6 w-6" />}
-          iconBg="bg-green-100"
+            title="Inventory Health Score"
+            stat={healthScore}
+            icon={<Heart className="h-6 w-6" />}
+            iconBg="bg-green-100"
           />
 
 
@@ -293,11 +295,10 @@ export default function InventoryPage() {
             <div className="flex items-center gap-2">
               <Button
                 variant={category === "all" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-semibold text-sm transition-all ${
-                  category === "all"
-                    ? "bg-[#150150] text-white shadow-md"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`h-10 px-4 rounded-full font-semibold text-sm transition-all ${category === "all"
+                  ? "bg-[#150150] text-white shadow-md"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
                 onClick={() => setCategory("all")}
               >
                 All Categories
@@ -305,11 +306,10 @@ export default function InventoryPage() {
               </Button>
               <Button
                 variant={category === "PARTS" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${
-                  category === "PARTS"
-                    ? "bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "PARTS"
+                  ? "bg-slate-900 text-white"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
                 onClick={() => setCategory("PARTS")}
               >
                 Parts
@@ -317,11 +317,10 @@ export default function InventoryPage() {
               </Button>
               <Button
                 variant={category === "FERTILIZER" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${
-                  category === "FERTILIZER"
-                    ? "bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "FERTILIZER"
+                  ? "bg-slate-900 text-white"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
                 onClick={() => setCategory("FERTILIZER")}
               >
                 Fertilizer
@@ -329,11 +328,10 @@ export default function InventoryPage() {
               </Button>
               <Button
                 variant={category === "HEAVY_DUTY" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${
-                  category === "HEAVY_DUTY"
-                    ? "bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "HEAVY_DUTY"
+                  ? "bg-slate-900 text-white"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
                 onClick={() => setCategory("HEAVY_DUTY")}
               >
                 Accessories
@@ -444,11 +442,10 @@ export default function InventoryPage() {
                         </TableCell>
                         <TableCell className="py-5 text-center">
                           <span
-                            className={`font-bold text-lg ${
-                              status === "LOW_STOCK" || status === "OUT_OF_STOCK"
-                                ? "text-red-600"
-                                : "text-slate-900"
-                            }`}
+                            className={`font-bold text-lg ${status === "LOW_STOCK" || status === "OUT_OF_STOCK"
+                              ? "text-red-600"
+                              : "text-slate-900"
+                              }`}
                           >
                             {product.currentStock}
                           </span>
@@ -515,11 +512,10 @@ export default function InventoryPage() {
                       key={pageNum}
                       variant={currentPage === pageNum ? "default" : "outline"}
                       size="sm"
-                      className={`h-9 w-9 rounded-lg ${
-                        currentPage === pageNum
-                          ? "bg-[#150150] text-white shadow-sm"
-                          : "border-slate-200 text-slate-600"
-                      }`}
+                      className={`h-9 w-9 rounded-lg ${currentPage === pageNum
+                        ? "bg-[#150150] text-white shadow-sm"
+                        : "border-slate-200 text-slate-600"
+                        }`}
                       onClick={() => handlePageChange((pageNum - 1) * pagination.take)}
                     >
                       {pageNum}

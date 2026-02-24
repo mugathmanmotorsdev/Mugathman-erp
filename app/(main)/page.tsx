@@ -33,8 +33,8 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import SkeletonUi from "@/components/SkeletonUi";
-import { formatCurrency } from "@/lib/utils/currency-formatter";
 import { useFetchProduct } from "@/hooks/usefetchproducts";
+import { useFormatCurrency } from "@/hooks/use-formatcurrency";
 
 
 interface Stats {
@@ -59,14 +59,13 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  console.log(stats);
   const {
     products,
   } = useFetchProduct();
-  const lowStockItems = 
-  products
-  .filter((product) => product.currentStock <= product.reorder_level)
-  .sort((a, b) => a.currentStock - b.currentStock);
+  const lowStockItems =
+    products
+      .filter((product) => product.currentStock <= product.reorder_level)
+      .sort((a, b) => a.currentStock - b.currentStock);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -88,6 +87,8 @@ export default function Dashboard() {
 
     fetchDashboardData();
   }, []);
+
+  const { formattedAmountWithUnit: totalRevenue } = useFormatCurrency(stats?.totalRevenue || 0);
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -139,7 +140,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="m-0">
             <h3 className="text-3xl font-black text-slate-900">
-              {formatCurrency(stats?.totalRevenue || 0)}
+              {totalRevenue}
             </h3>
           </CardContent>
           <CardFooter className="m-0">
@@ -314,20 +315,20 @@ export default function Dashboard() {
               <div className="space-y-4 overflow-y-auto h-64">
                 {
                   lowStockItems.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors group"
-                  >
-                    <span className="font-bold text-slate-700 group-hover:text-slate-900">
-                      {item.name}
-                    </span>
-                    <Badge
-                      className={`bg-red-50 text-red-600 border-none font-bold`}
+                    <div
+                      key={i}
+                      className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors group"
                     >
-                      {item.currentStock}
-                    </Badge>
-                  </div>
-                ))}
+                      <span className="font-bold text-slate-700 group-hover:text-slate-900">
+                        {item.name}
+                      </span>
+                      <Badge
+                        className={`bg-red-50 text-red-600 border-none font-bold`}
+                      >
+                        {item.currentStock}
+                      </Badge>
+                    </div>
+                  ))}
               </div>
             </CardContent>
           </Card>

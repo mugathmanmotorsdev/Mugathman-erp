@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
             !location_id ||
             !quantity ||
             !reason ||
-            !reference_type ||
             !performed_by
         ) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -64,7 +63,7 @@ export async function POST(request: NextRequest) {
             quantity,
             reason,
             type: movement_type,
-            reference_type,
+            reference_type: reference_type || null,
             reference_id,
             performed_by,
             ...(vehicle_id && { vehicle_id }),

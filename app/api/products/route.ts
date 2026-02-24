@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
                     { sku: { contains: search, mode: 'insensitive' as Prisma.QueryMode } },
                 ]
             }),
-            ...(category && category !== 'all' && { category: category as Prisma.EnumCategoryFilter })
+            ...(category && category !== 'all' && { category: category as Prisma.EnumCategoryFilter }),
         }
 
         const products = await prisma.product.findMany({
@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
             take: take ? parseInt(take) : undefined,
             include: {
                 stock_movements: {
+                        
                     select: {
                         quantity: true,
                         type: true,
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
 
         const productsWithStock = products.map((p) => {
             const currentStock = (p.stock_movements || []).reduce((acc: number, mov) => {
-                return mov.type === 'IN' ? acc + mov.quantity : acc - mov.quantity
+                return acc + mov.quantity
             }, 0)
             
             return {
