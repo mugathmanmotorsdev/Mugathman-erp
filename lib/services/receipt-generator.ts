@@ -4,7 +4,11 @@ export async function generateReceipt(saleId: string) {
     const browser = await chromium.launch()
     const page = await browser.newPage()
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/receipt/${saleId}`
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+        throw new Error("NEXT_PUBLIC_BASE_URL is not defined in the environment.");
+    }
+    const url = `${baseUrl}/receipt/${saleId}`
 
     await page.goto(url, { waitUntil: 'networkidle' })
 

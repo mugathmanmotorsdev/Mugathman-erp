@@ -99,3 +99,8 @@ export type UserActivationToken = Prisma.UserActivationTokenModel
  * 
  */
 export type ResetPasswordToken = Prisma.ResetPasswordTokenModel
+/**
+ * Model Job
+ * 
+ */
+export type Job = Prisma.JobModel

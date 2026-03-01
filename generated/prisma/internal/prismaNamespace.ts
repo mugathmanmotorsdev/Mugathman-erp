@@ -395,7 +395,8 @@ export const ModelName = {
   SaleItem: 'SaleItem',
   StockAdjustment: 'StockAdjustment',
   UserActivationToken: 'UserActivationToken',
-  ResetPasswordToken: 'ResetPasswordToken'
+  ResetPasswordToken: 'ResetPasswordToken',
+  Job: 'Job'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "customer" | "product" | "vehicle" | "inventoryLocation" | "stockMovement" | "serializeMovement" | "sale" | "saleItem" | "stockAdjustment" | "userActivationToken" | "resetPasswordToken"
+    modelProps: "user" | "customer" | "product" | "vehicle" | "inventoryLocation" | "stockMovement" | "serializeMovement" | "sale" | "saleItem" | "stockAdjustment" | "userActivationToken" | "resetPasswordToken" | "job"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1304,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Job: {
+      payload: Prisma.$JobPayload<ExtArgs>
+      fields: Prisma.JobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.JobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.JobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        findFirst: {
+          args: Prisma.JobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.JobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        findMany: {
+          args: Prisma.JobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
+        }
+        create: {
+          args: Prisma.JobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        createMany: {
+          args: Prisma.JobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.JobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
+        }
+        delete: {
+          args: Prisma.JobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        update: {
+          args: Prisma.JobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        deleteMany: {
+          args: Prisma.JobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.JobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.JobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
+        }
+        upsert: {
+          args: Prisma.JobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
+        }
+        aggregate: {
+          args: Prisma.JobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateJob>
+        }
+        groupBy: {
+          args: Prisma.JobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.JobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1487,12 +1562,35 @@ export const ResetPasswordTokenScalarFieldEnum = {
 export type ResetPasswordTokenScalarFieldEnum = (typeof ResetPasswordTokenScalarFieldEnum)[keyof typeof ResetPasswordTokenScalarFieldEnum]
 
 
+export const JobScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  payload: 'payload',
+  status: 'status',
+  retryCount: 'retryCount',
+  maxRetries: 'maxRetries',
+  lastError: 'lastError',
+  scheduledAt: 'scheduledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1509,6 +1607,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1721,6 +1828,34 @@ export type ListEnumStockAdjustmentReasonFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'JobStatus'
+ */
+export type EnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'JobStatus[]'
+ */
+export type ListEnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1840,6 +1975,7 @@ export type GlobalOmitConfig = {
   stockAdjustment?: Prisma.StockAdjustmentOmit
   userActivationToken?: Prisma.UserActivationTokenOmit
   resetPasswordToken?: Prisma.ResetPasswordTokenOmit
+  job?: Prisma.JobOmit
 }
 
 /* Types for Logging */

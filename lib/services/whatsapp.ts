@@ -62,10 +62,16 @@ export async function sendWhatsappThankMsg(
         }),
       },
     );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`WhatsApp API error: ${JSON.stringify(errorData)}`);
+    }
+
     const data = await res.json();
     return data;
   } catch (error) {
-    console.log("whatsapp error: ", error);
+    console.error("whatsapp error in sendWhatsappThankMsg: ", error);
+    throw error;
   }
 }
 
@@ -87,10 +93,15 @@ export async function uploadMedia(pdfBuffer: Buffer) {
         body: formData,
       },
     );
-    const data = await res.json();
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`WhatsApp Media Upload error: ${JSON.stringify(errorData)}`);
+    }
 
+    const data = await res.json();
     return data;
   } catch (error) {
-    console.log("whatsapp error: ", error);
+    console.error("whatsapp error in uploadMedia: ", error);
+    throw error;
   }
 }

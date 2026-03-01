@@ -52,13 +52,15 @@ export async function POST(request: NextRequest) {
         // Because the new user was been assign by temprary default password
         const token = await setActivationToken(newUser)
 
-        // Send action email to new user
+        // Send activation email to new user
         const emailHTML = activationEmailHTML(newUser.full_name, token.token)
-        const { error } = await sendEmail(newUser.email, 'Activate your account', emailHTML)
-
-        if (error) {
-            return NextResponse.json({ error: error }, { status: 500 });
-        }
+        await prisma.job.create({
+            data: {
+                type: "SEND_ACTIVATION_EMAIL",
+                payload: { email: newUser.email, subject: 'Activate your account', html: emailHTML },
+                maxRetries: 5
+            }
+        })
 
         return NextResponse.json({ user: newUser, token }, { status: 201 });
     } catch (error) {

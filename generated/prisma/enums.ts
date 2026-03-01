@@ -107,3 +107,13 @@ export const Department = {
 } as const
 
 export type Department = (typeof Department)[keyof typeof Department]
+
+
+export const JobStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]

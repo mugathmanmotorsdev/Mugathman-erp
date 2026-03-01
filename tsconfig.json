@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,11 +25,24 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@generated/prisma": ["./generated/prisma/client"],
-      "@generated/prisma/*": ["./generated/prisma/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@generated/prisma": [
+        "./generated/prisma/client"
+      ],
+      "@generated/prisma/*": [
+        "./generated/prisma/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

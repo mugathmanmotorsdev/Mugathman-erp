@@ -190,6 +190,21 @@ model ResetPasswordToken {
   @@map("reset_password_tokens")
 }
 
+model Job {
+  id          String    @id @default(uuid())
+  type        String
+  payload     Json
+  status      JobStatus @default(PENDING)
+  retryCount  Int       @default(0)
+  maxRetries  Int       @default(3)
+  lastError   String?
+  scheduledAt DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  @@map("jobs")
+}
+
 // Enums
 enum UserStatus {
   PENDING
@@ -256,4 +271,11 @@ enum StockAdjustmentReason {
 enum Department {
   FERTILIZER
   PLASTIC
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "migrate:prod": "prisma migrate deploy"
+    "migrate:prod": "prisma migrate deploy",
+    "worker": "tsx worker/jobRunner.ts"
   },
   "dependencies": {
     "@dicebear/collection": "^9.3.1",

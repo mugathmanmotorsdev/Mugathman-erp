@@ -2,8 +2,7 @@ import { requireAuth } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { getSale, getSales } from "@/lib/actions/sales";
 import prisma from "@/lib/prisma";
-import { sendWhatsappThankMsg, uploadMedia } from "@/lib/services/whatsapp";
-import { generateReceipt } from "@/lib/services/receipt-generator";
+
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -163,19 +162,21 @@ export async function POST(request: NextRequest) {
       0,
     );
 
-    // generate pdf
-    const pdfBuffer = await generateReceipt(sale?.id || "");
-
-    // upload pdf to whatsapp
-    const media = await uploadMedia(pdfBuffer);
-    // send whatsapp thank message
-    await sendWhatsappThankMsg(
-      sale?.customer?.full_name || "",
-      sale?.customer?.phone || "",
-      sale?.sale_number || "",
-      totalAmount || 0,
-      media?.id || "",
-    );
+    // Send job to generate pdf, upload it to whatsapp 
+    // and send the Whatsapp thanks message
+    await prisma.job.create({
+      data: {
+        type: "GENERATE_RECEIPT_PDF_AND_EMAIL",
+        payload: {
+          id: sale?.id || "",
+          fullName: sale?.customer.full_name || "",
+          phone: sale?.customer?.phone || "",
+          salesNumber: sale?.sale_number || "",
+          totalAmount: totalAmount || 0,
+        },
+        maxRetries: 5
+      }
+    })
 
     return NextResponse.json(result);
   } catch (err) {

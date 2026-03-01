@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { resetPasswordEmailHTML } from "@/components/email-template/resetPasswordEmailTemplateHtml";
 import { setResetPasswordToken } from "@/lib/utils/auth-utils";
-import { sendEmail } from "@/lib/utils/send-email";
 
 export async function POST(request: NextRequest) {
     try {
@@ -27,15 +26,17 @@ export async function POST(request: NextRequest) {
         // Generate and set reset password token
         const token = await setResetPasswordToken(user)
 
-        // Send reset password email to user
+        // Send reset password email to user via background job
         const emailHTML = resetPasswordEmailHTML(user.full_name, token.token)
-        const { error } = await sendEmail(user.email, 'Reset your password', emailHTML)
+        await prisma.job.create({
+            data: {
+                type: "SEND_RESET_PASSWORD_EMAIL",
+                payload: { email: user.email, subject: 'Reset your password', html: emailHTML },
+                maxRetries: 5
+            }
+        })
 
-        if (error) {
-            return NextResponse.json({ error: error }, { status: 500 });
-        }
-
-        return NextResponse.json({ message: "Password reset email sent successfully" }, { status: 201 });
+        return NextResponse.json({ message: "Password reset email scheduled for sending" }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
