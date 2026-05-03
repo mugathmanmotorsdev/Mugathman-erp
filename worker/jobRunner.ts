@@ -9,6 +9,7 @@ if (fs.existsSync(envLocalPath)) {
     dotenv.config({ path: envLocalPath });
 }
 
+import { Job } from "../generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/utils/send-email";
 import { sendWhatsappThankMsg, uploadMedia } from "@/lib/services/whatsapp";
@@ -36,7 +37,7 @@ async function processJobs() {
             orderBy: { createdAt: "asc" }
         });
 
-        const activeJobs = jobs.filter(job =>
+        const activeJobs = jobs.filter((job: Job) =>
             job.status === "PENDING" || job.retryCount < job.maxRetries
         );
 
