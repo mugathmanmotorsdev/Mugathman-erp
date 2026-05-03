@@ -20,7 +20,7 @@ export async function sendWhatsappThankMsg(
           to: phoneNo,
           type: "template",
           template: {
-            name: "sales_thanks",
+            name: "sales_completion",
             language: {
               code: "en",
             },

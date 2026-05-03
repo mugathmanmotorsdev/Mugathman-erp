@@ -14,9 +14,17 @@ export default function Receipt({
     const total = subtotal;
 
     return (
-        <div className="w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-12 md:p-16 text-sm leading-relaxed shadow-lg mx-auto print:shadow-none print:w-full">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-16">
+        <div className="relative w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-12 md:p-16 text-sm leading-relaxed shadow-lg mx-auto print:shadow-none print:w-full overflow-hidden">
+            {/* Faded Background Logo */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-5 z-0">
+                <div className="relative w-[80%] h-[80%]">
+                    <Image src="/logo.png" alt="" fill className="object-contain" />
+                </div>
+            </div>
+
+            <div className="relative z-10">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-16">
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
                         {/* Logo Placeholder */}
@@ -103,8 +111,15 @@ export default function Receipt({
 
 
 
-            <div className="mb-10">
-                <h3 className="text-[#150151] font-bold text-lg">Thank you for your Business</h3>
+            <div className="flex justify-between items-end mb-10">
+                <div className="w-50">
+                    <div className="border-b border-slate-800 h-10 mb-2"></div>
+                    <p className="text-center text-slate-600 font-bold text-xs uppercase tracking-wider">Customer Signature</p>
+                </div>
+                <div className="w-50">
+                    <div className="border-b border-slate-800 h-10 mb-2"></div>
+                    <p className="text-center text-slate-600 font-bold text-xs uppercase tracking-wider">Authorized Signature</p>
+                </div>
             </div>
 
             {/* Footer Info */}
@@ -123,6 +138,7 @@ export default function Receipt({
                     </div>
                 </div>
 
+            </div>
             </div>
         </div>
     );
