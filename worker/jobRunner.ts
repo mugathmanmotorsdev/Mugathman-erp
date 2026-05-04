@@ -25,7 +25,7 @@ function getBackoffDelay(retryCount: number): number {
     return minutes * 60 * 1000;
 }
 
-async function processJobs() {
+export async function processJobs() {
     try {
         const now = new Date();
         const jobs = await prisma.job.findMany({
@@ -33,7 +33,7 @@ async function processJobs() {
                 status: { in: ["PENDING", "FAILED"] },
                 scheduledAt: { lte: now }
             },
-            take: 50,
+            take: 2,
             orderBy: { createdAt: "asc" }
         });
 
@@ -122,11 +122,8 @@ async function processJobs() {
         }
     } catch (error) {
         console.error("Critical error in job runner:", error);
-    } finally {
-        // Schedule next check after the current batch is processed
-        setTimeout(processJobs, 500);
     }
 }
 
-console.log("Job runner started...");
-processJobs();
+// console.log("Job runner started...");
+// processJobs();
