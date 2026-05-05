@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     // and send the Whatsapp thanks message
     await prisma.job.create({
       data: {
-        type: "GENERATE_RECEIPT_PDF_AND_EMAIL",
+        type: "GENERATE_RECEIPT_PDF_AND_SEND_WHATSAPP",
         payload: {
           id: sale?.id || "",
           fullName: sale?.customer.full_name || "",

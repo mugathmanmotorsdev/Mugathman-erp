@@ -13,7 +13,7 @@ import { Job } from "../generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/utils/send-email";
 import { sendWhatsappThankMsg, uploadMedia } from "@/lib/services/whatsapp";
-import { generateReceipt } from "@/lib/services/receipt-generator";
+import { generateReceiptPDF } from "@/lib/pdf/generate-receipt-pdf";
 
 
 function getBackoffDelay(retryCount: number): number {
@@ -63,11 +63,28 @@ export async function processJobs() {
                         break;
                     }
 
-                    case "GENERATE_RECEIPT_PDF_AND_EMAIL": {
-                        console.log("Generating receipt PDF and sending email...: ", data.id);
+                    case "GENERATE_RECEIPT_PDF_AND_SEND_WHATSAPP": {
+                        console.log("Generating receipt PDF and sending WhatsApp message...: ", data.id);
                         // This the sale job worker
                         // generate pdf
-                        const pdfBuffer = await generateReceipt(data.id || "");
+                        const sale = await prisma.sale.findUnique({
+                            where: { id: data.id },
+                            include: {
+                                customer: true,
+                                user: true,
+                                sale_items: {
+                                    include: {
+                                        product: true,
+                                    },
+                                },
+                            },
+                        });
+
+                        if (!sale) {
+                            throw new Error("Sale not found");
+                        }
+                        
+                        const pdfBuffer = await generateReceiptPDF(sale as any);
 
                         // upload pdf to whatsapp
                         const media = await uploadMedia(pdfBuffer);
