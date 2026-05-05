@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server' 
 import { getSale } from '@/lib/actions/sales'
 import { generateReceiptPDF } from '@/lib/pdf/generate-receipt-pdf'
+import { Sale } from '@/types/sale'
 
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
     }
 
     // generate pdf
-    const pdfBuffer = await generateReceiptPDF(sale as any)
+    const pdfBuffer = await generateReceiptPDF(sale as Sale)
 
     return new NextResponse(pdfBuffer as unknown as BodyInit, {
         headers: {
