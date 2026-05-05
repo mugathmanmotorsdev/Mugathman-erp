@@ -208,9 +208,6 @@ const styles = StyleSheet.create({
     color: "#334155",
     width: 50,
   },
-  footerValue: {
-    color: "#64748b",
-  },
 });
 
 export function ReceiptPDF({ sale }: { sale: Sale }) {
