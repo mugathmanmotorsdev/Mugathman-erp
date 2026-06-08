@@ -326,7 +326,7 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
             </View>
             <View style={styles.footerRow}>
               <Text style={styles.footerLabel}>Call us</Text>
-              <Text style={styles.footerValue}> : +628 123 456 789</Text>
+              <Text style={styles.footerValue}> : +2348067957545</Text>
             </View>
           </View>
         </View>
