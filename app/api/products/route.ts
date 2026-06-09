@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@/generated/prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "@/lib/prisma";
 import { generateSKU } from "@/lib/utils/sku-generator";
 import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
@@ -85,29 +86,14 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             )
         }
-        
-        const existingProduct = await prisma.product.findUnique({
-            where: {
-                sku: sku
-            }
-        })
-        
-        if (existingProduct) {
-            return NextResponse.json(
-                { error: "Product already exists" },
-                { status: 400 }
-            )
-        }
-        
-        let generatedSku = sku
-        if (!sku) {
-            generatedSku = generateSKU(name, category)
-        }
+
+        // Generate SKU before create — avoids race window between check and insert
+        const productSku = sku || generateSKU(name, category)
 
         const product = await prisma.product.create({
             data: {
                 name,
-                sku: generatedSku,
+                sku: productSku,
                 category,
                 description,
                 unit_price: unit_price ? parseFloat(unit_price) : 0,
@@ -117,9 +103,16 @@ export async function POST(request: NextRequest) {
                 is_active: is_active ?? true
             }
         })
-        
+
         return NextResponse.json({ product }, { status: 201 })
     } catch (error) {
+        // Handle unique constraint violation on SKU (P2002)
+        if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+            return NextResponse.json(
+                { error: "Product already exists" },
+                { status: 400 }
+            )
+        }
         console.error("Error creating product:", error)
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },

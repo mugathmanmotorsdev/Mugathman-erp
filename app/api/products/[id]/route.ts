@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "@/lib/prisma";
+import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
 
 export async function GET(
     request: NextRequest,
@@ -52,26 +54,50 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const user = await requireAuth();
+        await roleGuard(user, ["ADMIN", "EDITOR"]);
+
+        const { id } = await params;
         const body = await request.json();
         const { name, sku, category, unit, reorder_level, is_active, description, unit_price, tracking_type } = body || {};
 
+        // If SKU is provided, check it doesn't belong to another product
+        if (sku !== undefined && sku !== "") {
+            const existing = await prisma.product.findUnique({
+                where: { sku },
+                select: { id: true }
+            });
+            if (existing && existing.id !== id) {
+                return NextResponse.json(
+                    { error: "Product already exists" },
+                    { status: 400 }
+                );
+            }
+        }
+
         const product = await prisma.product.update({
-            where: { id: (await params).id },
+            where: { id },
             data: {
                 ...(name !== undefined && { name }),
                 ...(sku !== undefined && { sku }),
                 ...(category !== undefined && { category }),
                 ...(description !== undefined && { description }),
-                ...(unit_price !== undefined && { unit_price: parseFloat(unit_price) }),
+                ...(unit_price !== undefined && unit_price !== "" && { unit_price: parseFloat(unit_price) }),
                 ...(unit !== undefined && { unit }),
                 ...(tracking_type !== undefined && { tracking_type }),
-                ...(reorder_level !== undefined && { reorder_level: parseInt(reorder_level) }),
+                ...(reorder_level !== undefined && reorder_level !== "" && { reorder_level: parseInt(reorder_level) }),
                 ...(is_active !== undefined && { is_active })
             }
         });
 
         return NextResponse.json({ product }, { status: 200 });
     } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+            return NextResponse.json(
+                { error: "Product already exists" },
+                { status: 400 }
+            );
+        }
         console.error("Error updating product:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },

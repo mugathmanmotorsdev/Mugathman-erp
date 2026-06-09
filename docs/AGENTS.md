@@ -8,6 +8,10 @@
 4. Never assume input data is valid.
 5. No blocking operations inside request handlers, use background jobs instead.
 
+## TypeScrip constraints
+
+1. never explicitly use type any
+
 ## Database Migration constraints
 
 1. No destructive migration without explicit approval.
