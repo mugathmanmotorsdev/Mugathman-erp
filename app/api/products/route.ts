@@ -106,12 +106,20 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ product }, { status: 201 })
     } catch (error) {
-        // Handle unique constraint violation on SKU (P2002)
-        if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
-            return NextResponse.json(
-                { error: "Product already exists" },
-                { status: 400 }
-            )
+        // Handle unique constraint violation on SKU (P2002) and overflow (P2020)
+        if (error instanceof PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                return NextResponse.json(
+                    { error: "Product already exists" },
+                    { status: 400 }
+                );
+            }
+            if (error.code === 'P2020') {
+                return NextResponse.json(
+                    { error: "Value out of range for the type (numeric field overflow)" },
+                    { status: 400 }
+                );
+            }
         }
         console.error("Error creating product:", error)
         return NextResponse.json(

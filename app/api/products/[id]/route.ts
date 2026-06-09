@@ -92,11 +92,19 @@ export async function PUT(
 
         return NextResponse.json({ product }, { status: 200 });
     } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
-            return NextResponse.json(
-                { error: "Product already exists" },
-                { status: 400 }
-            );
+        if (error instanceof PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                return NextResponse.json(
+                    { error: "Product already exists" },
+                    { status: 400 }
+                );
+            }
+            if (error.code === 'P2020') {
+                return NextResponse.json(
+                    { error: "Value out of range for the type (numeric field overflow)" },
+                    { status: 400 }
+                );
+            }
         }
         console.error("Error updating product:", error);
         return NextResponse.json(
