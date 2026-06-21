@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
             reason,
             reference_type,
             reference_id,
-            movement_type
+            movement_type,
+            color
         } = body;
         const quantity = Number(body.quantity);
         const performed_by = user.id;
@@ -97,6 +98,7 @@ export async function POST(request: NextRequest) {
                             inventory_location_id: location_id,
                             vin: new_vin,
                             status: "AVAILABLE",
+                            color: color || undefined,
                         },
                     });
                     finalVehicleId = vehicle.id;

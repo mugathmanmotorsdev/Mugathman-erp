@@ -6,7 +6,13 @@ export type Sale = Prisma.SaleGetPayload<{
     user: true,  
     sale_items: {
       include: {
-        product: true
+        product: true,
+        vehicle: {
+          select: {
+            vin: true,
+            color: true
+          }
+        }
       }
     }
   }

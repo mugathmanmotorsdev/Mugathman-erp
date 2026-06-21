@@ -147,6 +147,7 @@ export default function NewMovementPage() {
           location_id: formData.location_id,
           vehicle_id: formData.vehicle_id,
           new_vin: formData.new_vin || undefined,
+          color: formData.color || undefined,
           quantity:
             movementType === "OUT"
               ? -Math.abs(Number(formData.quantity))
