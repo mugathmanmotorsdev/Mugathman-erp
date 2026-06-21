@@ -198,7 +198,10 @@ export default function SalesPage() {
                     </TableCell>
                     <TableCell className="px-6 py-5">
                       <span className="font-black text-slate-900">
-                        ${calculateTotal(sale.sale_items).toLocaleString()}
+                        {new Intl.NumberFormat("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        }).format(calculateTotal(sale.sale_items))}
                       </span>
                     </TableCell>
                     <TableCell className="px-6 py-5">

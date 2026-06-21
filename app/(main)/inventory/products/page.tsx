@@ -283,9 +283,9 @@ export default function ProductsPage() {
                     </div>
                   </TableCell>
                   <TableCell className="font-bold text-slate-900">
-                    {new Intl.NumberFormat("en-US", {
+                    {new Intl.NumberFormat("en-NG", {
                       style: "currency",
-                      currency: "USD",
+                      currency: "NGN",
                     }).format(Number(product.unit_price))}
                   </TableCell>
                   <TableCell className="pr-6 text-right">
