@@ -37,7 +37,7 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Product } from "@/types/product";
-import { type Customer, type Vehicle, type InventoryLocation as Location, Prisma } from "@/generated/prisma/client";
+import type { Customer, Vehicle, InventoryLocation as Location } from "@/generated/prisma/client";
 import type { SaleItem } from "@/types/sale";
 
 export default function NewSalePage() {
@@ -107,7 +107,7 @@ export default function NewSalePage() {
       location_id: locations[0]?.id || "",
       vehicle_id: "",
       quantity: 1,
-      unit_price: new Prisma.Decimal(0),
+      unit_price: 0,
       product_name: "",
       tracking_type: "BATCH",
     };
@@ -475,7 +475,7 @@ export default function NewSalePage() {
                               <Input
                                 type="number"
                                 value={Number(item.unit_price)}
-                                onChange={(e) => updateItem(item.id, { unit_price: new Prisma.Decimal(parseFloat(e.target.value) || 0) })}
+                                onChange={(e) => updateItem(item.id, { unit_price: parseFloat(e.target.value) || 0 })}
                                 className="h-10 pl-7 border-slate-200 rounded-xl bg-white shadow-sm font-semibold"
                               />
                               <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
