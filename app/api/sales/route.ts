@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
             product_id,
             quantity: Number(quantity),
             unit_price: Number(unit_price),
+            vehicle_id: vehicle_id || null,
           },
         });
 

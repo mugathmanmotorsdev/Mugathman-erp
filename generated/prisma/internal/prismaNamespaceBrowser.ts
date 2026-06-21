@@ -129,6 +129,7 @@ export const VehicleScalarFieldEnum = {
   product_id: 'product_id',
   inventory_location_id: 'inventory_location_id',
   vin: 'vin',
+  color: 'color',
   status: 'status',
   created_at: 'created_at'
 } as const
@@ -187,6 +188,7 @@ export const SaleItemScalarFieldEnum = {
   id: 'id',
   sale_id: 'sale_id',
   product_id: 'product_id',
+  vehicle_id: 'vehicle_id',
   quantity: 'quantity',
   unit_price: 'unit_price'
 } as const

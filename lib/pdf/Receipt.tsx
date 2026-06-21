@@ -211,7 +211,12 @@ const styles = StyleSheet.create({
   footerValue: {
     color: "#64748b",
   },
-    
+  vehicleInfo: {
+    fontSize: 8,
+    color: "#64748b",
+    marginTop: 2,
+  },
+
 });
 
 export function ReceiptPDF({ sale }: { sale: Sale }) {
@@ -283,6 +288,12 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
             <View key={item.id} style={styles.tableRow}>
               <View style={styles.col1}>
                 <Text style={styles.productName}>{item.product.name}</Text>
+                {item.vehicle && (
+                  <Text style={styles.vehicleInfo}>
+                    VIN: {item.vehicle.vin}
+                    {item.vehicle.color ? ` | Color: ${item.vehicle.color}` : ''}
+                  </Text>
+                )}
               </View>
               <Text style={styles.col2}>{Number(item.unit_price).toLocaleString()}</Text>
               <Text style={styles.col3}>{Number(item.quantity)}</Text>

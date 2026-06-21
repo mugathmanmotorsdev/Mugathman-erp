@@ -74,6 +74,7 @@ export default function NewMovementPage() {
     location_id: "",
     vehicle_id: "",
     new_vin: "",
+    color: "",
     quantity: "1",
     reason: "",
     reference_type: "",
@@ -171,6 +172,7 @@ export default function NewMovementPage() {
             product_id: formData.product_id,
             inventory_location_id: formData.location_id,
             vin: formData.new_vin,
+            color: formData.color || undefined,
           }),
         });
 
@@ -451,6 +453,22 @@ export default function NewMovementPage() {
                             Each piece of equipment requires a unique
                             identifier.
                           </p>
+                          <div className="space-y-3 mt-4">
+                            <Label className="text-slate-700 font-bold flex items-center gap-2">
+                              Vehicle Color
+                            </Label>
+                            <Input
+                              placeholder="e.g. White, Blue, Red..."
+                              value={formData.color}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  color: e.target.value,
+                                })
+                              }
+                              className="h-12 border-slate-200 bg-white rounded-2xl focus:ring-2 focus:ring-indigo-100 transition-all"
+                            />
+                          </div>
                         </div>
                       ) : (
                         <div className="space-y-3">

@@ -75,6 +75,12 @@ export async function processJobs() {
                                 sale_items: {
                                     include: {
                                         product: true,
+                                        vehicle: {
+                                            select: {
+                                                vin: true,
+                                                color: true,
+                                            },
+                                        },
                                     },
                                 },
                             },

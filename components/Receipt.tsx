@@ -82,6 +82,12 @@ export default function Receipt({
                         <div key={item.id} className="flex items-start px-6 py-4 text-slate-700">
                             <div className="flex-[3] pr-8">
                                 <p className="font-bold text-slate-900 mb-1">{item.product.name}</p>
+                                {item.vehicle && (
+                                  <p className="text-xs text-slate-500 mt-0.5">
+                                    VIN: {item.vehicle.vin}
+                                    {item.vehicle.color ? ` | Color: ${item.vehicle.color}` : ''}
+                                  </p>
+                                )}
                             </div>
                             <div className="flex-1 text-right font-medium py-1">
                                 {Number(item.unit_price).toLocaleString()}

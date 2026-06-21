@@ -11,7 +11,13 @@ export const getSales = async (skip = 0, take = 100) => {
             },
             sale_items: {
                 include: {
-                    product: true
+                    product: true,
+                    vehicle: {
+                        select: {
+                            vin: true,
+                            color: true,
+                        },
+                    },
                 }
             }
         },
@@ -35,7 +41,13 @@ export const getSale = async (id: string) => {
             },
             sale_items: {
                 include: {
-                    product: true
+                    product: true,
+                    vehicle: {
+                        select: {
+                            vin: true,
+                            color: true,
+                        },
+                    },
                 }
             }
         }

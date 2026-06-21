@@ -40,6 +40,7 @@ export type SaleItemMinAggregateOutputType = {
   id: string | null
   sale_id: string | null
   product_id: string | null
+  vehicle_id: string | null
   quantity: number | null
   unit_price: runtime.Decimal | null
 }
@@ -48,6 +49,7 @@ export type SaleItemMaxAggregateOutputType = {
   id: string | null
   sale_id: string | null
   product_id: string | null
+  vehicle_id: string | null
   quantity: number | null
   unit_price: runtime.Decimal | null
 }
@@ -56,6 +58,7 @@ export type SaleItemCountAggregateOutputType = {
   id: number
   sale_id: number
   product_id: number
+  vehicle_id: number
   quantity: number
   unit_price: number
   _all: number
@@ -76,6 +79,7 @@ export type SaleItemMinAggregateInputType = {
   id?: true
   sale_id?: true
   product_id?: true
+  vehicle_id?: true
   quantity?: true
   unit_price?: true
 }
@@ -84,6 +88,7 @@ export type SaleItemMaxAggregateInputType = {
   id?: true
   sale_id?: true
   product_id?: true
+  vehicle_id?: true
   quantity?: true
   unit_price?: true
 }
@@ -92,6 +97,7 @@ export type SaleItemCountAggregateInputType = {
   id?: true
   sale_id?: true
   product_id?: true
+  vehicle_id?: true
   quantity?: true
   unit_price?: true
   _all?: true
@@ -187,6 +193,7 @@ export type SaleItemGroupByOutputType = {
   id: string
   sale_id: string
   product_id: string
+  vehicle_id: string | null
   quantity: number
   unit_price: runtime.Decimal
   _count: SaleItemCountAggregateOutputType | null
@@ -218,20 +225,24 @@ export type SaleItemWhereInput = {
   id?: Prisma.StringFilter<"SaleItem"> | string
   sale_id?: Prisma.StringFilter<"SaleItem"> | string
   product_id?: Prisma.StringFilter<"SaleItem"> | string
+  vehicle_id?: Prisma.StringNullableFilter<"SaleItem"> | string | null
   quantity?: Prisma.IntFilter<"SaleItem"> | number
   unit_price?: Prisma.DecimalFilter<"SaleItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   sale?: Prisma.XOR<Prisma.SaleScalarRelationFilter, Prisma.SaleWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  vehicle?: Prisma.XOR<Prisma.VehicleNullableScalarRelationFilter, Prisma.VehicleWhereInput> | null
 }
 
 export type SaleItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   sale_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
+  vehicle_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   sale?: Prisma.SaleOrderByWithRelationInput
   product?: Prisma.ProductOrderByWithRelationInput
+  vehicle?: Prisma.VehicleOrderByWithRelationInput
 }
 
 export type SaleItemWhereUniqueInput = Prisma.AtLeast<{
@@ -241,16 +252,19 @@ export type SaleItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SaleItemWhereInput | Prisma.SaleItemWhereInput[]
   sale_id?: Prisma.StringFilter<"SaleItem"> | string
   product_id?: Prisma.StringFilter<"SaleItem"> | string
+  vehicle_id?: Prisma.StringNullableFilter<"SaleItem"> | string | null
   quantity?: Prisma.IntFilter<"SaleItem"> | number
   unit_price?: Prisma.DecimalFilter<"SaleItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   sale?: Prisma.XOR<Prisma.SaleScalarRelationFilter, Prisma.SaleWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  vehicle?: Prisma.XOR<Prisma.VehicleNullableScalarRelationFilter, Prisma.VehicleWhereInput> | null
 }, "id">
 
 export type SaleItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   sale_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
+  vehicle_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   _count?: Prisma.SaleItemCountOrderByAggregateInput
@@ -267,6 +281,7 @@ export type SaleItemScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"SaleItem"> | string
   sale_id?: Prisma.StringWithAggregatesFilter<"SaleItem"> | string
   product_id?: Prisma.StringWithAggregatesFilter<"SaleItem"> | string
+  vehicle_id?: Prisma.StringNullableWithAggregatesFilter<"SaleItem"> | string | null
   quantity?: Prisma.IntWithAggregatesFilter<"SaleItem"> | number
   unit_price?: Prisma.DecimalWithAggregatesFilter<"SaleItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -277,12 +292,14 @@ export type SaleItemCreateInput = {
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
   sale: Prisma.SaleCreateNestedOneWithoutSale_itemsInput
   product: Prisma.ProductCreateNestedOneWithoutSale_itemsInput
+  vehicle?: Prisma.VehicleCreateNestedOneWithoutSale_itemsInput
 }
 
 export type SaleItemUncheckedCreateInput = {
   id?: string
   sale_id: string
   product_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -293,12 +310,14 @@ export type SaleItemUpdateInput = {
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sale?: Prisma.SaleUpdateOneRequiredWithoutSale_itemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutSale_itemsNestedInput
+  vehicle?: Prisma.VehicleUpdateOneWithoutSale_itemsNestedInput
 }
 
 export type SaleItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -307,6 +326,7 @@ export type SaleItemCreateManyInput = {
   id?: string
   sale_id: string
   product_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -321,6 +341,7 @@ export type SaleItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -339,6 +360,7 @@ export type SaleItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sale_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
+  vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
 }
@@ -352,6 +374,7 @@ export type SaleItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sale_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
+  vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
 }
@@ -360,6 +383,7 @@ export type SaleItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sale_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
+  vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
 }
@@ -411,6 +435,48 @@ export type SaleItemUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.SaleItemScalarWhereInput | Prisma.SaleItemScalarWhereInput[]
 }
 
+export type SaleItemCreateNestedManyWithoutVehicleInput = {
+  create?: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput> | Prisma.SaleItemCreateWithoutVehicleInput[] | Prisma.SaleItemUncheckedCreateWithoutVehicleInput[]
+  connectOrCreate?: Prisma.SaleItemCreateOrConnectWithoutVehicleInput | Prisma.SaleItemCreateOrConnectWithoutVehicleInput[]
+  createMany?: Prisma.SaleItemCreateManyVehicleInputEnvelope
+  connect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+}
+
+export type SaleItemUncheckedCreateNestedManyWithoutVehicleInput = {
+  create?: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput> | Prisma.SaleItemCreateWithoutVehicleInput[] | Prisma.SaleItemUncheckedCreateWithoutVehicleInput[]
+  connectOrCreate?: Prisma.SaleItemCreateOrConnectWithoutVehicleInput | Prisma.SaleItemCreateOrConnectWithoutVehicleInput[]
+  createMany?: Prisma.SaleItemCreateManyVehicleInputEnvelope
+  connect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+}
+
+export type SaleItemUpdateManyWithoutVehicleNestedInput = {
+  create?: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput> | Prisma.SaleItemCreateWithoutVehicleInput[] | Prisma.SaleItemUncheckedCreateWithoutVehicleInput[]
+  connectOrCreate?: Prisma.SaleItemCreateOrConnectWithoutVehicleInput | Prisma.SaleItemCreateOrConnectWithoutVehicleInput[]
+  upsert?: Prisma.SaleItemUpsertWithWhereUniqueWithoutVehicleInput | Prisma.SaleItemUpsertWithWhereUniqueWithoutVehicleInput[]
+  createMany?: Prisma.SaleItemCreateManyVehicleInputEnvelope
+  set?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  disconnect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  delete?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  connect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  update?: Prisma.SaleItemUpdateWithWhereUniqueWithoutVehicleInput | Prisma.SaleItemUpdateWithWhereUniqueWithoutVehicleInput[]
+  updateMany?: Prisma.SaleItemUpdateManyWithWhereWithoutVehicleInput | Prisma.SaleItemUpdateManyWithWhereWithoutVehicleInput[]
+  deleteMany?: Prisma.SaleItemScalarWhereInput | Prisma.SaleItemScalarWhereInput[]
+}
+
+export type SaleItemUncheckedUpdateManyWithoutVehicleNestedInput = {
+  create?: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput> | Prisma.SaleItemCreateWithoutVehicleInput[] | Prisma.SaleItemUncheckedCreateWithoutVehicleInput[]
+  connectOrCreate?: Prisma.SaleItemCreateOrConnectWithoutVehicleInput | Prisma.SaleItemCreateOrConnectWithoutVehicleInput[]
+  upsert?: Prisma.SaleItemUpsertWithWhereUniqueWithoutVehicleInput | Prisma.SaleItemUpsertWithWhereUniqueWithoutVehicleInput[]
+  createMany?: Prisma.SaleItemCreateManyVehicleInputEnvelope
+  set?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  disconnect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  delete?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  connect?: Prisma.SaleItemWhereUniqueInput | Prisma.SaleItemWhereUniqueInput[]
+  update?: Prisma.SaleItemUpdateWithWhereUniqueWithoutVehicleInput | Prisma.SaleItemUpdateWithWhereUniqueWithoutVehicleInput[]
+  updateMany?: Prisma.SaleItemUpdateManyWithWhereWithoutVehicleInput | Prisma.SaleItemUpdateManyWithWhereWithoutVehicleInput[]
+  deleteMany?: Prisma.SaleItemScalarWhereInput | Prisma.SaleItemScalarWhereInput[]
+}
+
 export type SaleItemCreateNestedManyWithoutSaleInput = {
   create?: Prisma.XOR<Prisma.SaleItemCreateWithoutSaleInput, Prisma.SaleItemUncheckedCreateWithoutSaleInput> | Prisma.SaleItemCreateWithoutSaleInput[] | Prisma.SaleItemUncheckedCreateWithoutSaleInput[]
   connectOrCreate?: Prisma.SaleItemCreateOrConnectWithoutSaleInput | Prisma.SaleItemCreateOrConnectWithoutSaleInput[]
@@ -458,11 +524,13 @@ export type SaleItemCreateWithoutProductInput = {
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
   sale: Prisma.SaleCreateNestedOneWithoutSale_itemsInput
+  vehicle?: Prisma.VehicleCreateNestedOneWithoutSale_itemsInput
 }
 
 export type SaleItemUncheckedCreateWithoutProductInput = {
   id?: string
   sale_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -500,8 +568,51 @@ export type SaleItemScalarWhereInput = {
   id?: Prisma.StringFilter<"SaleItem"> | string
   sale_id?: Prisma.StringFilter<"SaleItem"> | string
   product_id?: Prisma.StringFilter<"SaleItem"> | string
+  vehicle_id?: Prisma.StringNullableFilter<"SaleItem"> | string | null
   quantity?: Prisma.IntFilter<"SaleItem"> | number
   unit_price?: Prisma.DecimalFilter<"SaleItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type SaleItemCreateWithoutVehicleInput = {
+  id?: string
+  quantity: number
+  unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sale: Prisma.SaleCreateNestedOneWithoutSale_itemsInput
+  product: Prisma.ProductCreateNestedOneWithoutSale_itemsInput
+}
+
+export type SaleItemUncheckedCreateWithoutVehicleInput = {
+  id?: string
+  sale_id: string
+  product_id: string
+  quantity: number
+  unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type SaleItemCreateOrConnectWithoutVehicleInput = {
+  where: Prisma.SaleItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput>
+}
+
+export type SaleItemCreateManyVehicleInputEnvelope = {
+  data: Prisma.SaleItemCreateManyVehicleInput | Prisma.SaleItemCreateManyVehicleInput[]
+  skipDuplicates?: boolean
+}
+
+export type SaleItemUpsertWithWhereUniqueWithoutVehicleInput = {
+  where: Prisma.SaleItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.SaleItemUpdateWithoutVehicleInput, Prisma.SaleItemUncheckedUpdateWithoutVehicleInput>
+  create: Prisma.XOR<Prisma.SaleItemCreateWithoutVehicleInput, Prisma.SaleItemUncheckedCreateWithoutVehicleInput>
+}
+
+export type SaleItemUpdateWithWhereUniqueWithoutVehicleInput = {
+  where: Prisma.SaleItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.SaleItemUpdateWithoutVehicleInput, Prisma.SaleItemUncheckedUpdateWithoutVehicleInput>
+}
+
+export type SaleItemUpdateManyWithWhereWithoutVehicleInput = {
+  where: Prisma.SaleItemScalarWhereInput
+  data: Prisma.XOR<Prisma.SaleItemUpdateManyMutationInput, Prisma.SaleItemUncheckedUpdateManyWithoutVehicleInput>
 }
 
 export type SaleItemCreateWithoutSaleInput = {
@@ -509,11 +620,13 @@ export type SaleItemCreateWithoutSaleInput = {
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
   product: Prisma.ProductCreateNestedOneWithoutSale_itemsInput
+  vehicle?: Prisma.VehicleCreateNestedOneWithoutSale_itemsInput
 }
 
 export type SaleItemUncheckedCreateWithoutSaleInput = {
   id?: string
   product_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -547,6 +660,7 @@ export type SaleItemUpdateManyWithWhereWithoutSaleInput = {
 export type SaleItemCreateManyProductInput = {
   id?: string
   sale_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -556,11 +670,13 @@ export type SaleItemUpdateWithoutProductInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sale?: Prisma.SaleUpdateOneRequiredWithoutSale_itemsNestedInput
+  vehicle?: Prisma.VehicleUpdateOneWithoutSale_itemsNestedInput
 }
 
 export type SaleItemUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -568,6 +684,39 @@ export type SaleItemUncheckedUpdateWithoutProductInput = {
 export type SaleItemUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type SaleItemCreateManyVehicleInput = {
+  id?: string
+  sale_id: string
+  product_id: string
+  quantity: number
+  unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type SaleItemUpdateWithoutVehicleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sale?: Prisma.SaleUpdateOneRequiredWithoutSale_itemsNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutSale_itemsNestedInput
+}
+
+export type SaleItemUncheckedUpdateWithoutVehicleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sale_id?: Prisma.StringFieldUpdateOperationsInput | string
+  product_id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type SaleItemUncheckedUpdateManyWithoutVehicleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sale_id?: Prisma.StringFieldUpdateOperationsInput | string
+  product_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -575,6 +724,7 @@ export type SaleItemUncheckedUpdateManyWithoutProductInput = {
 export type SaleItemCreateManySaleInput = {
   id?: string
   product_id: string
+  vehicle_id?: string | null
   quantity: number
   unit_price: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -584,11 +734,13 @@ export type SaleItemUpdateWithoutSaleInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product?: Prisma.ProductUpdateOneRequiredWithoutSale_itemsNestedInput
+  vehicle?: Prisma.VehicleUpdateOneWithoutSale_itemsNestedInput
 }
 
 export type SaleItemUncheckedUpdateWithoutSaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -596,6 +748,7 @@ export type SaleItemUncheckedUpdateWithoutSaleInput = {
 export type SaleItemUncheckedUpdateManyWithoutSaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -606,52 +759,62 @@ export type SaleItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   sale_id?: boolean
   product_id?: boolean
+  vehicle_id?: boolean
   quantity?: boolean
   unit_price?: boolean
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }, ExtArgs["result"]["saleItem"]>
 
 export type SaleItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   sale_id?: boolean
   product_id?: boolean
+  vehicle_id?: boolean
   quantity?: boolean
   unit_price?: boolean
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }, ExtArgs["result"]["saleItem"]>
 
 export type SaleItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   sale_id?: boolean
   product_id?: boolean
+  vehicle_id?: boolean
   quantity?: boolean
   unit_price?: boolean
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }, ExtArgs["result"]["saleItem"]>
 
 export type SaleItemSelectScalar = {
   id?: boolean
   sale_id?: boolean
   product_id?: boolean
+  vehicle_id?: boolean
   quantity?: boolean
   unit_price?: boolean
 }
 
-export type SaleItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sale_id" | "product_id" | "quantity" | "unit_price", ExtArgs["result"]["saleItem"]>
+export type SaleItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sale_id" | "product_id" | "vehicle_id" | "quantity" | "unit_price", ExtArgs["result"]["saleItem"]>
 export type SaleItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }
 export type SaleItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }
 export type SaleItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sale?: boolean | Prisma.SaleDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vehicle?: boolean | Prisma.SaleItem$vehicleArgs<ExtArgs>
 }
 
 export type $SaleItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -659,11 +822,13 @@ export type $SaleItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     sale: Prisma.$SalePayload<ExtArgs>
     product: Prisma.$ProductPayload<ExtArgs>
+    vehicle: Prisma.$VehiclePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     sale_id: string
     product_id: string
+    vehicle_id: string | null
     quantity: number
     unit_price: runtime.Decimal
   }, ExtArgs["result"]["saleItem"]>
@@ -1062,6 +1227,7 @@ export interface Prisma__SaleItemClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   sale<T extends Prisma.SaleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SaleDefaultArgs<ExtArgs>>): Prisma.Prisma__SaleClient<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  vehicle<T extends Prisma.SaleItem$vehicleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SaleItem$vehicleArgs<ExtArgs>>): Prisma.Prisma__VehicleClient<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1094,6 +1260,7 @@ export interface SaleItemFieldRefs {
   readonly id: Prisma.FieldRef<"SaleItem", 'String'>
   readonly sale_id: Prisma.FieldRef<"SaleItem", 'String'>
   readonly product_id: Prisma.FieldRef<"SaleItem", 'String'>
+  readonly vehicle_id: Prisma.FieldRef<"SaleItem", 'String'>
   readonly quantity: Prisma.FieldRef<"SaleItem", 'Int'>
   readonly unit_price: Prisma.FieldRef<"SaleItem", 'Decimal'>
 }
@@ -1489,6 +1656,25 @@ export type SaleItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many SaleItems to delete.
    */
   limit?: number
+}
+
+/**
+ * SaleItem.vehicle
+ */
+export type SaleItem$vehicleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicle
+   */
+  select?: Prisma.VehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vehicle
+   */
+  omit?: Prisma.VehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehicleInclude<ExtArgs> | null
+  where?: Prisma.VehicleWhereInput
 }
 
 /**

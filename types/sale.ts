@@ -19,5 +19,9 @@ export interface Sale {
     product: {
       name: string;
     };
+    vehicle: {
+      vin: string;
+      color: string | null;
+    } | null;
   }>;
 }
