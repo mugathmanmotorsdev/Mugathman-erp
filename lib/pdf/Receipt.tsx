@@ -7,6 +7,8 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Sale } from "@/types/sale";
+import fs from "fs";
+import path from "path";
 
 const styles = StyleSheet.create({
   page: {
@@ -228,11 +230,15 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
   );
   const total = subtotal;
 
-  // Ideally, use an absolute URL like http://localhost:3000/logo.png
-  // Or path.join(process.cwd(), 'public', 'logo.png')
-  // We will leave the logo out if it's too problematic or use a placeholder string.
-  // We'll use a placeholder URL for the logo.
-  const logoUrl = "http://localhost:3000/logo.png"; 
+  // Read logo as base64 data URI so it works in any environment (no network dependency)
+  let logoUrl = "";
+  try {
+    const logoPath = path.join(process.cwd(), "public", "logo.png");
+    const logoBase64 = fs.readFileSync(logoPath).toString("base64");
+    logoUrl = `data:image/png;base64,${logoBase64}`;
+  } catch {
+    // Image not available — render receipt without logo
+  } 
 
   return (
     <Document>
