@@ -1,14 +1,8 @@
 import { StockMovement } from "@/generated/prisma/client";
+import type { Product as ProductPrisma } from "@/generated/prisma/client";
 
-export interface Product {
-  id: string;
-  name: string;
-  sku: string | null;
-  category: string;
-  unit_price: number;
+export interface Product extends ProductPrisma {
   currentStock: number;
-  reorder_level: number;
-  is_active: boolean;
   stock_movements: StockMovement[] | null;
 }
 

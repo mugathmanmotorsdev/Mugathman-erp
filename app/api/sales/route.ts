@@ -1,4 +1,4 @@
-import { requireAuth } from "@/lib/utils/auth-utils";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { getSale, getSales } from "@/lib/actions/sales";
 import prisma from "@/lib/prisma";
@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching sales:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
+      { error: error instanceof Error ? error.message : "Internal server error" },
+      { status: error instanceof AppError ? error.status : 500 }
     );
   }
 }
@@ -185,7 +185,7 @@ export async function POST(request: NextRequest) {
     const errorMessage = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json(
       { error: errorMessage },
-      { status: 500 },
+      { status: err instanceof AppError ? err.status : 500 }
     );
   }
 }

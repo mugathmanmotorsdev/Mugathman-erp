@@ -25,15 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import StatCard from "@/components/StatCard";
 import PageHeading from "@/components/PageHeading";
+import type { Customer } from "@generated/prisma/client";
 
-interface Customer {
-  id: string;
-  full_name: string;
-  phone: string;
-  email: string | null;
-  address: string | null;
-  created_at: string;
-}
 
 export default function CustomersPage() {
   const router = useRouter();

@@ -2,12 +2,15 @@
 import { auth } from "../auth"
 import prisma from "../prisma"
 import { generateToken } from "./token-generator"
+import { AppError } from "./app-error"
 import { User, Role } from "@generated/prisma"
+
+export { AppError }
 
 export async function requireAuth() {
   const session = await auth()
   if (!session?.user?.email) {
-    throw new Error('Authentication required')
+    throw new AppError('Authentication required', 401)
   }
 
   const user = await prisma.user.findUnique({
@@ -17,7 +20,7 @@ export async function requireAuth() {
   })
 
   if (!user) {
-    throw new Error('User not found')
+    throw new AppError('User not found', 404)
   }
 
   return user
@@ -52,11 +55,11 @@ export async function setResetPasswordToken(user: User) {
 
 export async function roleGuard(user: User, roles: Role[]) {
   if (!user) {
-    throw new Error('Authentication required')
+    throw new AppError('Authentication required', 401)
   }
 
   if (!roles.includes(user.role)) {
-    throw new Error('Unauthorized')
+    throw new AppError('Unauthorized', 403)
   }
 }
 

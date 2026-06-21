@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { roleGuard, setActivationToken, requireAuth } from "@/lib/utils/auth-utils";
+import { roleGuard, setActivationToken, requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { activationEmailHTML } from "@/components/email-template/activationEmailTemplateHtml";
 import { generatePassword } from "@/lib/utils/password-generator";
 import { hashPassword } from "@/lib/utils/password";
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         console.error("Error creating user:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Something went wrong from our side" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         console.error("Error fetching users:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Something went wrong from our side" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }

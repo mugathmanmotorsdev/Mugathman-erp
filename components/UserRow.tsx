@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, UserMinus, UserCheck } from "lucide-react";
-import { Role, User, UserStatus } from "@/types/user";
 import { useAvatar } from "@/hooks/useAvatar";
+import { Role, User, UserStatus } from "@generated/prisma/client";
 
 
 export default function UserRow({

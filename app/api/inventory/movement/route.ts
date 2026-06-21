@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { requireAuth } from "@/lib/utils/auth-utils";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
             product_id,
             location_id,
             vehicle_id,
+            new_vin,
             reason,
             reference_type,
             reference_id,
@@ -33,15 +34,19 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        // get product
+        // get product (needed for tracking type checks below)
         const product = await prisma.product.findUnique({
             where: {
                 id: product_id,
             },
         });
 
-        // check stock availability
-        if (movement_type === "OUT" && product?.tracking_type === "BATCH") {
+        if (!product) {
+            return NextResponse.json({ error: "Product not found" }, { status: 404 });
+        }
+
+        // check stock availability for batch OUT
+        if (movement_type === "OUT" && product.tracking_type === "BATCH") {
             const stock = await prisma.stockMovement.aggregate({
                 where: {
                     product_id: product_id,
@@ -57,7 +62,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        const data = {
+        const movementData = {
             product_id,
             location_id,
             quantity,
@@ -66,27 +71,70 @@ export async function POST(request: NextRequest) {
             reference_type: reference_type || null,
             reference_id,
             performed_by,
-            ...(vehicle_id && { vehicle_id }),
         };
 
-        // create stock movement
-        const stock_movement = await prisma.stockMovement.create({
-            data
-        });
+        let stock_movement;
 
-        // create serialize movement if tracking type is serial
-        if (product?.tracking_type === "SERIAL") {
-            await prisma.serializeMovement.create({
-                data: {
-                    stock_movement_id: stock_movement.id,
-                    vehicle_id,
+        // --- SERIAL-tracked products: use a transaction for atomicity ---
+        if (product.tracking_type === "SERIAL") {
+            stock_movement = await prisma.$transaction(async (tx) => {
+                let finalVehicleId = vehicle_id;
+
+                // IN + new_vin: create the vehicle inside the transaction
+                if (movement_type === "IN" && new_vin) {
+                    // Check VIN uniqueness
+                    const existing = await tx.vehicle.findUnique({
+                        where: { vin: new_vin },
+                    });
+                    if (existing) {
+                        throw new Error("Vehicle with this VIN already exists");
+                    }
+
+                    // Create the vehicle
+                    const vehicle = await tx.vehicle.create({
+                        data: {
+                            product_id,
+                            inventory_location_id: location_id,
+                            vin: new_vin,
+                            status: "AVAILABLE",
+                        },
+                    });
+                    finalVehicleId = vehicle.id;
                 }
+
+                if (!finalVehicleId) {
+                    throw new Error("Vehicle ID is required for serial-tracked products");
+                }
+
+                // Create stock movement
+                const movement = await tx.stockMovement.create({
+                    data: {
+                        ...movementData,
+                        vehicle_id: finalVehicleId,
+                    },
+                });
+
+                // Link movement to vehicle via serialize_movements
+                await tx.serializeMovement.create({
+                    data: {
+                        stock_movement_id: movement.id,
+                        vehicle_id: finalVehicleId,
+                    },
+                });
+
+                return movement;
+            });
+        } else {
+            // --- BATCH-tracked products: single write, no transaction needed ---
+            stock_movement = await prisma.stockMovement.create({
+                data: movementData,
             });
         }
 
         return NextResponse.json(stock_movement);
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        console.error(error);
+        const errorMessage = error instanceof Error ? error.message : "Internal server error";
+        return NextResponse.json({ error: errorMessage }, { status: error instanceof AppError ? error.status : 400 });
     }
 }

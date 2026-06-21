@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
+import { requireAuth, roleGuard, AppError } from "@/lib/utils/auth-utils";
 
 export async function POST(
     request: NextRequest,
@@ -25,7 +25,7 @@ export async function POST(
         console.error("Error updating user:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }

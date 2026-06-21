@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/utils/auth-utils";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { getSale } from "@/lib/actions/sales";
 
 export async function GET(
@@ -20,7 +20,7 @@ export async function GET(
         console.error("Error fetching sale:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal server error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }

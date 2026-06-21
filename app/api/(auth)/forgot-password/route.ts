@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { resetPasswordEmailHTML } from "@/components/email-template/resetPasswordEmailTemplateHtml";
-import { setResetPasswordToken } from "@/lib/utils/auth-utils";
+import { setResetPasswordToken, AppError } from "@/lib/utils/auth-utils";
 
 export async function POST(request: NextRequest) {
     try {
@@ -38,6 +38,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ message: "Password reset email scheduled for sending" }, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ error: error }, { status: 500 });
+        console.error("Error sending forgot-password email:", error);
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

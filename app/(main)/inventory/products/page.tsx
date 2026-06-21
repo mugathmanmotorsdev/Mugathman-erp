@@ -251,7 +251,7 @@ export default function ProductsPage() {
                         </span>
                         <span className="text-xs text-slate-500">
                           Standard Unit:{" "}
-                          {product.unit_price > 1000 ? "Bulk" : "Retail"}
+                          {Number(product.unit_price) > 1000 ? "Bulk" : "Retail"}
                         </span>
                       </div>
                     </div>
@@ -286,7 +286,7 @@ export default function ProductsPage() {
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
-                    }).format(product.unit_price)}
+                    }).format(Number(product.unit_price))}
                   </TableCell>
                   <TableCell className="pr-6 text-right">
                     <DropdownMenu>

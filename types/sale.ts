@@ -1,27 +1,22 @@
-export interface Sale {
-  id: string;
-  sale_number: string;
-  customer: {
-    full_name: string;
-    phone: string;
-    address: string | null;
-    email: string | null;
-  };
-  user: {
-    full_name: string;
-  };
-  status: string;
-  created_at: string | Date;
-  sale_items: Array<{
-    id: string;
-    quantity: number;
-    unit_price: any;
-    product: {
-      name: string;
-    };
-    vehicle: {
-      vin: string;
-      color: string | null;
-    } | null;
-  }>;
+import { Prisma, SaleItem as SaleItemPrisma } from "@/generated/prisma/client";
+
+export type Sale = Prisma.SaleGetPayload<{ 
+  include: { 
+    customer: true, 
+    user: true,  
+    sale_items: {
+      include: {
+        product: true
+      }
+    }
+  }
+}>
+
+export interface SaleItem extends Omit<SaleItemPrisma, 'sale_id'> {
+  sale_id?: string;
+  location_id: string;
+  vehicle_id: string;
+  product_name: string;
+  tracking_type: string;
+  vin?: string;
 }

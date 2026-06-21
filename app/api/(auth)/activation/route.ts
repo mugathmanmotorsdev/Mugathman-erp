@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hashPassword } from "@/lib/utils/password";
+import { AppError } from "@/lib/utils/app-error";
 
 export async function POST(request: NextRequest) {
     const data = await request.json()
@@ -50,7 +51,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ message: "User activated successfully" }, { status: 200 });
     } catch (error) {
-        console.log("Error activating user: ", error)
-        return NextResponse.json({ error: error }, { status: 500 });
+        console.error("Error activating user:", error);
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

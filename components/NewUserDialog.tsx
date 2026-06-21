@@ -28,10 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-
-
 import { UseFormReturn } from "react-hook-form";
-import { Role } from "@/types/user";
+import { Role } from "@generated/prisma/client"
 
 interface InviteUserData {
     name: string;
