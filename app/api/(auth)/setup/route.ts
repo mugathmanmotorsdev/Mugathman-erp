@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { hashPassword } from '@/lib/utils/password';
+import { AppError } from '@/lib/utils/app-error';
 
 export async function POST(request: NextRequest) {
   try {
@@ -82,8 +83,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
+      { success: false, error: error instanceof Error ? error.message : 'Internal server error' },
+      { status: error instanceof AppError ? error.status : 500 }
     );
   }
 }
@@ -103,8 +104,8 @@ export async function GET() {
   } catch (error) {
     console.error('Setup check error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to check setup status' },
-      { status: 500 }
+      { success: false, error: error instanceof Error ? error.message : 'Failed to check setup status' },
+      { status: error instanceof AppError ? error.status : 500 }
     );
   }
 }

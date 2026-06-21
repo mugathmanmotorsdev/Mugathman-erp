@@ -37,10 +37,8 @@ import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
 import NewUserDialog from "@/components/NewUserDialog";
 import UserRow from "@/components/UserRow";
-
-
-import { User, Role, UserStatus } from "@/types/user";
 import SkeletonUi from "@/components/SkeletonUi";
+import { User, Role, UserStatus } from "@generated/prisma/client";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);

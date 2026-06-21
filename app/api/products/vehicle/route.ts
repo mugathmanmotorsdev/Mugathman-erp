@@ -1,8 +1,11 @@
 import prisma from "@/lib/prisma";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
     try {
+        await requireAuth();
+
         const vehicles = await prisma.vehicle.findMany({
             where: {
                 status: "AVAILABLE",
@@ -11,13 +14,17 @@ export async function GET() {
 
         return NextResponse.json(vehicles);
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        console.error("Error fetching vehicles:", error);
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }
 
 export async function POST(request: NextRequest) {
     try {
+        await requireAuth();
         const body = await request.json();
         console.log("body: ", body);
         const { product_id, inventory_location_id, vin } = body;
@@ -66,7 +73,10 @@ export async function POST(request: NextRequest) {
         })
         return NextResponse.json(vehicle);
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        console.error("Error creating vehicle:", error);
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

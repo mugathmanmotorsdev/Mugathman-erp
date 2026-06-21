@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "@/lib/prisma";
-import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
+import { requireAuth, roleGuard, AppError } from "@/lib/utils/auth-utils";
 
 export async function GET(
     request: NextRequest,
@@ -44,7 +44,7 @@ export async function GET(
         console.error("Error fetching product:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }
@@ -109,7 +109,7 @@ export async function PUT(
         console.error("Error updating product:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }
@@ -153,7 +153,7 @@ export async function DELETE(
         console.error("Error deleting product:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }

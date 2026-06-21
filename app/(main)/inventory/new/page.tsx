@@ -36,26 +36,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-
-interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  tracking_type: "BATCH" | "SERIAL";
-  currentStock: number;
-}
-
-interface Location {
-  id: string;
-  name: string;
-}
-
-interface Vehicle {
-  product_id: string;
-  inventory_location_id: string;
-  vin: string;
-  status: string;
-}
+import type { Product } from "@/types/product";
+import type { Vehicle, InventoryLocation as Location } from "@/generated/prisma/client";
 
 export default function NewMovementPage() {
   const router = useRouter();
@@ -155,41 +137,15 @@ export default function NewMovementPage() {
     setLoading(true);
 
     try {
-      let finalVehicleId = formData.vehicle_id;
-
-      // If it's IN and SERIAL, we might need to create the vehicle first if it doesn't exist
-      // Based on user request "a vin number for each product"
-      if (
-        movementType === "IN" &&
-        selectedProduct?.tracking_type === "SERIAL" &&
-        formData.new_vin
-      ) {
-        const vehicleRes = await fetch("/api/products/vehicle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            product_id: formData.product_id,
-            inventory_location_id: formData.location_id,
-            vin: formData.new_vin,
-          }),
-        });
-
-        if (!vehicleRes.ok) {
-          const error = await vehicleRes.json();
-          throw new Error(error.error || "Failed to register vehicle VIN");
-        }
-        const newVehicle = await vehicleRes.json();
-        finalVehicleId = newVehicle.id;
-      }
-
-      // Create movement
+      // Single atomic API call — vehicle creation and movement happen in one transaction
       const movementRes = await fetch("/api/inventory/movement", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product_id: formData.product_id,
           location_id: formData.location_id,
-          vehicle_id: finalVehicleId,
+          vehicle_id: formData.vehicle_id,
+          new_vin: formData.new_vin || undefined,
           quantity:
             movementType === "OUT"
               ? -Math.abs(Number(formData.quantity))

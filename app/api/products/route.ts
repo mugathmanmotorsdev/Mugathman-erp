@@ -3,7 +3,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import prisma from "@/lib/prisma";
 import { generateSKU } from "@/lib/utils/sku-generator";
-import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
+import { requireAuth, roleGuard, AppError } from "@/lib/utils/auth-utils";
 
 export async function GET(request: NextRequest) {
     try {
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
         console.error("Error fetching products:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
         console.error("Error creating product:", error)
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         )
     }
 }

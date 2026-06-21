@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { requireAuth, roleGuard } from "@/lib/utils/auth-utils";
+import { requireAuth, roleGuard, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -30,7 +30,7 @@ export async function GET(
         console.error("Error fetching users:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }
@@ -59,7 +59,7 @@ export async function PATCH(
         console.error("Error updating user:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Internal Server Error" },
-            { status: 500 }
+            { status: error instanceof AppError ? error.status : 500 }
         );
     }
 }

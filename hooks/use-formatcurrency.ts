@@ -5,28 +5,32 @@ export function useFormatCurrency(amount: number) {
     const [formattedAmount, setFormattedAmount] = useState<string>("");
     const [unit, setUnit] = useState<string>("");
 
-
-
     useEffect(() => {
-        if (amount > 1000000000000) {
-            setShortAmount((amount / 1000000000000).toFixed(2));
-            setUnit("T");
-        } else if (amount > 1000000000) {
-            setShortAmount((amount / 1000000000).toFixed(2));
-            setUnit("B");
-        } else if (amount > 1000000) {
-            setShortAmount((amount / 1000000).toFixed(2));
-            setUnit("M");
+        let short: string;
+        let unitLabel: string;
+
+        if (amount > 1_000_000_000_000) {
+            short = (amount / 1_000_000_000_000).toFixed(2);
+            unitLabel = "T";
+        } else if (amount > 1_000_000_000) {
+            short = (amount / 1_000_000_000).toFixed(2);
+            unitLabel = "B";
+        } else if (amount > 1_000_000) {
+            short = (amount / 1_000_000).toFixed(2);
+            unitLabel = "M";
         } else {
-            setShortAmount(amount.toFixed(2));
-            setUnit("");
+            short = amount.toFixed(2);
+            unitLabel = "";
         }
+
+        setShortAmount(short);
+        setUnit(unitLabel);
         setFormattedAmount(new Intl.NumberFormat("en-NG", {
             style: "currency",
             currency: "NGN",
             maximumFractionDigits: 2,
-        }).format(Number(shortAmount)));
-    }, [amount, shortAmount]);
+        }).format(Number(short)));
+    }, [amount]);
 
     const formattedAmountWithUnit = `${formattedAmount}${unit}`;
 

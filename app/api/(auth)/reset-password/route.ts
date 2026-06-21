@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { hashPassword } from "@/lib/utils/password";
 import { NextRequest, NextResponse } from "next/server";
+import { AppError } from "@/lib/utils/app-error";
 
 export async function POST(request: NextRequest) {
     const userData = await request.json()
@@ -58,6 +59,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ message: "Password reset successfully" }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: error }, { status: 500 });
+        console.error("Error resetting password:", error);
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

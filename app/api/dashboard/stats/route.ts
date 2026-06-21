@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { requireAuth } from "@/lib/utils/auth-utils";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import {NextResponse } from "next/server";
 
 export async function GET() {
@@ -115,6 +115,9 @@ export async function GET() {
         });
     } catch (error) {
         console.error("Dashboard stats error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

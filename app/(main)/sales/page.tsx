@@ -58,7 +58,7 @@ export default function SalesPage() {
   }, []);
 
   const calculateTotal = (items: Sale["sale_items"]) => {
-    return items.reduce((acc, item) => acc + item.quantity * parseFloat(item.unit_price), 0);
+    return items.reduce((acc, item) => acc + item.quantity * Number(item.unit_price), 0);
   };
 
   const filteredSales = sales.filter(

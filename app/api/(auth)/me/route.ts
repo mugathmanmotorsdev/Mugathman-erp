@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { AppError } from "@/lib/utils/app-error";
 
 export async function GET() {
     try {
@@ -26,6 +27,9 @@ export async function GET() {
         return NextResponse.json(userWithoutPassword);
     } catch (error) {
         console.error("Error fetching user details:", error);
-        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

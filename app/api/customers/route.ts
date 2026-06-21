@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { requireAuth } from "@/lib/utils/auth-utils";
+import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
@@ -13,7 +13,10 @@ export async function GET() {
         return NextResponse.json(customers);
     } catch (error) {
         console.error("Error fetching customers:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }
 
@@ -38,6 +41,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(customer);
     } catch (error) {
         console.error("Error creating customer:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Internal server error" },
+            { status: error instanceof AppError ? error.status : 500 }
+        );
     }
 }

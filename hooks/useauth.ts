@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { User } from "@generated/prisma";
-import { redirect } from "next/navigation";
 
 export function useAuth() {
+    const router = useRouter()
     const { data: session, status } = useSession()
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
@@ -33,9 +34,9 @@ export function useAuth() {
 
     useEffect(() => {
         if (status === "unauthenticated") {
-            redirect("/signin")
+            router.push("/signin")
         }
-    }, [status])
+    }, [status, router])
 
 
     return {
