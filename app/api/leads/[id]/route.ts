@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { LeadStatus } from "@generated/prisma/client";
+import { revalidatePath } from "next/cache";
 
 // GET /api/leads/[id] — Authenticated, get single lead
 export async function GET(
@@ -30,7 +31,7 @@ export async function GET(
   }
 }
 
-// PATCH /api/leads/[id] — Authenticated, update lead status or other fields
+// PATCH /api/leads/[id] — Authenticated, update lead status or notes
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -39,7 +40,7 @@ export async function PATCH(
     const user = await requireAuth();
     const { id } = await params;
     const body = await request.json();
-    const { status } = body;
+    const { status, notes } = body;
 
     const lead = await prisma.lead.findUnique({
       where: { id },
@@ -53,8 +54,11 @@ export async function PATCH(
       where: { id },
       data: {
         status: status ? (status as LeadStatus) : lead.status,
+        notes: notes !== undefined ? notes : lead.notes,
       },
     });
+
+    revalidatePath("/leads");
 
     return NextResponse.json(updated);
   } catch (error) {

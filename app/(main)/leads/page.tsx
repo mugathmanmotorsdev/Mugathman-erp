@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   UserCheck,
   Search,
@@ -272,7 +273,8 @@ export default function LeadsPage() {
                   return (
                     <TableRow
                       key={lead.id}
-                      className="group hover:bg-slate-50/50 transition-colors"
+                      className="group hover:bg-slate-50/50 transition-colors cursor-pointer"
+                      onClick={() => router.push(`/leads/${lead.id}`)}
                     >
                       <TableCell className="px-6 py-4">
                         <div className="flex flex-col">
