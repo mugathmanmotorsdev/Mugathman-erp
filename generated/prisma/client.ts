@@ -104,3 +104,8 @@ export type ResetPasswordToken = Prisma.ResetPasswordTokenModel
  * 
  */
 export type Job = Prisma.JobModel
+/**
+ * Model Lead
+ * 
+ */
+export type Lead = Prisma.LeadModel

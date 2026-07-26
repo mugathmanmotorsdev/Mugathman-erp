@@ -2,6 +2,7 @@ import "dotenv/config";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
+import crypto from "crypto";
 
 // Also load .env.local if it exists
 const envLocalPath = path.resolve(process.cwd(), ".env.local");
@@ -14,6 +15,14 @@ import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/utils/send-email";
 import { sendWhatsappThankMsg, uploadMedia } from "@/lib/services/whatsapp";
 import { generateReceiptPDF } from "@/lib/pdf/generate-receipt-pdf";
+
+function hashEmail(email: string): string {
+    return crypto.createHash("sha256").update(email.toLowerCase().trim()).digest("hex");
+}
+
+function hashPhone(phone: string): string {
+    return crypto.createHash("sha256").update(phone.replace(/[\s\-\(\)\.]/g, "").trim()).digest("hex");
+}
 
 
 function getBackoffDelay(retryCount: number): number {
@@ -89,7 +98,7 @@ export async function processJobs() {
                         if (!sale) {
                             throw new Error("Sale not found");
                         }
-                        
+
                         const pdfBuffer = await generateReceiptPDF(sale as any);
 
                         // upload pdf to whatsapp
@@ -107,6 +116,62 @@ export async function processJobs() {
                             media.id,
                         );
 
+                        break;
+                    }
+
+                    case "SEND_META_CONVERSION": {
+                        console.log("Sending Meta conversion for lead:", data.leadId);
+
+                        const META_CONVERSION_API_URL = process.env.META_CONVERSION_API_URL;
+                        const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
+                        const META_PIXEL_ID = process.env.META_PIXEL_ID;
+
+                        if (!META_CONVERSION_API_URL || !META_ACCESS_TOKEN || !META_PIXEL_ID) {
+                            console.warn("Meta conversion API credentials not configured. Skipping.");
+                            break;
+                        }
+
+                        const response = await fetch(META_CONVERSION_API_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                data: [
+                                    {
+                                        event_name: "Lead",
+                                        event_time: Math.floor(Date.now() / 1000),
+                                        action_source: "website",
+                                        user_data: {
+                                            em: data.email ? hashEmail(data.email) : undefined,
+                                            ph: data.phone ? hashPhone(data.phone) : undefined,
+                                            fi: data.fullName,
+                                            client_ip_address: data.email,
+                                        },
+                                        custom_data: {
+                                            org: data.organization,
+                                            product_interest: data.productOfInterest,
+                                        },
+                                        event_source_url: "https://mugathman.com/leads",
+                                        fbp: META_PIXEL_ID,
+                                    },
+                                ],
+                                access_token: META_ACCESS_TOKEN,
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            const errorBody = await response.text();
+                            throw new Error(`Meta API returned ${response.status}: ${errorBody}`);
+                        }
+
+                        const result = await response.json();
+
+                        // Store the conversion ID on the lead for tracking
+                        await prisma.lead.update({
+                            where: { id: data.leadId },
+                            data: { meta_conversion_id: result?.conversion_id || null },
+                        });
+
+                        console.log("Meta conversion sent successfully for lead:", data.leadId);
                         break;
                     }
 

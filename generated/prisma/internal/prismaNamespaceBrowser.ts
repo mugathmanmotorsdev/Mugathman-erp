@@ -63,7 +63,8 @@ export const ModelName = {
   StockAdjustment: 'StockAdjustment',
   UserActivationToken: 'UserActivationToken',
   ResetPasswordToken: 'ResetPasswordToken',
-  Job: 'Job'
+  Job: 'Job',
+  Lead: 'Lead'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -243,6 +244,23 @@ export const JobScalarFieldEnum = {
 } as const
 
 export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
+export const LeadScalarFieldEnum = {
+  id: 'id',
+  full_name: 'full_name',
+  email: 'email',
+  phone: 'phone',
+  organization: 'organization',
+  product_of_interest: 'product_of_interest',
+  message: 'message',
+  status: 'status',
+  meta_conversion_id: 'meta_conversion_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
 export const SortOrder = {
