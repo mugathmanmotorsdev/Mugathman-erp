@@ -8,7 +8,6 @@ import {
   Plus,
   Minus,
   Package,
-  MapPin,
   FileText,
   Truck,
   Barcode,
@@ -43,7 +42,6 @@ export default function NewMovementPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [fetchingProducts, setFetchingProducts] = useState(true);
-  const [fetchingLocations, setFetchingLocations] = useState(true);
   const [fetchingVehicles, setFetchingVehicles] = useState(false);
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -278,44 +276,6 @@ export default function NewMovementPage() {
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="w-full space-y-2">
-                  <Label className="text-slate-700 font-bold flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-indigo-500" />
-                    Inventory Location
-                  </Label>
-                  <Select
-                    onValueChange={(val) =>
-                      setFormData({ ...formData, location_id: val })
-                    }
-                    value={formData.location_id}
-                  >
-                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md focus:ring-2 focus:ring-indigo-100 transition-all">
-                      <SelectValue
-                        placeholder={
-                          fetchingLocations
-                            ? "Loading locations..."
-                            : "Choose location"
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-md border-slate-200 shadow-2xl">
-                      {locations.map((l) => (
-                        <SelectItem
-                          key={l.id}
-                          value={l.id}
-                          className="py-3 rounded-xl"
-                        >
-                          <div className="flex flex-col">
-                            <span className="font-semibold text-slate-800">
-                              {l.name}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
               </div>
 
               {/* Tracking Specific Logic */}
@@ -475,47 +435,6 @@ export default function NewMovementPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-                <div className="space-y-3 w-full">
-                  <Label className="text-slate-700 font-bold">
-                    Reference Type
-                  </Label>
-                  <Select
-                    onValueChange={(val) =>
-                      setFormData({ ...formData, reference_type: val })
-                    }
-                    value={formData.reference_type}
-                  >
-                    <SelectTrigger className="w-full h-12 border-slate-200 bg-slate-50/50 rounded-md">
-                      <SelectValue placeholder="Select Type" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-slate-200">
-                      {refTypes.map((rt) => (
-                        <SelectItem key={rt.value} value={rt.value}>
-                          {rt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-3 w-full">
-                  <Label className="text-slate-700 font-bold">
-                    Reference ID
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      placeholder="e.g. PO-8829"
-                      value={formData.reference_id}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          reference_id: e.target.value,
-                        })
-                      }
-                      className="w-full h-12 pl-10 border-slate-200 bg-slate-50/50 rounded-md"
-                    />
-                    <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  </div>
                 </div>
               </div>
             </CardContent>

@@ -55,12 +55,9 @@ export const ModelName = {
   Customer: 'Customer',
   Product: 'Product',
   Vehicle: 'Vehicle',
-  InventoryLocation: 'InventoryLocation',
   StockMovement: 'StockMovement',
-  SerializeMovement: 'SerializeMovement',
   Sale: 'Sale',
   SaleItem: 'SaleItem',
-  StockAdjustment: 'StockAdjustment',
   UserActivationToken: 'UserActivationToken',
   ResetPasswordToken: 'ResetPasswordToken',
   Job: 'Job',
@@ -128,7 +125,6 @@ export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeo
 export const VehicleScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
-  inventory_location_id: 'inventory_location_id',
   vin: 'vin',
   color: 'color',
   status: 'status',
@@ -138,39 +134,18 @@ export const VehicleScalarFieldEnum = {
 export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
 
 
-export const InventoryLocationScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  is_active: 'is_active'
-} as const
-
-export type InventoryLocationScalarFieldEnum = (typeof InventoryLocationScalarFieldEnum)[keyof typeof InventoryLocationScalarFieldEnum]
-
-
 export const StockMovementScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
-  location_id: 'location_id',
   vehicle_id: 'vehicle_id',
   quantity: 'quantity',
   type: 'type',
   reason: 'reason',
-  reference_type: 'reference_type',
-  reference_id: 'reference_id',
   performed_by: 'performed_by',
   created_at: 'created_at'
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
-
-
-export const SerializeMovementScalarFieldEnum = {
-  id: 'id',
-  stock_movement_id: 'stock_movement_id',
-  vehicle_id: 'vehicle_id'
-} as const
-
-export type SerializeMovementScalarFieldEnum = (typeof SerializeMovementScalarFieldEnum)[keyof typeof SerializeMovementScalarFieldEnum]
 
 
 export const SaleScalarFieldEnum = {
@@ -195,17 +170,6 @@ export const SaleItemScalarFieldEnum = {
 } as const
 
 export type SaleItemScalarFieldEnum = (typeof SaleItemScalarFieldEnum)[keyof typeof SaleItemScalarFieldEnum]
-
-
-export const StockAdjustmentScalarFieldEnum = {
-  id: 'id',
-  reason: 'reason',
-  notes: 'notes',
-  created_by: 'created_by',
-  created_at: 'created_at'
-} as const
-
-export type StockAdjustmentScalarFieldEnum = (typeof StockAdjustmentScalarFieldEnum)[keyof typeof StockAdjustmentScalarFieldEnum]
 
 
 export const UserActivationTokenScalarFieldEnum = {
@@ -254,7 +218,6 @@ export const LeadScalarFieldEnum = {
   organization: 'organization',
   product_of_interest: 'product_of_interest',
   message: 'message',
-  notes: 'notes',
   status: 'status',
   meta_conversion_id: 'meta_conversion_id',
   created_at: 'created_at',

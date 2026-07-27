@@ -27,7 +27,6 @@ export type AggregateVehicle = {
 export type VehicleMinAggregateOutputType = {
   id: string | null
   product_id: string | null
-  inventory_location_id: string | null
   vin: string | null
   color: string | null
   status: $Enums.VehicleStatus | null
@@ -37,7 +36,6 @@ export type VehicleMinAggregateOutputType = {
 export type VehicleMaxAggregateOutputType = {
   id: string | null
   product_id: string | null
-  inventory_location_id: string | null
   vin: string | null
   color: string | null
   status: $Enums.VehicleStatus | null
@@ -47,7 +45,6 @@ export type VehicleMaxAggregateOutputType = {
 export type VehicleCountAggregateOutputType = {
   id: number
   product_id: number
-  inventory_location_id: number
   vin: number
   color: number
   status: number
@@ -59,7 +56,6 @@ export type VehicleCountAggregateOutputType = {
 export type VehicleMinAggregateInputType = {
   id?: true
   product_id?: true
-  inventory_location_id?: true
   vin?: true
   color?: true
   status?: true
@@ -69,7 +65,6 @@ export type VehicleMinAggregateInputType = {
 export type VehicleMaxAggregateInputType = {
   id?: true
   product_id?: true
-  inventory_location_id?: true
   vin?: true
   color?: true
   status?: true
@@ -79,7 +74,6 @@ export type VehicleMaxAggregateInputType = {
 export type VehicleCountAggregateInputType = {
   id?: true
   product_id?: true
-  inventory_location_id?: true
   vin?: true
   color?: true
   status?: true
@@ -162,7 +156,6 @@ export type VehicleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type VehicleGroupByOutputType = {
   id: string
   product_id: string
-  inventory_location_id: string
   vin: string
   color: string | null
   status: $Enums.VehicleStatus
@@ -193,30 +186,24 @@ export type VehicleWhereInput = {
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   id?: Prisma.StringFilter<"Vehicle"> | string
   product_id?: Prisma.StringFilter<"Vehicle"> | string
-  inventory_location_id?: Prisma.StringFilter<"Vehicle"> | string
   vin?: Prisma.StringFilter<"Vehicle"> | string
   color?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  inventory_location?: Prisma.XOR<Prisma.InventoryLocationScalarRelationFilter, Prisma.InventoryLocationWhereInput>
   stock_movement?: Prisma.StockMovementListRelationFilter
-  serialize_movements?: Prisma.SerializeMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
 }
 
 export type VehicleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  inventory_location_id?: Prisma.SortOrder
   vin?: Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
-  inventory_location?: Prisma.InventoryLocationOrderByWithRelationInput
   stock_movement?: Prisma.StockMovementOrderByRelationAggregateInput
-  serialize_movements?: Prisma.SerializeMovementOrderByRelationAggregateInput
   sale_items?: Prisma.SaleItemOrderByRelationAggregateInput
 }
 
@@ -227,21 +214,17 @@ export type VehicleWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   product_id?: Prisma.StringFilter<"Vehicle"> | string
-  inventory_location_id?: Prisma.StringFilter<"Vehicle"> | string
   color?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  inventory_location?: Prisma.XOR<Prisma.InventoryLocationScalarRelationFilter, Prisma.InventoryLocationWhereInput>
   stock_movement?: Prisma.StockMovementListRelationFilter
-  serialize_movements?: Prisma.SerializeMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
 }, "id" | "vin">
 
 export type VehicleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  inventory_location_id?: Prisma.SortOrder
   vin?: Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -257,7 +240,6 @@ export type VehicleScalarWhereWithAggregatesInput = {
   NOT?: Prisma.VehicleScalarWhereWithAggregatesInput | Prisma.VehicleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   product_id?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
-  inventory_location_id?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   vin?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   color?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
   status?: Prisma.EnumVehicleStatusWithAggregatesFilter<"Vehicle"> | $Enums.VehicleStatus
@@ -271,22 +253,18 @@ export type VehicleCreateInput = {
   status: $Enums.VehicleStatus
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutVehiclesInput
-  inventory_location: Prisma.InventoryLocationCreateNestedOneWithoutVehiclesInput
   stock_movement?: Prisma.StockMovementCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateInput = {
   id?: string
   product_id: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
   created_at?: Date | string
   stock_movement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutVehicleInput
 }
 
@@ -297,29 +275,24 @@ export type VehicleUpdateInput = {
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutVehiclesNestedInput
-  inventory_location?: Prisma.InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput
   stock_movement?: Prisma.StockMovementUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stock_movement?: Prisma.StockMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleCreateManyInput = {
   id?: string
   product_id: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
@@ -337,7 +310,6 @@ export type VehicleUpdateManyMutationInput = {
 export type VehicleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
@@ -357,7 +329,6 @@ export type VehicleOrderByRelationAggregateInput = {
 export type VehicleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  inventory_location_id?: Prisma.SortOrder
   vin?: Prisma.SortOrder
   color?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -367,7 +338,6 @@ export type VehicleCountOrderByAggregateInput = {
 export type VehicleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  inventory_location_id?: Prisma.SortOrder
   vin?: Prisma.SortOrder
   color?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -377,7 +347,6 @@ export type VehicleMaxOrderByAggregateInput = {
 export type VehicleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  inventory_location_id?: Prisma.SortOrder
   vin?: Prisma.SortOrder
   color?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -387,11 +356,6 @@ export type VehicleMinOrderByAggregateInput = {
 export type VehicleNullableScalarRelationFilter = {
   is?: Prisma.VehicleWhereInput | null
   isNot?: Prisma.VehicleWhereInput | null
-}
-
-export type VehicleScalarRelationFilter = {
-  is?: Prisma.VehicleWhereInput
-  isNot?: Prisma.VehicleWhereInput
 }
 
 export type VehicleCreateNestedManyWithoutProductInput = {
@@ -440,48 +404,6 @@ export type EnumVehicleStatusFieldUpdateOperationsInput = {
   set?: $Enums.VehicleStatus
 }
 
-export type VehicleCreateNestedManyWithoutInventory_locationInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput> | Prisma.VehicleCreateWithoutInventory_locationInput[] | Prisma.VehicleUncheckedCreateWithoutInventory_locationInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutInventory_locationInput | Prisma.VehicleCreateOrConnectWithoutInventory_locationInput[]
-  createMany?: Prisma.VehicleCreateManyInventory_locationInputEnvelope
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-}
-
-export type VehicleUncheckedCreateNestedManyWithoutInventory_locationInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput> | Prisma.VehicleCreateWithoutInventory_locationInput[] | Prisma.VehicleUncheckedCreateWithoutInventory_locationInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutInventory_locationInput | Prisma.VehicleCreateOrConnectWithoutInventory_locationInput[]
-  createMany?: Prisma.VehicleCreateManyInventory_locationInputEnvelope
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-}
-
-export type VehicleUpdateManyWithoutInventory_locationNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput> | Prisma.VehicleCreateWithoutInventory_locationInput[] | Prisma.VehicleUncheckedCreateWithoutInventory_locationInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutInventory_locationInput | Prisma.VehicleCreateOrConnectWithoutInventory_locationInput[]
-  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutInventory_locationInput | Prisma.VehicleUpsertWithWhereUniqueWithoutInventory_locationInput[]
-  createMany?: Prisma.VehicleCreateManyInventory_locationInputEnvelope
-  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutInventory_locationInput | Prisma.VehicleUpdateWithWhereUniqueWithoutInventory_locationInput[]
-  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutInventory_locationInput | Prisma.VehicleUpdateManyWithWhereWithoutInventory_locationInput[]
-  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
-}
-
-export type VehicleUncheckedUpdateManyWithoutInventory_locationNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput> | Prisma.VehicleCreateWithoutInventory_locationInput[] | Prisma.VehicleUncheckedCreateWithoutInventory_locationInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutInventory_locationInput | Prisma.VehicleCreateOrConnectWithoutInventory_locationInput[]
-  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutInventory_locationInput | Prisma.VehicleUpsertWithWhereUniqueWithoutInventory_locationInput[]
-  createMany?: Prisma.VehicleCreateManyInventory_locationInputEnvelope
-  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutInventory_locationInput | Prisma.VehicleUpdateWithWhereUniqueWithoutInventory_locationInput[]
-  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutInventory_locationInput | Prisma.VehicleUpdateManyWithWhereWithoutInventory_locationInput[]
-  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
-}
-
 export type VehicleCreateNestedOneWithoutStock_movementInput = {
   create?: Prisma.XOR<Prisma.VehicleCreateWithoutStock_movementInput, Prisma.VehicleUncheckedCreateWithoutStock_movementInput>
   connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutStock_movementInput
@@ -496,20 +418,6 @@ export type VehicleUpdateOneWithoutStock_movementNestedInput = {
   delete?: Prisma.VehicleWhereInput | boolean
   connect?: Prisma.VehicleWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutStock_movementInput, Prisma.VehicleUpdateWithoutStock_movementInput>, Prisma.VehicleUncheckedUpdateWithoutStock_movementInput>
-}
-
-export type VehicleCreateNestedOneWithoutSerialize_movementsInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedCreateWithoutSerialize_movementsInput>
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutSerialize_movementsInput
-  connect?: Prisma.VehicleWhereUniqueInput
-}
-
-export type VehicleUpdateOneRequiredWithoutSerialize_movementsNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedCreateWithoutSerialize_movementsInput>
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutSerialize_movementsInput
-  upsert?: Prisma.VehicleUpsertWithoutSerialize_movementsInput
-  connect?: Prisma.VehicleWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutSerialize_movementsInput, Prisma.VehicleUpdateWithoutSerialize_movementsInput>, Prisma.VehicleUncheckedUpdateWithoutSerialize_movementsInput>
 }
 
 export type VehicleCreateNestedOneWithoutSale_itemsInput = {
@@ -534,21 +442,17 @@ export type VehicleCreateWithoutProductInput = {
   color?: string | null
   status: $Enums.VehicleStatus
   created_at?: Date | string
-  inventory_location: Prisma.InventoryLocationCreateNestedOneWithoutVehiclesInput
   stock_movement?: Prisma.StockMovementCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateWithoutProductInput = {
   id?: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
   created_at?: Date | string
   stock_movement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutVehicleInput
 }
 
@@ -584,61 +488,10 @@ export type VehicleScalarWhereInput = {
   NOT?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
   id?: Prisma.StringFilter<"Vehicle"> | string
   product_id?: Prisma.StringFilter<"Vehicle"> | string
-  inventory_location_id?: Prisma.StringFilter<"Vehicle"> | string
   vin?: Prisma.StringFilter<"Vehicle"> | string
   color?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
-}
-
-export type VehicleCreateWithoutInventory_locationInput = {
-  id?: string
-  vin: string
-  color?: string | null
-  status: $Enums.VehicleStatus
-  created_at?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutVehiclesInput
-  stock_movement?: Prisma.StockMovementCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutVehicleInput
-  sale_items?: Prisma.SaleItemCreateNestedManyWithoutVehicleInput
-}
-
-export type VehicleUncheckedCreateWithoutInventory_locationInput = {
-  id?: string
-  product_id: string
-  vin: string
-  color?: string | null
-  status: $Enums.VehicleStatus
-  created_at?: Date | string
-  stock_movement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutVehicleInput
-  sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutVehicleInput
-}
-
-export type VehicleCreateOrConnectWithoutInventory_locationInput = {
-  where: Prisma.VehicleWhereUniqueInput
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput>
-}
-
-export type VehicleCreateManyInventory_locationInputEnvelope = {
-  data: Prisma.VehicleCreateManyInventory_locationInput | Prisma.VehicleCreateManyInventory_locationInput[]
-  skipDuplicates?: boolean
-}
-
-export type VehicleUpsertWithWhereUniqueWithoutInventory_locationInput = {
-  where: Prisma.VehicleWhereUniqueInput
-  update: Prisma.XOR<Prisma.VehicleUpdateWithoutInventory_locationInput, Prisma.VehicleUncheckedUpdateWithoutInventory_locationInput>
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutInventory_locationInput, Prisma.VehicleUncheckedCreateWithoutInventory_locationInput>
-}
-
-export type VehicleUpdateWithWhereUniqueWithoutInventory_locationInput = {
-  where: Prisma.VehicleWhereUniqueInput
-  data: Prisma.XOR<Prisma.VehicleUpdateWithoutInventory_locationInput, Prisma.VehicleUncheckedUpdateWithoutInventory_locationInput>
-}
-
-export type VehicleUpdateManyWithWhereWithoutInventory_locationInput = {
-  where: Prisma.VehicleScalarWhereInput
-  data: Prisma.XOR<Prisma.VehicleUpdateManyMutationInput, Prisma.VehicleUncheckedUpdateManyWithoutInventory_locationInput>
 }
 
 export type VehicleCreateWithoutStock_movementInput = {
@@ -648,20 +501,16 @@ export type VehicleCreateWithoutStock_movementInput = {
   status: $Enums.VehicleStatus
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutVehiclesInput
-  inventory_location: Prisma.InventoryLocationCreateNestedOneWithoutVehiclesInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateWithoutStock_movementInput = {
   id?: string
   product_id: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
   created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutVehicleInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutVehicleInput
 }
 
@@ -688,84 +537,16 @@ export type VehicleUpdateWithoutStock_movementInput = {
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutVehiclesNestedInput
-  inventory_location?: Prisma.InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutStock_movementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutVehicleNestedInput
-}
-
-export type VehicleCreateWithoutSerialize_movementsInput = {
-  id?: string
-  vin: string
-  color?: string | null
-  status: $Enums.VehicleStatus
-  created_at?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutVehiclesInput
-  inventory_location: Prisma.InventoryLocationCreateNestedOneWithoutVehiclesInput
-  stock_movement?: Prisma.StockMovementCreateNestedManyWithoutVehicleInput
-  sale_items?: Prisma.SaleItemCreateNestedManyWithoutVehicleInput
-}
-
-export type VehicleUncheckedCreateWithoutSerialize_movementsInput = {
-  id?: string
-  product_id: string
-  inventory_location_id: string
-  vin: string
-  color?: string | null
-  status: $Enums.VehicleStatus
-  created_at?: Date | string
-  stock_movement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutVehicleInput
-  sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutVehicleInput
-}
-
-export type VehicleCreateOrConnectWithoutSerialize_movementsInput = {
-  where: Prisma.VehicleWhereUniqueInput
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedCreateWithoutSerialize_movementsInput>
-}
-
-export type VehicleUpsertWithoutSerialize_movementsInput = {
-  update: Prisma.XOR<Prisma.VehicleUpdateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedUpdateWithoutSerialize_movementsInput>
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedCreateWithoutSerialize_movementsInput>
-  where?: Prisma.VehicleWhereInput
-}
-
-export type VehicleUpdateToOneWithWhereWithoutSerialize_movementsInput = {
-  where?: Prisma.VehicleWhereInput
-  data: Prisma.XOR<Prisma.VehicleUpdateWithoutSerialize_movementsInput, Prisma.VehicleUncheckedUpdateWithoutSerialize_movementsInput>
-}
-
-export type VehicleUpdateWithoutSerialize_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  vin?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutVehiclesNestedInput
-  inventory_location?: Prisma.InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput
-  stock_movement?: Prisma.StockMovementUpdateManyWithoutVehicleNestedInput
-  sale_items?: Prisma.SaleItemUpdateManyWithoutVehicleNestedInput
-}
-
-export type VehicleUncheckedUpdateWithoutSerialize_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vin?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  stock_movement?: Prisma.StockMovementUncheckedUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
@@ -776,21 +557,17 @@ export type VehicleCreateWithoutSale_itemsInput = {
   status: $Enums.VehicleStatus
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutVehiclesInput
-  inventory_location: Prisma.InventoryLocationCreateNestedOneWithoutVehiclesInput
   stock_movement?: Prisma.StockMovementCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateWithoutSale_itemsInput = {
   id?: string
   product_id: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
   created_at?: Date | string
   stock_movement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutVehicleInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleCreateOrConnectWithoutSale_itemsInput = {
@@ -816,26 +593,21 @@ export type VehicleUpdateWithoutSale_itemsInput = {
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutVehiclesNestedInput
-  inventory_location?: Prisma.InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput
   stock_movement?: Prisma.StockMovementUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutSale_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stock_movement?: Prisma.StockMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleCreateManyProductInput = {
   id?: string
-  inventory_location_id: string
   vin: string
   color?: string | null
   status: $Enums.VehicleStatus
@@ -848,69 +620,22 @@ export type VehicleUpdateWithoutProductInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  inventory_location?: Prisma.InventoryLocationUpdateOneRequiredWithoutVehiclesNestedInput
   stock_movement?: Prisma.StockMovementUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stock_movement?: Prisma.StockMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutVehicleNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventory_location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vin?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type VehicleCreateManyInventory_locationInput = {
-  id?: string
-  product_id: string
-  vin: string
-  color?: string | null
-  status: $Enums.VehicleStatus
-  created_at?: Date | string
-}
-
-export type VehicleUpdateWithoutInventory_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  vin?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutVehiclesNestedInput
-  stock_movement?: Prisma.StockMovementUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutVehicleNestedInput
-  sale_items?: Prisma.SaleItemUpdateManyWithoutVehicleNestedInput
-}
-
-export type VehicleUncheckedUpdateWithoutInventory_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vin?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  stock_movement?: Prisma.StockMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutVehicleNestedInput
-  sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutVehicleNestedInput
-}
-
-export type VehicleUncheckedUpdateManyWithoutInventory_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
   vin?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
@@ -924,13 +649,11 @@ export type VehicleUncheckedUpdateManyWithoutInventory_locationInput = {
 
 export type VehicleCountOutputType = {
   stock_movement: number
-  serialize_movements: number
   sale_items: number
 }
 
 export type VehicleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movement?: boolean | VehicleCountOutputTypeCountStock_movementArgs
-  serialize_movements?: boolean | VehicleCountOutputTypeCountSerialize_movementsArgs
   sale_items?: boolean | VehicleCountOutputTypeCountSale_itemsArgs
 }
 
@@ -954,13 +677,6 @@ export type VehicleCountOutputTypeCountStock_movementArgs<ExtArgs extends runtim
 /**
  * VehicleCountOutputType without action
  */
-export type VehicleCountOutputTypeCountSerialize_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SerializeMovementWhereInput
-}
-
-/**
- * VehicleCountOutputType without action
- */
 export type VehicleCountOutputTypeCountSale_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SaleItemWhereInput
 }
@@ -969,15 +685,12 @@ export type VehicleCountOutputTypeCountSale_itemsArgs<ExtArgs extends runtime.Ty
 export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  inventory_location_id?: boolean
   vin?: boolean
   color?: boolean
   status?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   stock_movement?: boolean | Prisma.Vehicle$stock_movementArgs<ExtArgs>
-  serialize_movements?: boolean | Prisma.Vehicle$serialize_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Vehicle$sale_itemsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
@@ -985,68 +698,56 @@ export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type VehicleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  inventory_location_id?: boolean
   vin?: boolean
   color?: boolean
   status?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
 export type VehicleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  inventory_location_id?: boolean
   vin?: boolean
   color?: boolean
   status?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
 export type VehicleSelectScalar = {
   id?: boolean
   product_id?: boolean
-  inventory_location_id?: boolean
   vin?: boolean
   color?: boolean
   status?: boolean
   created_at?: boolean
 }
 
-export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "product_id" | "inventory_location_id" | "vin" | "color" | "status" | "created_at", ExtArgs["result"]["vehicle"]>
+export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "product_id" | "vin" | "color" | "status" | "created_at", ExtArgs["result"]["vehicle"]>
 export type VehicleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   stock_movement?: boolean | Prisma.Vehicle$stock_movementArgs<ExtArgs>
-  serialize_movements?: boolean | Prisma.Vehicle$serialize_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Vehicle$sale_itemsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  inventory_location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
 }
 
 export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vehicle"
   objects: {
     product: Prisma.$ProductPayload<ExtArgs>
-    inventory_location: Prisma.$InventoryLocationPayload<ExtArgs>
     stock_movement: Prisma.$StockMovementPayload<ExtArgs>[]
-    serialize_movements: Prisma.$SerializeMovementPayload<ExtArgs>[]
     sale_items: Prisma.$SaleItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     product_id: string
-    inventory_location_id: string
     vin: string
     color: string | null
     status: $Enums.VehicleStatus
@@ -1446,9 +1147,7 @@ readonly fields: VehicleFieldRefs;
 export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  inventory_location<T extends Prisma.InventoryLocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryLocationDefaultArgs<ExtArgs>>): Prisma.Prisma__InventoryLocationClient<runtime.Types.Result.GetResult<Prisma.$InventoryLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stock_movement<T extends Prisma.Vehicle$stock_movementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$stock_movementArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  serialize_movements<T extends Prisma.Vehicle$serialize_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$serialize_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SerializeMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sale_items<T extends Prisma.Vehicle$sale_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$sale_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1481,7 +1180,6 @@ export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.
 export interface VehicleFieldRefs {
   readonly id: Prisma.FieldRef<"Vehicle", 'String'>
   readonly product_id: Prisma.FieldRef<"Vehicle", 'String'>
-  readonly inventory_location_id: Prisma.FieldRef<"Vehicle", 'String'>
   readonly vin: Prisma.FieldRef<"Vehicle", 'String'>
   readonly color: Prisma.FieldRef<"Vehicle", 'String'>
   readonly status: Prisma.FieldRef<"Vehicle", 'VehicleStatus'>
@@ -1903,30 +1601,6 @@ export type Vehicle$stock_movementArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
-}
-
-/**
- * Vehicle.serialize_movements
- */
-export type Vehicle$serialize_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SerializeMovement
-   */
-  select?: Prisma.SerializeMovementSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the SerializeMovement
-   */
-  omit?: Prisma.SerializeMovementOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SerializeMovementInclude<ExtArgs> | null
-  where?: Prisma.SerializeMovementWhereInput
-  orderBy?: Prisma.SerializeMovementOrderByWithRelationInput | Prisma.SerializeMovementOrderByWithRelationInput[]
-  cursor?: Prisma.SerializeMovementWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SerializeMovementScalarFieldEnum | Prisma.SerializeMovementScalarFieldEnum[]
 }
 
 /**

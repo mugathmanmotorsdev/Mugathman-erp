@@ -60,20 +60,10 @@ export type Product = Prisma.ProductModel
  */
 export type Vehicle = Prisma.VehicleModel
 /**
- * Model InventoryLocation
- * 
- */
-export type InventoryLocation = Prisma.InventoryLocationModel
-/**
  * Model StockMovement
  * 
  */
 export type StockMovement = Prisma.StockMovementModel
-/**
- * Model SerializeMovement
- * 
- */
-export type SerializeMovement = Prisma.SerializeMovementModel
 /**
  * Model Sale
  * 
@@ -84,11 +74,6 @@ export type Sale = Prisma.SaleModel
  * 
  */
 export type SaleItem = Prisma.SaleItemModel
-/**
- * Model StockAdjustment
- * 
- */
-export type StockAdjustment = Prisma.StockAdjustmentModel
 /**
  * Model UserActivationToken
  * 

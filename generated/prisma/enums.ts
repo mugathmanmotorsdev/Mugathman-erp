@@ -74,15 +74,6 @@ export const StockMovementReason = {
 export type StockMovementReason = (typeof StockMovementReason)[keyof typeof StockMovementReason]
 
 
-export const ReferenceType = {
-  SALE: 'SALE',
-  PURCHASE: 'PURCHASE',
-  ADJUSTMENT: 'ADJUSTMENT'
-} as const
-
-export type ReferenceType = (typeof ReferenceType)[keyof typeof ReferenceType]
-
-
 export const SaleStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -90,23 +81,6 @@ export const SaleStatus = {
 } as const
 
 export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
-
-
-export const StockAdjustmentReason = {
-  DAMAGE: 'DAMAGE',
-  LOSS: 'LOSS',
-  COUNT_CORRECTION: 'COUNT_CORRECTION'
-} as const
-
-export type StockAdjustmentReason = (typeof StockAdjustmentReason)[keyof typeof StockAdjustmentReason]
-
-
-export const Department = {
-  FERTILIZER: 'FERTILIZER',
-  PLASTIC: 'PLASTIC'
-} as const
-
-export type Department = (typeof Department)[keyof typeof Department]
 
 
 export const JobStatus = {

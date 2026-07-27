@@ -37,13 +37,10 @@ export type StockMovementSumAggregateOutputType = {
 export type StockMovementMinAggregateOutputType = {
   id: string | null
   product_id: string | null
-  location_id: string | null
   vehicle_id: string | null
   quantity: number | null
   type: $Enums.StockMovementType | null
   reason: $Enums.StockMovementReason | null
-  reference_type: $Enums.ReferenceType | null
-  reference_id: string | null
   performed_by: string | null
   created_at: Date | null
 }
@@ -51,13 +48,10 @@ export type StockMovementMinAggregateOutputType = {
 export type StockMovementMaxAggregateOutputType = {
   id: string | null
   product_id: string | null
-  location_id: string | null
   vehicle_id: string | null
   quantity: number | null
   type: $Enums.StockMovementType | null
   reason: $Enums.StockMovementReason | null
-  reference_type: $Enums.ReferenceType | null
-  reference_id: string | null
   performed_by: string | null
   created_at: Date | null
 }
@@ -65,13 +59,10 @@ export type StockMovementMaxAggregateOutputType = {
 export type StockMovementCountAggregateOutputType = {
   id: number
   product_id: number
-  location_id: number
   vehicle_id: number
   quantity: number
   type: number
   reason: number
-  reference_type: number
-  reference_id: number
   performed_by: number
   created_at: number
   _all: number
@@ -89,13 +80,10 @@ export type StockMovementSumAggregateInputType = {
 export type StockMovementMinAggregateInputType = {
   id?: true
   product_id?: true
-  location_id?: true
   vehicle_id?: true
   quantity?: true
   type?: true
   reason?: true
-  reference_type?: true
-  reference_id?: true
   performed_by?: true
   created_at?: true
 }
@@ -103,13 +91,10 @@ export type StockMovementMinAggregateInputType = {
 export type StockMovementMaxAggregateInputType = {
   id?: true
   product_id?: true
-  location_id?: true
   vehicle_id?: true
   quantity?: true
   type?: true
   reason?: true
-  reference_type?: true
-  reference_id?: true
   performed_by?: true
   created_at?: true
 }
@@ -117,13 +102,10 @@ export type StockMovementMaxAggregateInputType = {
 export type StockMovementCountAggregateInputType = {
   id?: true
   product_id?: true
-  location_id?: true
   vehicle_id?: true
   quantity?: true
   type?: true
   reason?: true
-  reference_type?: true
-  reference_id?: true
   performed_by?: true
   created_at?: true
   _all?: true
@@ -218,13 +200,10 @@ export type StockMovementGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type StockMovementGroupByOutputType = {
   id: string
   product_id: string
-  location_id: string
   vehicle_id: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type: $Enums.ReferenceType | null
-  reference_id: string | null
   performed_by: string
   created_at: Date
   _count: StockMovementCountAggregateOutputType | null
@@ -255,39 +234,29 @@ export type StockMovementWhereInput = {
   NOT?: Prisma.StockMovementWhereInput | Prisma.StockMovementWhereInput[]
   id?: Prisma.StringFilter<"StockMovement"> | string
   product_id?: Prisma.StringFilter<"StockMovement"> | string
-  location_id?: Prisma.StringFilter<"StockMovement"> | string
   vehicle_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   quantity?: Prisma.IntFilter<"StockMovement"> | number
   type?: Prisma.EnumStockMovementTypeFilter<"StockMovement"> | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFilter<"StockMovement"> | $Enums.StockMovementReason
-  reference_type?: Prisma.EnumReferenceTypeNullableFilter<"StockMovement"> | $Enums.ReferenceType | null
-  reference_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   performed_by?: Prisma.StringFilter<"StockMovement"> | string
   created_at?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   vehicle?: Prisma.XOR<Prisma.VehicleNullableScalarRelationFilter, Prisma.VehicleWhereInput> | null
-  location?: Prisma.XOR<Prisma.InventoryLocationScalarRelationFilter, Prisma.InventoryLocationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  serialize_movements?: Prisma.SerializeMovementListRelationFilter
 }
 
 export type StockMovementOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  location_id?: Prisma.SortOrder
   vehicle_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   type?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  reference_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  reference_id?: Prisma.SortOrderInput | Prisma.SortOrder
   performed_by?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
   vehicle?: Prisma.VehicleOrderByWithRelationInput
-  location?: Prisma.InventoryLocationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
-  serialize_movements?: Prisma.SerializeMovementOrderByRelationAggregateInput
 }
 
 export type StockMovementWhereUniqueInput = Prisma.AtLeast<{
@@ -296,32 +265,24 @@ export type StockMovementWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StockMovementWhereInput[]
   NOT?: Prisma.StockMovementWhereInput | Prisma.StockMovementWhereInput[]
   product_id?: Prisma.StringFilter<"StockMovement"> | string
-  location_id?: Prisma.StringFilter<"StockMovement"> | string
   vehicle_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   quantity?: Prisma.IntFilter<"StockMovement"> | number
   type?: Prisma.EnumStockMovementTypeFilter<"StockMovement"> | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFilter<"StockMovement"> | $Enums.StockMovementReason
-  reference_type?: Prisma.EnumReferenceTypeNullableFilter<"StockMovement"> | $Enums.ReferenceType | null
-  reference_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   performed_by?: Prisma.StringFilter<"StockMovement"> | string
   created_at?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   vehicle?: Prisma.XOR<Prisma.VehicleNullableScalarRelationFilter, Prisma.VehicleWhereInput> | null
-  location?: Prisma.XOR<Prisma.InventoryLocationScalarRelationFilter, Prisma.InventoryLocationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  serialize_movements?: Prisma.SerializeMovementListRelationFilter
 }, "id">
 
 export type StockMovementOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  location_id?: Prisma.SortOrder
   vehicle_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   type?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  reference_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  reference_id?: Prisma.SortOrderInput | Prisma.SortOrder
   performed_by?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.StockMovementCountOrderByAggregateInput
@@ -337,13 +298,10 @@ export type StockMovementScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StockMovementScalarWhereWithAggregatesInput | Prisma.StockMovementScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"StockMovement"> | string
   product_id?: Prisma.StringWithAggregatesFilter<"StockMovement"> | string
-  location_id?: Prisma.StringWithAggregatesFilter<"StockMovement"> | string
   vehicle_id?: Prisma.StringNullableWithAggregatesFilter<"StockMovement"> | string | null
   quantity?: Prisma.IntWithAggregatesFilter<"StockMovement"> | number
   type?: Prisma.EnumStockMovementTypeWithAggregatesFilter<"StockMovement"> | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonWithAggregatesFilter<"StockMovement"> | $Enums.StockMovementReason
-  reference_type?: Prisma.EnumReferenceTypeNullableWithAggregatesFilter<"StockMovement"> | $Enums.ReferenceType | null
-  reference_id?: Prisma.StringNullableWithAggregatesFilter<"StockMovement"> | string | null
   performed_by?: Prisma.StringWithAggregatesFilter<"StockMovement"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"StockMovement"> | Date | string
 }
@@ -353,29 +311,21 @@ export type StockMovementCreateInput = {
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutStock_movementsInput
   vehicle?: Prisma.VehicleCreateNestedOneWithoutStock_movementInput
-  location: Prisma.InventoryLocationCreateNestedOneWithoutStock_movementsInput
   user: Prisma.UserCreateNestedOneWithoutStock_movementsInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementUncheckedCreateInput = {
   id?: string
   product_id: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementUpdateInput = {
@@ -383,41 +333,30 @@ export type StockMovementUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutStock_movementsNestedInput
   vehicle?: Prisma.VehicleUpdateOneWithoutStock_movementNestedInput
-  location?: Prisma.InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutStock_movementsNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementCreateManyInput = {
   id?: string
   product_id: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
 }
@@ -427,21 +366,16 @@ export type StockMovementUpdateManyMutationInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StockMovementUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -459,13 +393,10 @@ export type StockMovementOrderByRelationAggregateInput = {
 export type StockMovementCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  location_id?: Prisma.SortOrder
   vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   type?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  reference_type?: Prisma.SortOrder
-  reference_id?: Prisma.SortOrder
   performed_by?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -477,13 +408,10 @@ export type StockMovementAvgOrderByAggregateInput = {
 export type StockMovementMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  location_id?: Prisma.SortOrder
   vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   type?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  reference_type?: Prisma.SortOrder
-  reference_id?: Prisma.SortOrder
   performed_by?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -491,24 +419,16 @@ export type StockMovementMaxOrderByAggregateInput = {
 export type StockMovementMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
-  location_id?: Prisma.SortOrder
   vehicle_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   type?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  reference_type?: Prisma.SortOrder
-  reference_id?: Prisma.SortOrder
   performed_by?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
 export type StockMovementSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
-}
-
-export type StockMovementScalarRelationFilter = {
-  is?: Prisma.StockMovementWhereInput
-  isNot?: Prisma.StockMovementWhereInput
 }
 
 export type StockMovementCreateNestedManyWithoutUserInput = {
@@ -637,48 +557,6 @@ export type StockMovementUncheckedUpdateManyWithoutVehicleNestedInput = {
   deleteMany?: Prisma.StockMovementScalarWhereInput | Prisma.StockMovementScalarWhereInput[]
 }
 
-export type StockMovementCreateNestedManyWithoutLocationInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput> | Prisma.StockMovementCreateWithoutLocationInput[] | Prisma.StockMovementUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutLocationInput | Prisma.StockMovementCreateOrConnectWithoutLocationInput[]
-  createMany?: Prisma.StockMovementCreateManyLocationInputEnvelope
-  connect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-}
-
-export type StockMovementUncheckedCreateNestedManyWithoutLocationInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput> | Prisma.StockMovementCreateWithoutLocationInput[] | Prisma.StockMovementUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutLocationInput | Prisma.StockMovementCreateOrConnectWithoutLocationInput[]
-  createMany?: Prisma.StockMovementCreateManyLocationInputEnvelope
-  connect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-}
-
-export type StockMovementUpdateManyWithoutLocationNestedInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput> | Prisma.StockMovementCreateWithoutLocationInput[] | Prisma.StockMovementUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutLocationInput | Prisma.StockMovementCreateOrConnectWithoutLocationInput[]
-  upsert?: Prisma.StockMovementUpsertWithWhereUniqueWithoutLocationInput | Prisma.StockMovementUpsertWithWhereUniqueWithoutLocationInput[]
-  createMany?: Prisma.StockMovementCreateManyLocationInputEnvelope
-  set?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  disconnect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  delete?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  connect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  update?: Prisma.StockMovementUpdateWithWhereUniqueWithoutLocationInput | Prisma.StockMovementUpdateWithWhereUniqueWithoutLocationInput[]
-  updateMany?: Prisma.StockMovementUpdateManyWithWhereWithoutLocationInput | Prisma.StockMovementUpdateManyWithWhereWithoutLocationInput[]
-  deleteMany?: Prisma.StockMovementScalarWhereInput | Prisma.StockMovementScalarWhereInput[]
-}
-
-export type StockMovementUncheckedUpdateManyWithoutLocationNestedInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput> | Prisma.StockMovementCreateWithoutLocationInput[] | Prisma.StockMovementUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutLocationInput | Prisma.StockMovementCreateOrConnectWithoutLocationInput[]
-  upsert?: Prisma.StockMovementUpsertWithWhereUniqueWithoutLocationInput | Prisma.StockMovementUpsertWithWhereUniqueWithoutLocationInput[]
-  createMany?: Prisma.StockMovementCreateManyLocationInputEnvelope
-  set?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  disconnect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  delete?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  connect?: Prisma.StockMovementWhereUniqueInput | Prisma.StockMovementWhereUniqueInput[]
-  update?: Prisma.StockMovementUpdateWithWhereUniqueWithoutLocationInput | Prisma.StockMovementUpdateWithWhereUniqueWithoutLocationInput[]
-  updateMany?: Prisma.StockMovementUpdateManyWithWhereWithoutLocationInput | Prisma.StockMovementUpdateManyWithWhereWithoutLocationInput[]
-  deleteMany?: Prisma.StockMovementScalarWhereInput | Prisma.StockMovementScalarWhereInput[]
-}
-
 export type EnumStockMovementTypeFieldUpdateOperationsInput = {
   set?: $Enums.StockMovementType
 }
@@ -687,50 +565,24 @@ export type EnumStockMovementReasonFieldUpdateOperationsInput = {
   set?: $Enums.StockMovementReason
 }
 
-export type NullableEnumReferenceTypeFieldUpdateOperationsInput = {
-  set?: $Enums.ReferenceType | null
-}
-
-export type StockMovementCreateNestedOneWithoutSerialize_movementsInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedCreateWithoutSerialize_movementsInput>
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutSerialize_movementsInput
-  connect?: Prisma.StockMovementWhereUniqueInput
-}
-
-export type StockMovementUpdateOneRequiredWithoutSerialize_movementsNestedInput = {
-  create?: Prisma.XOR<Prisma.StockMovementCreateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedCreateWithoutSerialize_movementsInput>
-  connectOrCreate?: Prisma.StockMovementCreateOrConnectWithoutSerialize_movementsInput
-  upsert?: Prisma.StockMovementUpsertWithoutSerialize_movementsInput
-  connect?: Prisma.StockMovementWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StockMovementUpdateToOneWithWhereWithoutSerialize_movementsInput, Prisma.StockMovementUpdateWithoutSerialize_movementsInput>, Prisma.StockMovementUncheckedUpdateWithoutSerialize_movementsInput>
-}
-
 export type StockMovementCreateWithoutUserInput = {
   id?: string
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutStock_movementsInput
   vehicle?: Prisma.VehicleCreateNestedOneWithoutStock_movementInput
-  location: Prisma.InventoryLocationCreateNestedOneWithoutStock_movementsInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementUncheckedCreateWithoutUserInput = {
   id?: string
   product_id: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementCreateOrConnectWithoutUserInput = {
@@ -765,13 +617,10 @@ export type StockMovementScalarWhereInput = {
   NOT?: Prisma.StockMovementScalarWhereInput | Prisma.StockMovementScalarWhereInput[]
   id?: Prisma.StringFilter<"StockMovement"> | string
   product_id?: Prisma.StringFilter<"StockMovement"> | string
-  location_id?: Prisma.StringFilter<"StockMovement"> | string
   vehicle_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   quantity?: Prisma.IntFilter<"StockMovement"> | number
   type?: Prisma.EnumStockMovementTypeFilter<"StockMovement"> | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFilter<"StockMovement"> | $Enums.StockMovementReason
-  reference_type?: Prisma.EnumReferenceTypeNullableFilter<"StockMovement"> | $Enums.ReferenceType | null
-  reference_id?: Prisma.StringNullableFilter<"StockMovement"> | string | null
   performed_by?: Prisma.StringFilter<"StockMovement"> | string
   created_at?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
 }
@@ -781,27 +630,19 @@ export type StockMovementCreateWithoutProductInput = {
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
   vehicle?: Prisma.VehicleCreateNestedOneWithoutStock_movementInput
-  location: Prisma.InventoryLocationCreateNestedOneWithoutStock_movementsInput
   user: Prisma.UserCreateNestedOneWithoutStock_movementsInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementUncheckedCreateWithoutProductInput = {
   id?: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementCreateOrConnectWithoutProductInput = {
@@ -835,27 +676,19 @@ export type StockMovementCreateWithoutVehicleInput = {
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutStock_movementsInput
-  location: Prisma.InventoryLocationCreateNestedOneWithoutStock_movementsInput
   user: Prisma.UserCreateNestedOneWithoutStock_movementsInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementUncheckedCreateWithoutVehicleInput = {
   id?: string
   product_id: string
-  location_id: string
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutStock_movementInput
 }
 
 export type StockMovementCreateOrConnectWithoutVehicleInput = {
@@ -884,142 +717,13 @@ export type StockMovementUpdateManyWithWhereWithoutVehicleInput = {
   data: Prisma.XOR<Prisma.StockMovementUpdateManyMutationInput, Prisma.StockMovementUncheckedUpdateManyWithoutVehicleInput>
 }
 
-export type StockMovementCreateWithoutLocationInput = {
-  id?: string
-  quantity: number
-  type: $Enums.StockMovementType
-  reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
-  created_at?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutStock_movementsInput
-  vehicle?: Prisma.VehicleCreateNestedOneWithoutStock_movementInput
-  user: Prisma.UserCreateNestedOneWithoutStock_movementsInput
-  serialize_movements?: Prisma.SerializeMovementCreateNestedManyWithoutStock_movementInput
-}
-
-export type StockMovementUncheckedCreateWithoutLocationInput = {
-  id?: string
-  product_id: string
-  vehicle_id?: string | null
-  quantity: number
-  type: $Enums.StockMovementType
-  reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
-  performed_by: string
-  created_at?: Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedCreateNestedManyWithoutStock_movementInput
-}
-
-export type StockMovementCreateOrConnectWithoutLocationInput = {
-  where: Prisma.StockMovementWhereUniqueInput
-  create: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput>
-}
-
-export type StockMovementCreateManyLocationInputEnvelope = {
-  data: Prisma.StockMovementCreateManyLocationInput | Prisma.StockMovementCreateManyLocationInput[]
-  skipDuplicates?: boolean
-}
-
-export type StockMovementUpsertWithWhereUniqueWithoutLocationInput = {
-  where: Prisma.StockMovementWhereUniqueInput
-  update: Prisma.XOR<Prisma.StockMovementUpdateWithoutLocationInput, Prisma.StockMovementUncheckedUpdateWithoutLocationInput>
-  create: Prisma.XOR<Prisma.StockMovementCreateWithoutLocationInput, Prisma.StockMovementUncheckedCreateWithoutLocationInput>
-}
-
-export type StockMovementUpdateWithWhereUniqueWithoutLocationInput = {
-  where: Prisma.StockMovementWhereUniqueInput
-  data: Prisma.XOR<Prisma.StockMovementUpdateWithoutLocationInput, Prisma.StockMovementUncheckedUpdateWithoutLocationInput>
-}
-
-export type StockMovementUpdateManyWithWhereWithoutLocationInput = {
-  where: Prisma.StockMovementScalarWhereInput
-  data: Prisma.XOR<Prisma.StockMovementUpdateManyMutationInput, Prisma.StockMovementUncheckedUpdateManyWithoutLocationInput>
-}
-
-export type StockMovementCreateWithoutSerialize_movementsInput = {
-  id?: string
-  quantity: number
-  type: $Enums.StockMovementType
-  reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
-  created_at?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutStock_movementsInput
-  vehicle?: Prisma.VehicleCreateNestedOneWithoutStock_movementInput
-  location: Prisma.InventoryLocationCreateNestedOneWithoutStock_movementsInput
-  user: Prisma.UserCreateNestedOneWithoutStock_movementsInput
-}
-
-export type StockMovementUncheckedCreateWithoutSerialize_movementsInput = {
-  id?: string
-  product_id: string
-  location_id: string
-  vehicle_id?: string | null
-  quantity: number
-  type: $Enums.StockMovementType
-  reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
-  performed_by: string
-  created_at?: Date | string
-}
-
-export type StockMovementCreateOrConnectWithoutSerialize_movementsInput = {
-  where: Prisma.StockMovementWhereUniqueInput
-  create: Prisma.XOR<Prisma.StockMovementCreateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedCreateWithoutSerialize_movementsInput>
-}
-
-export type StockMovementUpsertWithoutSerialize_movementsInput = {
-  update: Prisma.XOR<Prisma.StockMovementUpdateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedUpdateWithoutSerialize_movementsInput>
-  create: Prisma.XOR<Prisma.StockMovementCreateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedCreateWithoutSerialize_movementsInput>
-  where?: Prisma.StockMovementWhereInput
-}
-
-export type StockMovementUpdateToOneWithWhereWithoutSerialize_movementsInput = {
-  where?: Prisma.StockMovementWhereInput
-  data: Prisma.XOR<Prisma.StockMovementUpdateWithoutSerialize_movementsInput, Prisma.StockMovementUncheckedUpdateWithoutSerialize_movementsInput>
-}
-
-export type StockMovementUpdateWithoutSerialize_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
-  reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutStock_movementsNestedInput
-  vehicle?: Prisma.VehicleUpdateOneWithoutStock_movementNestedInput
-  location?: Prisma.InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutStock_movementsNestedInput
-}
-
-export type StockMovementUncheckedUpdateWithoutSerialize_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
-  reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performed_by?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type StockMovementCreateManyUserInput = {
   id?: string
   product_id: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   created_at?: Date | string
 }
 
@@ -1028,51 +732,37 @@ export type StockMovementUpdateWithoutUserInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutStock_movementsNestedInput
   vehicle?: Prisma.VehicleUpdateOneWithoutStock_movementNestedInput
-  location?: Prisma.InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StockMovementCreateManyProductInput = {
   id?: string
-  location_id: string
   vehicle_id?: string | null
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
 }
@@ -1082,38 +772,27 @@ export type StockMovementUpdateWithoutProductInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle?: Prisma.VehicleUpdateOneWithoutStock_movementNestedInput
-  location?: Prisma.InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutStock_movementsNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1121,12 +800,9 @@ export type StockMovementUncheckedUpdateManyWithoutProductInput = {
 export type StockMovementCreateManyVehicleInput = {
   id?: string
   product_id: string
-  location_id: string
   quantity: number
   type: $Enums.StockMovementType
   reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
   performed_by: string
   created_at?: Date | string
 }
@@ -1136,216 +812,100 @@ export type StockMovementUpdateWithoutVehicleInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutStock_movementsNestedInput
-  location?: Prisma.InventoryLocationUpdateOneRequiredWithoutStock_movementsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutStock_movementsNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateWithoutVehicleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutStock_movementNestedInput
 }
 
 export type StockMovementUncheckedUpdateManyWithoutVehicleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
   reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   performed_by?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type StockMovementCreateManyLocationInput = {
-  id?: string
-  product_id: string
-  vehicle_id?: string | null
-  quantity: number
-  type: $Enums.StockMovementType
-  reason: $Enums.StockMovementReason
-  reference_type?: $Enums.ReferenceType | null
-  reference_id?: string | null
-  performed_by: string
-  created_at?: Date | string
-}
-
-export type StockMovementUpdateWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
-  reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutStock_movementsNestedInput
-  vehicle?: Prisma.VehicleUpdateOneWithoutStock_movementNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutStock_movementsNestedInput
-  serialize_movements?: Prisma.SerializeMovementUpdateManyWithoutStock_movementNestedInput
-}
-
-export type StockMovementUncheckedUpdateWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
-  reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performed_by?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serialize_movements?: Prisma.SerializeMovementUncheckedUpdateManyWithoutStock_movementNestedInput
-}
-
-export type StockMovementUncheckedUpdateManyWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  product_id?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicle_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumStockMovementTypeFieldUpdateOperationsInput | $Enums.StockMovementType
-  reason?: Prisma.EnumStockMovementReasonFieldUpdateOperationsInput | $Enums.StockMovementReason
-  reference_type?: Prisma.NullableEnumReferenceTypeFieldUpdateOperationsInput | $Enums.ReferenceType | null
-  reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performed_by?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-
-/**
- * Count Type StockMovementCountOutputType
- */
-
-export type StockMovementCountOutputType = {
-  serialize_movements: number
-}
-
-export type StockMovementCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  serialize_movements?: boolean | StockMovementCountOutputTypeCountSerialize_movementsArgs
-}
-
-/**
- * StockMovementCountOutputType without action
- */
-export type StockMovementCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the StockMovementCountOutputType
-   */
-  select?: Prisma.StockMovementCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * StockMovementCountOutputType without action
- */
-export type StockMovementCountOutputTypeCountSerialize_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SerializeMovementWhereInput
-}
 
 
 export type StockMovementSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  location_id?: boolean
   vehicle_id?: boolean
   quantity?: boolean
   type?: boolean
   reason?: boolean
-  reference_type?: boolean
-  reference_id?: boolean
   performed_by?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  serialize_movements?: boolean | Prisma.StockMovement$serialize_movementsArgs<ExtArgs>
-  _count?: boolean | Prisma.StockMovementCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockMovement"]>
 
 export type StockMovementSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  location_id?: boolean
   vehicle_id?: boolean
   quantity?: boolean
   type?: boolean
   reason?: boolean
-  reference_type?: boolean
-  reference_id?: boolean
   performed_by?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockMovement"]>
 
 export type StockMovementSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   product_id?: boolean
-  location_id?: boolean
   vehicle_id?: boolean
   quantity?: boolean
   type?: boolean
   reason?: boolean
-  reference_type?: boolean
-  reference_id?: boolean
   performed_by?: boolean
   created_at?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockMovement"]>
 
 export type StockMovementSelectScalar = {
   id?: boolean
   product_id?: boolean
-  location_id?: boolean
   vehicle_id?: boolean
   quantity?: boolean
   type?: boolean
   reason?: boolean
-  reference_type?: boolean
-  reference_id?: boolean
   performed_by?: boolean
   created_at?: boolean
 }
 
-export type StockMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "product_id" | "location_id" | "vehicle_id" | "quantity" | "type" | "reason" | "reference_type" | "reference_id" | "performed_by" | "created_at", ExtArgs["result"]["stockMovement"]>
+export type StockMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "product_id" | "vehicle_id" | "quantity" | "type" | "reason" | "performed_by" | "created_at", ExtArgs["result"]["stockMovement"]>
 export type StockMovementInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  serialize_movements?: boolean | Prisma.StockMovement$serialize_movementsArgs<ExtArgs>
-  _count?: boolean | Prisma.StockMovementCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StockMovementIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type StockMovementIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.StockMovement$vehicleArgs<ExtArgs>
-  location?: boolean | Prisma.InventoryLocationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -1354,20 +914,15 @@ export type $StockMovementPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     product: Prisma.$ProductPayload<ExtArgs>
     vehicle: Prisma.$VehiclePayload<ExtArgs> | null
-    location: Prisma.$InventoryLocationPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
-    serialize_movements: Prisma.$SerializeMovementPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     product_id: string
-    location_id: string
     vehicle_id: string | null
     quantity: number
     type: $Enums.StockMovementType
     reason: $Enums.StockMovementReason
-    reference_type: $Enums.ReferenceType | null
-    reference_id: string | null
     performed_by: string
     created_at: Date
   }, ExtArgs["result"]["stockMovement"]>
@@ -1766,9 +1321,7 @@ export interface Prisma__StockMovementClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   vehicle<T extends Prisma.StockMovement$vehicleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockMovement$vehicleArgs<ExtArgs>>): Prisma.Prisma__VehicleClient<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  location<T extends Prisma.InventoryLocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryLocationDefaultArgs<ExtArgs>>): Prisma.Prisma__InventoryLocationClient<runtime.Types.Result.GetResult<Prisma.$InventoryLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  serialize_movements<T extends Prisma.StockMovement$serialize_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockMovement$serialize_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SerializeMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1800,13 +1353,10 @@ export interface Prisma__StockMovementClient<T, Null = never, ExtArgs extends ru
 export interface StockMovementFieldRefs {
   readonly id: Prisma.FieldRef<"StockMovement", 'String'>
   readonly product_id: Prisma.FieldRef<"StockMovement", 'String'>
-  readonly location_id: Prisma.FieldRef<"StockMovement", 'String'>
   readonly vehicle_id: Prisma.FieldRef<"StockMovement", 'String'>
   readonly quantity: Prisma.FieldRef<"StockMovement", 'Int'>
   readonly type: Prisma.FieldRef<"StockMovement", 'StockMovementType'>
   readonly reason: Prisma.FieldRef<"StockMovement", 'StockMovementReason'>
-  readonly reference_type: Prisma.FieldRef<"StockMovement", 'ReferenceType'>
-  readonly reference_id: Prisma.FieldRef<"StockMovement", 'String'>
   readonly performed_by: Prisma.FieldRef<"StockMovement", 'String'>
   readonly created_at: Prisma.FieldRef<"StockMovement", 'DateTime'>
 }
@@ -2221,30 +1771,6 @@ export type StockMovement$vehicleArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   include?: Prisma.VehicleInclude<ExtArgs> | null
   where?: Prisma.VehicleWhereInput
-}
-
-/**
- * StockMovement.serialize_movements
- */
-export type StockMovement$serialize_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SerializeMovement
-   */
-  select?: Prisma.SerializeMovementSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the SerializeMovement
-   */
-  omit?: Prisma.SerializeMovementOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SerializeMovementInclude<ExtArgs> | null
-  where?: Prisma.SerializeMovementWhereInput
-  orderBy?: Prisma.SerializeMovementOrderByWithRelationInput | Prisma.SerializeMovementOrderByWithRelationInput[]
-  cursor?: Prisma.SerializeMovementWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SerializeMovementScalarFieldEnum | Prisma.SerializeMovementScalarFieldEnum[]
 }
 
 /**
