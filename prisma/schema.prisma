@@ -27,7 +27,6 @@ model User {
   role                 Role
   stock_movements      StockMovement[]
   sales                Sale[]
-  stock_adjustments    StockAdjustment[]
   userActivationTokens UserActivationToken[]
   resetPasswordTokens  ResetPasswordToken[]
 
@@ -66,65 +65,35 @@ model Product {
 }
 
 model Vehicle {
-  id                    String        @id @default(uuid())
-  product_id            String
-  inventory_location_id String
-  vin                   String        @unique
-  color                 String?
-  status                VehicleStatus
-  created_at            DateTime      @default(now())
+  id          String     @id @default(uuid())
+  product_id  String
+  vin         String     @unique
+  color       String?
+  status      VehicleStatus
+  created_at  DateTime   @default(now())
 
   product             Product             @relation(fields: [product_id], references: [id])
-  inventory_location  InventoryLocation   @relation(fields: [inventory_location_id], references: [id])
   stock_movement      StockMovement[]
-  serialize_movements SerializeMovement[]
   sale_items          SaleItem[]
 
   @@map("vehicles")
 }
 
-model InventoryLocation {
-  id        String  @id @default(uuid())
-  name      String
-  is_active Boolean @default(true)
-
-  stock_movements StockMovement[]
-  vehicles        Vehicle[]
-
-  @@map("inventory_locations")
-}
-
 model StockMovement {
-  id             String              @id @default(uuid())
-  product_id     String
-  location_id    String
-  vehicle_id     String?
-  quantity       Int
-  type           StockMovementType
-  reason         StockMovementReason
-  reference_type ReferenceType?
-  reference_id   String?
-  performed_by   String
-  created_at     DateTime            @default(now())
+  id           String              @id @default(uuid())
+  product_id   String
+  vehicle_id   String?
+  quantity     Int
+  type         StockMovementType
+  reason       StockMovementReason
+  performed_by String
+  created_at   DateTime            @default(now())
 
-  product             Product             @relation(fields: [product_id], references: [id])
-  vehicle             Vehicle?            @relation(fields: [vehicle_id], references: [id])
-  location            InventoryLocation   @relation(fields: [location_id], references: [id])
-  user                User                @relation(fields: [performed_by], references: [id])
-  serialize_movements SerializeMovement[]
+  product Product            @relation(fields: [product_id], references: [id])
+  vehicle Vehicle?           @relation(fields: [vehicle_id], references: [id])
+  user    User               @relation(fields: [performed_by], references: [id])
 
   @@map("stock_movements")
-}
-
-model SerializeMovement {
-  id                String @id @default(uuid())
-  stock_movement_id String
-  vehicle_id        String
-
-  stock_movement StockMovement @relation(fields: [stock_movement_id], references: [id])
-  vehicle        Vehicle       @relation(fields: [vehicle_id], references: [id])
-
-  @@map("serialize_movements")
 }
 
 model Sale {
@@ -155,18 +124,6 @@ model SaleItem {
   vehicle Vehicle? @relation(fields: [vehicle_id], references: [id])
 
   @@map("sale_items")
-}
-
-model StockAdjustment {
-  id         String                @id @default(uuid())
-  reason     StockAdjustmentReason
-  notes      String?
-  created_by String
-  created_at DateTime              @default(now())
-
-  user User @relation(fields: [created_by], references: [id])
-
-  @@map("stock_adjustments")
 }
 
 model UserActivationToken {
@@ -253,27 +210,10 @@ enum StockMovementReason {
   ADJUSTMENT
 }
 
-enum ReferenceType {
-  SALE
-  PURCHASE
-  ADJUSTMENT
-}
-
 enum SaleStatus {
   PENDING
   COMPLETED
   CANCELLED
-}
-
-enum StockAdjustmentReason {
-  DAMAGE
-  LOSS
-  COUNT_CORRECTION
-}
-
-enum Department {
-  FERTILIZER
-  PLASTIC
 }
 
 enum JobStatus {
@@ -297,7 +237,6 @@ model Lead {
   organization        String?
   product_of_interest String?
   message             String?
-  notes               String?
   status              LeadStatus @default(NEW)
   meta_conversion_id  String?
   created_at          DateTime   @default(now())

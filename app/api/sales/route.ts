@@ -1,6 +1,7 @@
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { getSale, getSales } from "@/lib/actions/sales";
+import { findOrCreateCustomer } from "@/lib/actions/customer";
 import prisma from "@/lib/prisma";
 
 
@@ -75,26 +76,10 @@ export async function POST(request: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       let final_customer_id = customer_id;
 
-      // 1. Create Customer if details provided
+      // 1. Create or find Customer if details provided
       if (!final_customer_id && customer_details) {
-        // Check if customer with phone exists
-        const existing = await tx.customer.findUnique({
-          where: { phone: customer_details.phone },
-        });
-
-        if (existing) {
-          final_customer_id = existing.id;
-        } else {
-          const newCustomer = await tx.customer.create({
-            data: {
-              full_name: customer_details.full_name,
-              phone: customer_details.phone,
-              email: customer_details.email,
-              address: customer_details.address,
-            },
-          });
-          final_customer_id = newCustomer.id;
-        }
+        const customer = await findOrCreateCustomer(customer_details);
+        final_customer_id = customer.id;
       }
 
       // 2. Create the Sale
@@ -109,7 +94,7 @@ export async function POST(request: NextRequest) {
 
       // 2. Process each SaleItem
       for (const item of items) {
-        const { product_id, quantity, unit_price, vehicle_id, location_id } =
+        const { product_id, quantity, unit_price, vehicle_id } =
           item;
 
         // Create SaleItem
@@ -127,13 +112,10 @@ export async function POST(request: NextRequest) {
         await tx.stockMovement.create({
           data: {
             product_id,
-            location_id,
             vehicle_id: vehicle_id || null,
             quantity: -Math.abs(Number(quantity)),
             type: "OUT",
             reason: "SALE",
-            reference_type: "SALE",
-            reference_id: sale.id,
             performed_by: user.id,
           },
         });

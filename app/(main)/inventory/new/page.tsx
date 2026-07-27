@@ -37,7 +37,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import type { Product } from "@/types/product";
-import type { Vehicle, InventoryLocation as Location } from "@/generated/prisma/client";
+import type { Vehicle } from "@/generated/prisma/client";
 
 export default function NewMovementPage() {
   const router = useRouter();
@@ -47,20 +47,16 @@ export default function NewMovementPage() {
   const [fetchingVehicles, setFetchingVehicles] = useState(false);
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
   const [availableVehicles, setAvailableVehicles] = useState<Vehicle[]>([]);
 
   const [movementType, setMovementType] = useState<"IN" | "OUT">("IN");
   const [formData, setFormData] = useState({
     product_id: "",
-    location_id: "",
     vehicle_id: "",
     new_vin: "",
     color: "",
     quantity: "1",
     reason: "",
-    reference_type: "",
-    reference_id: "",
   });
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -69,25 +65,16 @@ export default function NewMovementPage() {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [prodRes, locRes] = await Promise.all([
-          fetch("/api/products"),
-          fetch("/api/inventory/locations"),
-        ]);
-
+        const prodRes = await fetch("/api/products");
         if (prodRes.ok) {
           const data = await prodRes.json();
           setProducts(data.products || []);
         }
-        if (locRes.ok) {
-          const data = await locRes.json();
-          setLocations(data || []);
-        }
       } catch (error) {
         console.error("Error loading data", error);
-        toast.error("Failed to load products or locations");
+        toast.error("Failed to load products");
       } finally {
         setFetchingProducts(false);
-        setFetchingLocations(false);
       }
     };
 
@@ -144,7 +131,6 @@ export default function NewMovementPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product_id: formData.product_id,
-          location_id: formData.location_id,
           vehicle_id: formData.vehicle_id,
           new_vin: formData.new_vin || undefined,
           color: formData.color || undefined,
@@ -154,8 +140,6 @@ export default function NewMovementPage() {
               : Math.abs(Number(formData.quantity)),
           reason: formData.reason,
           movement_type: movementType,
-          reference_type: formData.reference_type,
-          reference_id: formData.reference_id,
         }),
       });
 
@@ -182,12 +166,6 @@ export default function NewMovementPage() {
     { label: "Sale", value: "SALE" },
     { label: "Damage", value: "DAMAGE" },
     { label: "Adjustment", value: "ADJUSTMENT" },
-  ];
-
-  const refTypes = [
-    { label: "Purchase Order", value: "PURCHASE" },
-    { label: "Sales Order", value: "SALE" },
-    { label: "Stock Adjustment", value: "ADJUSTMENT" },
   ];
 
   return (
