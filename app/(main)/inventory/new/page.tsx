@@ -59,7 +59,7 @@ export default function NewMovementPage() {
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Fetch products and locations on mount
+  // Fetch products on mount
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -502,7 +502,6 @@ export default function NewMovementPage() {
                   disabled={
                     loading ||
                     !formData.product_id ||
-                    !formData.location_id ||
                     !formData.reason
                   }
                   onClick={handleSubmit}
