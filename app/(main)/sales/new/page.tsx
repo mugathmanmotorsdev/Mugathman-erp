@@ -37,7 +37,7 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Product } from "@/types/product";
-import type { Customer, Vehicle, InventoryLocation as Location } from "@/generated/prisma/client";
+import type { Customer, Vehicle } from "@/generated/prisma/client";
 import type { SaleItem } from "@/types/sale";
 
 export default function NewSalePage() {
@@ -46,7 +46,6 @@ export default function NewSalePage() {
   const [fetchingData, setFetchingData] = useState(true);
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [availableVehicles, setAvailableVehicles] = useState<Vehicle[]>([]);
 
@@ -66,9 +65,8 @@ export default function NewSalePage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [prodRes, locRes, custRes, vehRes] = await Promise.all([
+        const [prodRes, custRes, vehRes] = await Promise.all([
           fetch("/api/products"),
-          fetch("/api/inventory/locations"),
           fetch("/api/customers"),
           fetch("/api/products/vehicle"),
         ]);
@@ -76,10 +74,6 @@ export default function NewSalePage() {
         if (prodRes.ok) {
           const data = await prodRes.json();
           setProducts(data.products || []);
-        }
-        if (locRes.ok) {
-          const data = await locRes.json();
-          setLocations(data || []);
         }
         if (custRes.ok) {
           const data = await custRes.json();
@@ -104,7 +98,6 @@ export default function NewSalePage() {
     const item: SaleItem = {
       id: Math.random().toString(36).substr(2, 9),
       product_id: "",
-      location_id: locations[0]?.id || "",
       vehicle_id: "",
       quantity: 1,
       unit_price: 0,
@@ -129,6 +122,10 @@ export default function NewSalePage() {
               updated.tracking_type = prod.tracking_type;
               updated.vehicle_id = "";
               updated.vin = "";
+              // Reset quantity to 1 for serial items to ensure proper tracking
+              if (prod.tracking_type === "SERIAL") {
+                updated.quantity = 1;
+              }
             }
           }
 
@@ -167,7 +164,6 @@ export default function NewSalePage() {
     // Check if all items are valid
     const invalidItem = saleItems.find(item =>
       !item.product_id ||
-      !item.location_id ||
       (item.tracking_type === "SERIAL" && !item.vehicle_id) ||
       item.quantity <= 0
     );
@@ -184,7 +180,7 @@ export default function NewSalePage() {
         customer_details: customerMode === "new" ? newCustomer : null,
         items: saleItems.map((item) => ({
           product_id: item.product_id,
-          location_id: item.location_id,
+          location_id: "TEMP_LOCATION_ID", // Placeholder until location model is properly implemented
           vehicle_id: item.vehicle_id || null,
           quantity: item.quantity,
           unit_price: item.unit_price,
@@ -422,25 +418,11 @@ export default function NewSalePage() {
                             </Select>
                           </td>
                           <td className="px-6 py-4 space-y-2">
-                            <Select
-                              value={item.location_id}
-                              onValueChange={(val) => updateItem(item.id, { location_id: val })}
-                            >
-                              <SelectTrigger className="h-9 border-slate-100 rounded-lg bg-slate-50/50 text-xs">
-                                <SelectValue placeholder="Warehouse" />
-                              </SelectTrigger>
-                              <SelectContent className="rounded-xl">
-                                {locations.map((l) => (
-                                  <SelectItem key={l.id} value={l.id} className="text-xs">
-                                    {l.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            {/* Location dropdown removed due to InventoryLocation model simplification */}
 
                             {item.tracking_type === "SERIAL" && (
                               <Select
-                                value={item.vehicle_id}
+                                value={item.vehicle_id || ""}
                                 onValueChange={(val) => updateItem(item.id, { vehicle_id: val })}
                               >
                                 <SelectTrigger className="h-9 border-indigo-100 rounded-lg bg-indigo-50/30 text-xs font-mono font-bold text-indigo-700">

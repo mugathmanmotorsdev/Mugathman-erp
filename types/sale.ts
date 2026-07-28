@@ -1,9 +1,9 @@
 import type { Prisma, SaleItem as SaleItemPrisma } from "@/generated/prisma/client";
 
-export type Sale = Prisma.SaleGetPayload<{ 
-  include: { 
-    customer: true, 
-    user: true,  
+export type Sale = Prisma.SaleGetPayload<{
+  include: {
+    customer: true,
+    user: true,
     sale_items: {
       include: {
         product: true,
@@ -23,4 +23,5 @@ export interface SaleItem extends Omit<SaleItemPrisma, 'sale_id' | 'unit_price'>
   unit_price: number | Prisma.Decimal;
   product_name: string;
   tracking_type: string;
+  vin?: string;  // Add vin property for SERIAL tracking items
 }
