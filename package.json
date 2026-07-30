@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm run migrate:prod && next build --turbopack",
+    "build": "if [ \"$PRISMA_MIGRATE_ON_BUILD\" != \"true\" ]; then echo \"⏭  Skipping migrations — PRISMA_MIGRATE_ON_BUILD is not set to 'true'\"; else npm run migrate:prod; fi && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "prisma:generate": "prisma generate",

@@ -1405,6 +1405,7 @@ export const LeadScalarFieldEnum = {
   organization: 'organization',
   product_of_interest: 'product_of_interest',
   message: 'message',
+  notes: 'notes',
   status: 'status',
   meta_conversion_id: 'meta_conversion_id',
   created_at: 'created_at',

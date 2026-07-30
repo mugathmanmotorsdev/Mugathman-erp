@@ -237,6 +237,7 @@ model Lead {
   organization        String?
   product_of_interest String?
   message             String?
+  notes               String?
   status              LeadStatus @default(NEW)
   meta_conversion_id  String?
   created_at          DateTime   @default(now())
