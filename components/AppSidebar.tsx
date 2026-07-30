@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Package, LogOut, User, ShoppingCart, Users, UserCheck } from "lucide-react"
+import { Home, Package, LogOut, User, ShoppingCart, Users, UserCheck, FileText } from "lucide-react"
 import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
 import {
@@ -33,6 +33,7 @@ export function AppSidebar() {
     { href: "/", label: "Dashboard", icon: Home, external: false, adminOnly: false },
     { href: "/inventory", label: "Inventory", icon: Package, external: false, adminOnly: false },
     { href: "/sales", label: "Sales", icon: ShoppingCart, external: false, adminOnly: false },
+    { href: "/invoices", label: "Invoices", icon: FileText, external: false, adminOnly: false },
     { href: "/customers", label: "Customers", icon: Users, external: false, adminOnly: false },
     { href: "/leads", label: "Leads", icon: UserCheck, external: false, adminOnly: false },
     { href: "/users", label: "Users", icon: User, external: false, adminOnly: true },

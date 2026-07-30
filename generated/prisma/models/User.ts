@@ -208,6 +208,7 @@ export type UserWhereInput = {
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   stock_movements?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
   userActivationTokens?: Prisma.UserActivationTokenListRelationFilter
   resetPasswordTokens?: Prisma.ResetPasswordTokenListRelationFilter
 }
@@ -223,6 +224,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   stock_movements?: Prisma.StockMovementOrderByRelationAggregateInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   userActivationTokens?: Prisma.UserActivationTokenOrderByRelationAggregateInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenOrderByRelationAggregateInput
 }
@@ -241,6 +243,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   stock_movements?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
   userActivationTokens?: Prisma.UserActivationTokenListRelationFilter
   resetPasswordTokens?: Prisma.ResetPasswordTokenListRelationFilter
 }, "id" | "email">
@@ -284,6 +287,7 @@ export type UserCreateInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
@@ -299,6 +303,7 @@ export type UserUncheckedCreateInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
@@ -314,6 +319,7 @@ export type UserUpdateInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
@@ -329,6 +335,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -452,6 +459,20 @@ export type UserUpdateOneRequiredWithoutSalesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSalesInput, Prisma.UserUpdateWithoutSalesInput>, Prisma.UserUncheckedUpdateWithoutSalesInput>
 }
 
+export type UserCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoicesInput, Prisma.UserUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoicesInput, Prisma.UserUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.UserUpsertWithoutInvoicesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoicesInput, Prisma.UserUpdateWithoutInvoicesInput>, Prisma.UserUncheckedUpdateWithoutInvoicesInput>
+}
+
 export type UserCreateNestedOneWithoutUserActivationTokensInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUserActivationTokensInput, Prisma.UserUncheckedCreateWithoutUserActivationTokensInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserActivationTokensInput
@@ -490,6 +511,7 @@ export type UserCreateWithoutStock_movementsInput = {
   image?: string | null
   role: $Enums.Role
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
@@ -504,6 +526,7 @@ export type UserUncheckedCreateWithoutStock_movementsInput = {
   image?: string | null
   role: $Enums.Role
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
@@ -534,6 +557,7 @@ export type UserUpdateWithoutStock_movementsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
@@ -548,6 +572,7 @@ export type UserUncheckedUpdateWithoutStock_movementsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -562,6 +587,7 @@ export type UserCreateWithoutSalesInput = {
   image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
@@ -576,6 +602,7 @@ export type UserUncheckedCreateWithoutSalesInput = {
   image?: string | null
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
@@ -606,6 +633,7 @@ export type UserUpdateWithoutSalesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
@@ -620,6 +648,83 @@ export type UserUncheckedUpdateWithoutSalesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput
+  userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInvoicesInput = {
+  id?: string
+  email: string
+  full_name: string
+  password: string
+  status?: $Enums.UserStatus
+  created_at?: Date | string
+  image?: string | null
+  role: $Enums.Role
+  stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
+  sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  email: string
+  full_name: string
+  password: string
+  status?: $Enums.UserStatus
+  created_at?: Date | string
+  image?: string | null
+  role: $Enums.Role
+  stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoicesInput, Prisma.UserUncheckedCreateWithoutInvoicesInput>
+}
+
+export type UserUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoicesInput, Prisma.UserUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoicesInput, Prisma.UserUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoicesInput, Prisma.UserUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type UserUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
+  resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -635,6 +740,7 @@ export type UserCreateWithoutUserActivationTokensInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenCreateNestedManyWithoutUserInput
 }
 
@@ -649,6 +755,7 @@ export type UserUncheckedCreateWithoutUserActivationTokensInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -679,6 +786,7 @@ export type UserUpdateWithoutUserActivationTokensInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -693,6 +801,7 @@ export type UserUncheckedUpdateWithoutUserActivationTokensInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput
   resetPasswordTokens?: Prisma.ResetPasswordTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -707,6 +816,7 @@ export type UserCreateWithoutResetPasswordTokensInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenCreateNestedManyWithoutUserInput
 }
 
@@ -721,6 +831,7 @@ export type UserUncheckedCreateWithoutResetPasswordTokensInput = {
   role: $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutUserInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutUserInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUserInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -751,6 +862,7 @@ export type UserUpdateWithoutResetPasswordTokensInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -765,6 +877,7 @@ export type UserUncheckedUpdateWithoutResetPasswordTokensInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutUserNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutUserNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutUserNestedInput
   userActivationTokens?: Prisma.UserActivationTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -776,6 +889,7 @@ export type UserUncheckedUpdateWithoutResetPasswordTokensInput = {
 export type UserCountOutputType = {
   stock_movements: number
   sales: number
+  invoices: number
   userActivationTokens: number
   resetPasswordTokens: number
 }
@@ -783,6 +897,7 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | UserCountOutputTypeCountStock_movementsArgs
   sales?: boolean | UserCountOutputTypeCountSalesArgs
+  invoices?: boolean | UserCountOutputTypeCountInvoicesArgs
   userActivationTokens?: boolean | UserCountOutputTypeCountUserActivationTokensArgs
   resetPasswordTokens?: boolean | UserCountOutputTypeCountResetPasswordTokensArgs
 }
@@ -814,6 +929,13 @@ export type UserCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Exte
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountUserActivationTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserActivationTokenWhereInput
 }
@@ -837,6 +959,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   stock_movements?: boolean | Prisma.User$stock_movementsArgs<ExtArgs>
   sales?: boolean | Prisma.User$salesArgs<ExtArgs>
+  invoices?: boolean | Prisma.User$invoicesArgs<ExtArgs>
   userActivationTokens?: boolean | Prisma.User$userActivationTokensArgs<ExtArgs>
   resetPasswordTokens?: boolean | Prisma.User$resetPasswordTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -879,6 +1002,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | Prisma.User$stock_movementsArgs<ExtArgs>
   sales?: boolean | Prisma.User$salesArgs<ExtArgs>
+  invoices?: boolean | Prisma.User$invoicesArgs<ExtArgs>
   userActivationTokens?: boolean | Prisma.User$userActivationTokensArgs<ExtArgs>
   resetPasswordTokens?: boolean | Prisma.User$resetPasswordTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -891,6 +1015,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     stock_movements: Prisma.$StockMovementPayload<ExtArgs>[]
     sales: Prisma.$SalePayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
     userActivationTokens: Prisma.$UserActivationTokenPayload<ExtArgs>[]
     resetPasswordTokens: Prisma.$ResetPasswordTokenPayload<ExtArgs>[]
   }
@@ -1299,6 +1424,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stock_movements<T extends Prisma.User$stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.User$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userActivationTokens<T extends Prisma.User$userActivationTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userActivationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   resetPasswordTokens<T extends Prisma.User$resetPasswordTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resetPasswordTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResetPasswordTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1771,6 +1897,30 @@ export type User$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[]
+}
+
+/**
+ * User.invoices
+ */
+export type User$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
 }
 
 /**

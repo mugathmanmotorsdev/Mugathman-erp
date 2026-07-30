@@ -262,6 +262,7 @@ export type ProductWhereInput = {
   is_active?: Prisma.BoolFilter<"Product"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
+  invoice_items?: Prisma.InvoiceItemListRelationFilter
   vehicles?: Prisma.VehicleListRelationFilter
 }
 
@@ -278,6 +279,7 @@ export type ProductOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   stock_movements?: Prisma.StockMovementOrderByRelationAggregateInput
   sale_items?: Prisma.SaleItemOrderByRelationAggregateInput
+  invoice_items?: Prisma.InvoiceItemOrderByRelationAggregateInput
   vehicles?: Prisma.VehicleOrderByRelationAggregateInput
 }
 
@@ -297,6 +299,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"Product"> | boolean
   stock_movements?: Prisma.StockMovementListRelationFilter
   sale_items?: Prisma.SaleItemListRelationFilter
+  invoice_items?: Prisma.InvoiceItemListRelationFilter
   vehicles?: Prisma.VehicleListRelationFilter
 }, "id" | "sku">
 
@@ -347,6 +350,7 @@ export type ProductCreateInput = {
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
@@ -363,6 +367,7 @@ export type ProductUncheckedCreateInput = {
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
@@ -379,6 +384,7 @@ export type ProductUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
@@ -395,6 +401,7 @@ export type ProductUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
 
@@ -547,6 +554,20 @@ export type ProductUpdateOneRequiredWithoutStock_movementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutStock_movementsInput, Prisma.ProductUpdateWithoutStock_movementsInput>, Prisma.ProductUncheckedUpdateWithoutStock_movementsInput>
 }
 
+export type ProductCreateNestedOneWithoutInvoice_itemsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutInvoice_itemsInput, Prisma.ProductUncheckedCreateWithoutInvoice_itemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInvoice_itemsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutInvoice_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutInvoice_itemsInput, Prisma.ProductUncheckedCreateWithoutInvoice_itemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInvoice_itemsInput
+  upsert?: Prisma.ProductUpsertWithoutInvoice_itemsInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutInvoice_itemsInput, Prisma.ProductUpdateWithoutInvoice_itemsInput>, Prisma.ProductUncheckedUpdateWithoutInvoice_itemsInput>
+}
+
 export type ProductCreateNestedOneWithoutSale_itemsInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutSale_itemsInput, Prisma.ProductUncheckedCreateWithoutSale_itemsInput>
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSale_itemsInput
@@ -574,6 +595,7 @@ export type ProductCreateWithoutVehiclesInput = {
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutVehiclesInput = {
@@ -589,6 +611,7 @@ export type ProductUncheckedCreateWithoutVehiclesInput = {
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutVehiclesInput = {
@@ -620,6 +643,7 @@ export type ProductUpdateWithoutVehiclesInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutVehiclesInput = {
@@ -635,6 +659,7 @@ export type ProductUncheckedUpdateWithoutVehiclesInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutStock_movementsInput = {
@@ -649,6 +674,7 @@ export type ProductCreateWithoutStock_movementsInput = {
   reorder_level?: number
   is_active?: boolean
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
@@ -664,6 +690,7 @@ export type ProductUncheckedCreateWithoutStock_movementsInput = {
   reorder_level?: number
   is_active?: boolean
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
@@ -695,6 +722,7 @@ export type ProductUpdateWithoutStock_movementsInput = {
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
@@ -709,6 +737,87 @@ export type ProductUncheckedUpdateWithoutStock_movementsInput = {
   tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutInvoice_itemsInput = {
+  id?: string
+  name: string
+  sku: string
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit: string
+  tracking_type: $Enums.TrackingType
+  reorder_level?: number
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  sale_items?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutInvoice_itemsInput = {
+  id?: string
+  name: string
+  sku: string
+  category: $Enums.Category
+  description?: string | null
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit: string
+  tracking_type: $Enums.TrackingType
+  reorder_level?: number
+  is_active?: boolean
+  stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutInvoice_itemsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutInvoice_itemsInput, Prisma.ProductUncheckedCreateWithoutInvoice_itemsInput>
+}
+
+export type ProductUpsertWithoutInvoice_itemsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutInvoice_itemsInput, Prisma.ProductUncheckedUpdateWithoutInvoice_itemsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutInvoice_itemsInput, Prisma.ProductUncheckedCreateWithoutInvoice_itemsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutInvoice_itemsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutInvoice_itemsInput, Prisma.ProductUncheckedUpdateWithoutInvoice_itemsInput>
+}
+
+export type ProductUpdateWithoutInvoice_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
+  reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  sale_items?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutInvoice_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  tracking_type?: Prisma.EnumTrackingTypeFieldUpdateOperationsInput | $Enums.TrackingType
+  reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
@@ -725,6 +834,7 @@ export type ProductCreateWithoutSale_itemsInput = {
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutProductInput
 }
 
@@ -740,6 +850,7 @@ export type ProductUncheckedCreateWithoutSale_itemsInput = {
   reorder_level?: number
   is_active?: boolean
   stock_movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  invoice_items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutProductInput
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutProductInput
 }
 
@@ -771,6 +882,7 @@ export type ProductUpdateWithoutSale_itemsInput = {
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutProductNestedInput
 }
 
@@ -786,6 +898,7 @@ export type ProductUncheckedUpdateWithoutSale_itemsInput = {
   reorder_level?: Prisma.IntFieldUpdateOperationsInput | number
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stock_movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  invoice_items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutProductNestedInput
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutProductNestedInput
 }
 
@@ -797,12 +910,14 @@ export type ProductUncheckedUpdateWithoutSale_itemsInput = {
 export type ProductCountOutputType = {
   stock_movements: number
   sale_items: number
+  invoice_items: number
   vehicles: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | ProductCountOutputTypeCountStock_movementsArgs
   sale_items?: boolean | ProductCountOutputTypeCountSale_itemsArgs
+  invoice_items?: boolean | ProductCountOutputTypeCountInvoice_itemsArgs
   vehicles?: boolean | ProductCountOutputTypeCountVehiclesArgs
 }
 
@@ -833,6 +948,13 @@ export type ProductCountOutputTypeCountSale_itemsArgs<ExtArgs extends runtime.Ty
 /**
  * ProductCountOutputType without action
  */
+export type ProductCountOutputTypeCountInvoice_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceItemWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
 export type ProductCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VehicleWhereInput
 }
@@ -851,6 +973,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   is_active?: boolean
   stock_movements?: boolean | Prisma.Product$stock_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Product$sale_itemsArgs<ExtArgs>
+  invoice_items?: boolean | Prisma.Product$invoice_itemsArgs<ExtArgs>
   vehicles?: boolean | Prisma.Product$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
@@ -898,6 +1021,7 @@ export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stock_movements?: boolean | Prisma.Product$stock_movementsArgs<ExtArgs>
   sale_items?: boolean | Prisma.Product$sale_itemsArgs<ExtArgs>
+  invoice_items?: boolean | Prisma.Product$invoice_itemsArgs<ExtArgs>
   vehicles?: boolean | Prisma.Product$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -909,6 +1033,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     stock_movements: Prisma.$StockMovementPayload<ExtArgs>[]
     sale_items: Prisma.$SaleItemPayload<ExtArgs>[]
+    invoice_items: Prisma.$InvoiceItemPayload<ExtArgs>[]
     vehicles: Prisma.$VehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1318,6 +1443,7 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stock_movements<T extends Prisma.Product$stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sale_items<T extends Prisma.Product$sale_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$sale_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoice_items<T extends Prisma.Product$invoice_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$invoice_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vehicles<T extends Prisma.Product$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1791,6 +1917,30 @@ export type Product$sale_itemsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
+}
+
+/**
+ * Product.invoice_items
+ */
+export type Product$invoice_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceItem
+   */
+  select?: Prisma.InvoiceItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceItem
+   */
+  omit?: Prisma.InvoiceItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceItemInclude<ExtArgs> | null
+  where?: Prisma.InvoiceItemWhereInput
+  orderBy?: Prisma.InvoiceItemOrderByWithRelationInput | Prisma.InvoiceItemOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceItemScalarFieldEnum | Prisma.InvoiceItemScalarFieldEnum[]
 }
 
 /**

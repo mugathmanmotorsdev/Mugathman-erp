@@ -57,6 +57,8 @@ export const ModelName = {
   Vehicle: 'Vehicle',
   StockMovement: 'StockMovement',
   Sale: 'Sale',
+  Invoice: 'Invoice',
+  InvoiceItem: 'InvoiceItem',
   SaleItem: 'SaleItem',
   UserActivationToken: 'UserActivationToken',
   ResetPasswordToken: 'ResetPasswordToken',
@@ -158,6 +160,30 @@ export const SaleScalarFieldEnum = {
 } as const
 
 export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoice_number: 'invoice_number',
+  customer_id: 'customer_id',
+  created_by: 'created_by',
+  status: 'status',
+  total_amount: 'total_amount',
+  created_at: 'created_at'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoiceItemScalarFieldEnum = {
+  id: 'id',
+  invoice_id: 'invoice_id',
+  product_id: 'product_id',
+  quantity: 'quantity',
+  unit_price: 'unit_price'
+} as const
+
+export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum]
 
 
 export const SaleItemScalarFieldEnum = {

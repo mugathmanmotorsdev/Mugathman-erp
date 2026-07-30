@@ -27,6 +27,7 @@ model User {
   role                 Role
   stock_movements      StockMovement[]
   sales                Sale[]
+  invoices             Invoice[]
   userActivationTokens UserActivationToken[]
   resetPasswordTokens  ResetPasswordToken[]
 
@@ -41,7 +42,8 @@ model Customer {
   address    String?
   created_at DateTime @default(now())
 
-  sales Sale[]
+  sales   Sale[]
+  invoices Invoice[]
 
   @@map("customers")
 }
@@ -59,6 +61,7 @@ model Product {
   is_active     Boolean      @default(true)
   stock_movements StockMovement[]
   sale_items      SaleItem[]
+  invoice_items   InvoiceItem[]
   vehicles        Vehicle[]
 
   @@map("products")
@@ -109,6 +112,35 @@ model Sale {
   sale_items SaleItem[]
 
   @@map("sales")
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  invoice_number String        @unique
+  customer_id    String
+  created_by     String
+  status         InvoiceStatus @default(PENDING)
+  total_amount   Decimal       @default(0.00) @db.Decimal(12, 2)
+  created_at     DateTime      @default(now())
+
+  customer Customer    @relation(fields: [customer_id], references: [id])
+  user     User        @relation(fields: [created_by], references: [id])
+  items    InvoiceItem[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id         String  @id @default(uuid())
+  invoice_id String
+  product_id String
+  quantity   Int
+  unit_price Decimal @db.Decimal(12, 2)
+
+  invoice Invoice  @relation(fields: [invoice_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("invoice_items")
 }
 
 model SaleItem {
@@ -213,6 +245,12 @@ enum StockMovementReason {
 enum SaleStatus {
   PENDING
   COMPLETED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
   CANCELLED
 }
 

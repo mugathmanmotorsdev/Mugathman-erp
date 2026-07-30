@@ -83,6 +83,15 @@ export const SaleStatus = {
 export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
 
 
+export const InvoiceStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
+
 export const JobStatus = {
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',

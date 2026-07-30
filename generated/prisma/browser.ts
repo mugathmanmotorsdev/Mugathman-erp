@@ -48,6 +48,16 @@ export type StockMovement = Prisma.StockMovementModel
  */
 export type Sale = Prisma.SaleModel
 /**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model InvoiceItem
+ * 
+ */
+export type InvoiceItem = Prisma.InvoiceItemModel
+/**
  * Model SaleItem
  * 
  */
