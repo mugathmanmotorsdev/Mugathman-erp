@@ -269,7 +269,7 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
   const date = new Date(invoice.created_at)
 
   const subtotal = invoice.items.reduce(
-    //// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (acc: number, item: any) => acc + Number(item.unit_price) * Number(item.quantity),
     0
   )
