@@ -58,7 +58,7 @@ export default function InvoicesPage() {
   }, []);
 
   const calculateTotal = (items: Invoice["items"]) => {
-    return items.reduce((acc, item) => acc + item.quantity * Number(item.unit_price), 0);
+    return items.reduce((acc: number, item) => acc + item.quantity * Number(item.unit_price), 0);
   };
 
   const filteredInvoices = invoices.filter(
