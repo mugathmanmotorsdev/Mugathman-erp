@@ -372,7 +372,9 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
             <Text style={styles.col4}>Total</Text>
           </View>
 
-          {invoice.items.map((item) => (
+          {invoice.items.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (item: any) => (
             <View key={item.id} style={styles.tableRow}>
               <View style={styles.col1}>
                 <Text style={styles.productName}>{item.product.name}</Text>
