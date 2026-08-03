@@ -59,6 +59,7 @@ export async function processJobs() {
                 });
 
                 // Execute the job based on type
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const data = job.payload as any;
 
                 switch (job.type) {
@@ -99,6 +100,7 @@ export async function processJobs() {
                             throw new Error("Sale not found");
                         }
 
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         const pdfBuffer = await generateReceiptPDF(sale as any);
 
                         // upload pdf to whatsapp

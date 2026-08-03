@@ -15,14 +15,12 @@ import {
   Send,
   Clock,
   CheckCircle2,
-  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import SkeletonUi from "@/components/SkeletonUi";
 
 interface Lead {
@@ -80,7 +78,7 @@ export default function LeadDetailPage({
       }
     };
     fetchLead();
-  }, []);
+  }, [params, router]);
 
   const handleStatusChange = async (newStatus: string) => {
     if (!lead) return;

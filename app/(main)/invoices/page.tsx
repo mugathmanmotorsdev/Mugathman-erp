@@ -13,7 +13,6 @@ import {
   Printer,
   DollarSign,
   Clock,
-  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,7 +75,6 @@ export default function InvoicesPage() {
   const { formattedAmountWithUnit: formattedTotalValue } = useFormatCurrency(totalInvoiceValue);
 
   const pendingCount = invoices.filter((inv) => inv.status === "PENDING").length;
-  const paidCount = invoices.filter((inv) => inv.status === "PAID").length;
 
   const handleDownloadPDF = async (invoiceId: string, invoiceNumber: string) => {
     try {

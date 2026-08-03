@@ -5,7 +5,6 @@ import { activationEmailHTML } from "@/components/email-template/activationEmail
 import { generatePassword } from "@/lib/utils/password-generator";
 import { hashPassword } from "@/lib/utils/password";
 import { userCreateSchema } from "@/lib/validatoion/user";
-import { sendEmail } from "@/lib/utils/send-email";
 
 
 export async function POST(request: NextRequest) {

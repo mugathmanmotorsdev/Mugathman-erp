@@ -135,9 +135,6 @@ async function main() {
     return;
   }
 
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
   const batchMovements = [
     // Stock IN for all batch products
     { product_sku: "TOY-TIRE-001", qty_in: 50, qty_out: 12 },

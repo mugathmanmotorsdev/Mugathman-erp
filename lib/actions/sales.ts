@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { PaymentMethod } from "@generated/prisma/client";
 
 export const getSales = async (skip = 0, take = 100) => {
     return await prisma.sale.findMany({
@@ -73,6 +74,7 @@ export const createPayment = async (saleId: string, amount: number, method: stri
 
         const totalPaid = sale.payments.reduce((acc: number, p) => acc + Number(p.amount), 0);
         const totalAmount = sale.sale_items.reduce(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (acc: number, item: any) => acc + Number(item.product?.unit_price || 0) * item.quantity,
             0
         );
@@ -86,7 +88,7 @@ export const createPayment = async (saleId: string, amount: number, method: stri
             data: {
                 sale_id: saleId,
                 amount: amount,
-                method: method as any,
+                method: method as PaymentMethod,
                 notes: notes || null,
             },
         });

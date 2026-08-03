@@ -17,11 +17,7 @@ import {
   Mail,
   Home,
   CreditCard,
-  Banknote,
-  Building2,
-  Smartphone,
   CheckCircle,
-  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -576,7 +572,7 @@ export default function NewSalePage() {
                     <>
                       <div className="bg-white/5 rounded-3xl p-4 border border-white/5 space-y-2">
                         <p className="text-xs text-indigo-200/80 font-bold uppercase tracking-widest">
-                          What's next?
+                          What&apos;s next?
                         </p>
                         <p className="text-xs text-indigo-100/60 leading-relaxed">
                           Record a payment now, or come back to it later from the sale detail page.

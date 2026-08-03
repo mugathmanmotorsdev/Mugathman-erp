@@ -8,7 +8,6 @@ import {
   Plus,
   Minus,
   Package,
-  FileText,
   Truck,
   Barcode,
   AlertCircle,

@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   UserCheck,
   Search,
-  Filter,
   Clock,
   CheckCircle,
   XCircle,
@@ -69,7 +67,7 @@ export default function LeadsPage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (statusFilter !== "ALL") params.set("status", statusFilter);
@@ -87,11 +85,11 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchLeads();
-  }, [statusFilter]);
+  }, [fetchLeads]);
 
   const filteredLeads = leads.filter(
     (lead) =>

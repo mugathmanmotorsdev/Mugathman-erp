@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Product } from "@/types/product";
@@ -14,7 +14,7 @@ export function useFetchProduct() {
         take: 10,
     });
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         setLoading(true);
         try {
         const query = new URLSearchParams({
@@ -35,14 +35,14 @@ export function useFetchProduct() {
         } finally {
         setLoading(false);
         }
-    };
+    }, [pagination, search, category]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
           fetchProducts();
         }, 300);
         return () => clearTimeout(timer);
-    }, [search, category, pagination.skip]);
+    }, [fetchProducts]);
 
     return {
         products,

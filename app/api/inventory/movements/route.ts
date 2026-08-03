@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
         const skip = Number(searchParams.get("skip")) || 0;
         const take = Number(searchParams.get("take")) || 50;
 
-        const where: any = {};
+        const where: Record<string, unknown> = {};
         if (productId) where.product_id = productId;
-        if (reason && Object.values(StockMovementReason).includes(reason as any)) {
+        if (reason && Object.values(StockMovementReason).includes(reason as StockMovementReason)) {
             where.reason = reason;
         }
 

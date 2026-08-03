@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth();
     const body = await request.json();
     const { sale_id, amount, method, notes } = body;
 

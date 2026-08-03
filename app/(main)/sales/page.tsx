@@ -9,10 +9,8 @@ import {
   Calendar,
   MoreVertical,
   Download,
-  Filter,
   Printer,
   DollarSign,
-  Clock,
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
@@ -73,10 +71,6 @@ export default function SalesPage() {
 
   const totalRevenue = sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0);
   const { formattedAmountWithUnit: formattedTotalRevenue } = useFormatCurrency(totalRevenue);
-  const avgOrderValue = sales.length > 0 ?
-    (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length) : 0
-  const { formattedAmountWithUnit: formattedAvgOrderValue } = useFormatCurrency(Number(avgOrderValue));
-
   const totalPaid = sales.reduce((acc, s) => {
     const paid = s.payments.reduce((pAcc, p) => pAcc + Number(p.amount), 0);
     return acc + paid;

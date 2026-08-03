@@ -2,16 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
-  Search,
   Package,
-  AlertTriangle,
-  ChevronLeft,
-  ChevronDown,
-  Filter,
-  DollarSign,
   FileText,
+  ChevronLeft,
+  DollarSign,
   Plus,
   Trash2,
   User,
@@ -21,14 +16,6 @@ import {
   Home,
   Users,
 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -38,15 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -56,12 +35,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import PageHeading from "@/components/PageHeading";
-import StatCard from "@/components/StatCard";
-import { useAuth } from "@/hooks/useauth";
 import { useFetchProduct } from "@/hooks/usefetchproducts";
-import { useFormatCurrency } from "@/hooks/use-formatcurrency";
-import type { Product } from "@/types/product";
 import type { Customer } from "@generated/prisma/client";
 import type { InvoiceItem } from "@/types/invoice";
 
@@ -70,17 +44,7 @@ export default function NewInvoicePage() {
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(true);
 
-  const {
-    products,
-    loading: productsLoading,
-    search,
-    setSearch,
-    category,
-    setCategory,
-    pagination,
-    fetchProducts,
-    setPagination,
-  } = useFetchProduct();
+  const { products } = useFetchProduct();
 
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -118,13 +82,6 @@ export default function NewInvoicePage() {
 
     loadData();
   }, []);
-
-  const getStockStatus = (product: Product) => {
-    if (product.currentStock === 0) return "OUT_OF_STOCK";
-    if (product.currentStock <= product.reorder_level * 0.5) return "LOW_STOCK";
-    if (product.currentStock <= product.reorder_level) return "NEAR_LIMIT";
-    return "IN_STOCK";
-  };
 
   const addEmptyItem = () => {
     const item: InvoiceItem = {

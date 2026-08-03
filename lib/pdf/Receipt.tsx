@@ -260,12 +260,12 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
     <Document>
       <Page style={styles.page}>
         <View style={styles.watermarkContainer}>
-          <Image src={logoUrl} style={styles.watermarkImage} />
+          <Image src={logoUrl} style={styles.watermarkImage} alt="" />
         </View>
 
         <View style={styles.header}>
           <View style={styles.logoContainer}>
-            <Image src={logoUrl} style={styles.logoImage} />
+            <Image src={logoUrl} style={styles.logoImage} alt="" />
             <Text style={styles.companyName}>Mugathman Motors</Text>
             
             <View style={styles.customerInfo}>
@@ -348,19 +348,19 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
                 <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Total Paid:</Text>
                 <Text style={{ fontWeight: "bold", color: "#1e293b" }}>
-                  {sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0).toLocaleString()}
+                  {sale.payments.reduce((acc: number, p: { amount: unknown }) => acc + Number(p.amount), 0).toLocaleString()}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
                 <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Balance Outstanding:</Text>
-                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
-                  {(total - sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)).toLocaleString()}
+                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: { amount: unknown }) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
+                  {(total - sale.payments.reduce((acc: number, p: { amount: unknown }) => acc + Number(p.amount), 0)).toLocaleString()}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
                 <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Payment Status:</Text>
-                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
-                  {Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "PAID IN FULL" : "PARTIALLY PAID"}
+                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: { amount: unknown }) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
+                  {Number(sale.payments.reduce((acc: number, p: { amount: unknown }) => acc + Number(p.amount), 0)) >= total ? "PAID IN FULL" : "PARTIALLY PAID"}
                 </Text>
               </View>
             </View>
@@ -373,7 +373,7 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
             <Text style={styles.signatureText}>Customer Signature</Text>
           </View>
           <View style={styles.signatureBox}>
-            <Image src={signatureUrl} style={styles.signatureImage} />
+            <Image src={signatureUrl} style={styles.signatureImage} alt="" />
             <Text style={styles.signatureText}>Authorized Signature</Text>
           </View>
         </View>
