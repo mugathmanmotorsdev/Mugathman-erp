@@ -309,12 +309,12 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
     <Document>
       <Page style={styles.page}>
         <View style={styles.watermarkContainer}>
-          <Image src={logoUrl} style={styles.watermarkImage} alt="" />
+          <Image src={logoUrl} style={styles.watermarkImage} />
         </View>
 
         <View style={styles.header}>
           <View style={styles.logoContainer}>
-            <Image src={logoUrl} style={styles.logoImage} alt="" />
+            <Image src={logoUrl} style={styles.logoImage} />
             <Text style={styles.companyName}>Mugathman Motors</Text>
 
             <View style={styles.customerInfo}>
@@ -404,7 +404,7 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
 
         <View style={styles.signatures}>
           <View style={styles.signatureBox}>
-            <Image src={signatureUrl} style={styles.signatureImage} alt="" />
+            <Image src={signatureUrl} style={styles.signatureImage} />
             <Text style={styles.signatureText}>Authorized Signature</Text>
           </View>
         </View>
