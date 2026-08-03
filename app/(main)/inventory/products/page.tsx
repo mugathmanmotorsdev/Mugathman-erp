@@ -115,6 +115,7 @@ export default function ProductsPage() {
     { label: "Tipper", value: "TIPPER" },
     { label: "Tractor", value: "TRACTOR" },
     { label: "Dozer", value: "DOZER" },
+    { label: "Car", value: "CAR" },
   ];
 
   return (

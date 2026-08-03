@@ -191,6 +191,12 @@ const styles = StyleSheet.create({
   signatureBox: {
     width: 150,
   },
+  signatureImage: {
+    width: 150,
+    height: 50,
+    objectFit: "contain",
+    marginBottom: 5,
+  },
   signatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#1e293b",
@@ -274,6 +280,16 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
     logoUrl = `data:image/png;base64,${logoBase64}`
   } catch {
     // Image not available
+  }
+
+  // Read authorize signature as base64 data URI
+  let signatureUrl = ""
+  try {
+    const signaturePath = path.join(process.cwd(), "public", "signature.png")
+    const signatureBase64 = fs.readFileSync(signaturePath).toString("base64")
+    signatureUrl = `data:image/png;base64,${signatureBase64}`
+  } catch {
+    // Signature image not available
   }
 
   const getStatusStyle = (status: string) => {
@@ -386,11 +402,7 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
 
         <View style={styles.signatures}>
           <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}></View>
-            <Text style={styles.signatureText}>Customer Signature</Text>
-          </View>
-          <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}></View>
+            <Image src={signatureUrl} style={styles.signatureImage} />
             <Text style={styles.signatureText}>Authorized Signature</Text>
           </View>
         </View>

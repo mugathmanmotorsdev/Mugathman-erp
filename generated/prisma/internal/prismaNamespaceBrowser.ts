@@ -60,6 +60,7 @@ export const ModelName = {
   Invoice: 'Invoice',
   InvoiceItem: 'InvoiceItem',
   SaleItem: 'SaleItem',
+  Payment: 'Payment',
   UserActivationToken: 'UserActivationToken',
   ResetPasswordToken: 'ResetPasswordToken',
   Job: 'Job',
@@ -156,6 +157,8 @@ export const SaleScalarFieldEnum = {
   customer_id: 'customer_id',
   created_by: 'created_by',
   status: 'status',
+  payment_status: 'payment_status',
+  due_date: 'due_date',
   created_at: 'created_at'
 } as const
 
@@ -196,6 +199,18 @@ export const SaleItemScalarFieldEnum = {
 } as const
 
 export type SaleItemScalarFieldEnum = (typeof SaleItemScalarFieldEnum)[keyof typeof SaleItemScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  sale_id: 'sale_id',
+  amount: 'amount',
+  method: 'method',
+  notes: 'notes',
+  created_at: 'created_at'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const UserActivationTokenScalarFieldEnum = {

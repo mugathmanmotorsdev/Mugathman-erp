@@ -172,6 +172,7 @@ export default function InventoryPage() {
       TRUCK_HEAD: "bg-blue-100 text-blue-700 border-blue-200",
       TIPPER: "bg-purple-100 text-purple-700 border-purple-200",
       TRACTOR: "bg-rose-100 text-rose-700 border-rose-200",
+      CAR: "bg-teal-100 text-teal-700 border-teal-200",
     };
     const style = colors[category] || "bg-slate-100 text-slate-700 border-slate-200";
     return (
@@ -323,6 +324,17 @@ export default function InventoryPage() {
                 onClick={() => setCategory("HEAVY_DUTY")}
               >
                 Accessories
+                <ChevronDown className="h-4 w-4 ml-1.5" />
+              </Button>
+              <Button
+                variant={category === "CAR" ? "default" : "outline"}
+                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "CAR"
+                  ? "bg-slate-900 text-white"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                onClick={() => setCategory("CAR")}
+              >
+                Car
                 <ChevronDown className="h-4 w-4 ml-1.5" />
               </Button>
             </div>

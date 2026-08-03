@@ -171,6 +171,12 @@ const styles = StyleSheet.create({
   signatureBox: {
     width: 150,
   },
+  signatureImage: {
+    width: 150,
+    height: 50,
+    objectFit: "contain",
+    marginBottom: 5,
+  },
   signatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#1e293b",
@@ -238,7 +244,17 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
     logoUrl = `data:image/png;base64,${logoBase64}`;
   } catch {
     // Image not available — render receipt without logo
-  } 
+  }
+
+  // Read authorize signature as base64 data URI
+  let signatureUrl = "";
+  try {
+    const signaturePath = path.join(process.cwd(), "public", "signature.png");
+    const signatureBase64 = fs.readFileSync(signaturePath).toString("base64");
+    signatureUrl = `data:image/png;base64,${signatureBase64}`;
+  } catch {
+    // Signature image not available
+  }
 
   return (
     <Document>
@@ -317,11 +333,39 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
               <Text style={styles.subtotalValue}>{subtotal.toLocaleString()}</Text>
             </View>
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total Due:</Text>
+              <Text style={styles.totalLabel}>Total Amount:</Text>
               <Text style={styles.totalValue}>{total.toLocaleString()}</Text>
             </View>
           </View>
         </View>
+
+        {sale.payments && sale.payments.length > 0 && (
+          <View style={{ marginBottom: 30 }}>
+            <Text style={{ fontSize: 10, fontWeight: "bold", color: "#1e293b", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
+              Payment Summary
+            </Text>
+            <View style={styles.summaryBox}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
+                <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Total Paid:</Text>
+                <Text style={{ fontWeight: "bold", color: "#1e293b" }}>
+                  {sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0).toLocaleString()}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
+                <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Balance Outstanding:</Text>
+                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
+                  {(total - sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)).toLocaleString()}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" }}>
+                <Text style={{ fontSize: 8, fontWeight: "bold", textTransform: "uppercase", color: "#475569" }}>Payment Status:</Text>
+                <Text style={{ fontWeight: "bold", color: Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "#16a34a" : "#dc2626" }}>
+                  {Number(sale.payments.reduce((acc: number, p: any) => acc + Number(p.amount), 0)) >= total ? "PAID IN FULL" : "PARTIALLY PAID"}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
 
         <View style={styles.signatures}>
           <View style={styles.signatureBox}>
@@ -329,7 +373,7 @@ export function ReceiptPDF({ sale }: { sale: Sale }) {
             <Text style={styles.signatureText}>Customer Signature</Text>
           </View>
           <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}></View>
+            <Image src={signatureUrl} style={styles.signatureImage} />
             <Text style={styles.signatureText}>Authorized Signature</Text>
           </View>
         </View>

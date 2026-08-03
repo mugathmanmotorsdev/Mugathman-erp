@@ -55,6 +55,7 @@ export default function EditProductPage() {
         { label: "Tipper", value: "TIPPER" },
         { label: "Tractor", value: "TRACTOR" },
         { label: "Dozer", value: "DOZER" },
+        { label: "Car", value: "CAR" },
     ];
 
     useEffect(() => {

@@ -41,7 +41,8 @@ export const Category = {
   PARTS: 'parts',
   TRUCK_HEAD: 'truck_head',
   TIPPER: 'tipper',
-  TRACTOR: 'tractor'
+  TRACTOR: 'tractor',
+  CAR: 'car'
 } as const
 
 export type Category = (typeof Category)[keyof typeof Category]
@@ -81,6 +82,25 @@ export const SaleStatus = {
 } as const
 
 export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
+
+
+export const PaymentMethod = {
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CHEQUE: 'CHEQUE',
+  MOBILE_MONEY: 'MOBILE_MONEY'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
 export const InvoiceStatus = {

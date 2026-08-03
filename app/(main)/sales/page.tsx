@@ -12,6 +12,9 @@ import {
   Filter,
   Printer,
   DollarSign,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -73,6 +76,44 @@ export default function SalesPage() {
   const avgOrderValue = sales.length > 0 ?
     (sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0) / sales.length) : 0
   const { formattedAmountWithUnit: formattedAvgOrderValue } = useFormatCurrency(Number(avgOrderValue));
+
+  const totalPaid = sales.reduce((acc, s) => {
+    const paid = s.payments.reduce((pAcc, p) => pAcc + Number(p.amount), 0);
+    return acc + paid;
+  }, 0);
+  const { formattedAmountWithUnit: formattedTotalPaid } = useFormatCurrency(totalPaid);
+  const outstanding = totalRevenue - totalPaid;
+  const { formattedAmountWithUnit: formattedOutstanding } = useFormatCurrency(outstanding);
+
+  const getPaymentStatusBadge = (status: string) => {
+    const config = {
+      PENDING: {
+        bg: "bg-slate-100",
+        text: "text-slate-500",
+        border: "border-slate-200",
+        label: "Pending",
+      },
+      PARTIALLY_PAID: {
+        bg: "bg-amber-50",
+        text: "text-amber-600",
+        border: "border-amber-100",
+        label: "Partially Paid",
+      },
+      PAID: {
+        bg: "bg-emerald-50",
+        text: "text-emerald-600",
+        border: "border-emerald-100",
+        label: "Paid",
+      },
+    };
+    const cfg = config[status as keyof typeof config] || config.PENDING;
+
+    return (
+      <Badge className={`${cfg.bg} ${cfg.text} ${cfg.border} border px-3 py-1 font-bold`}>
+        {cfg.label}
+      </Badge>
+    );
+  };
   return (
     <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
@@ -93,7 +134,7 @@ export default function SalesPage() {
       </div>
 
       {/* Stats overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* total sales */}
         <StatCard
           title="Total Sales"
@@ -108,12 +149,19 @@ export default function SalesPage() {
           icon={<DollarSign className="h-6 w-6" />}
           iconBg="bg-emerald-50"
         />
-        {/* avg order value */}
+        {/* total paid */}
         <StatCard
-          title="Avg. Order Value"
-          stat={formattedAvgOrderValue}
-          icon={<Filter className="h-6 w-6" />}
-          iconBg="bg-orange-50"
+          title="Total Paid"
+          stat={formattedTotalPaid}
+          icon={<CheckCircle className="h-6 w-6" />}
+          iconBg="bg-emerald-50"
+        />
+        {/* outstanding */}
+        <StatCard
+          title="Outstanding"
+          stat={formattedOutstanding}
+          icon={<AlertTriangle className="h-6 w-6" />}
+          iconBg="bg-amber-50"
         />
       </div>
 
@@ -152,6 +200,8 @@ export default function SalesPage() {
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Customer</TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Items</TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</TableHead>
+                <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Payment</TableHead>
+                <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Due Date</TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Status</TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-right">Actions</TableHead>
               </TableRow>
@@ -174,107 +224,150 @@ export default function SalesPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredSales.map((sale) => (
-                  <TableRow key={sale.id} className="group hover:bg-slate-50/50 transition-colors">
-                    <TableCell className="px-6 py-5">
-                      <div className="flex flex-col">
-                        <span className="font-mono text-sm text-slate-500">{sale.sale_number}</span>
-                        <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(sale.created_at).toLocaleDateString()}
+                filteredSales.map((sale) => {
+                  const totalPaid = sale.payments.reduce((acc, p) => acc + Number(p.amount), 0);
+                  const totalAmount = calculateTotal(sale.sale_items);
+                  const outstanding = totalAmount - totalPaid;
+
+                  return (
+                    <TableRow
+                      key={sale.id}
+                      className={`group hover:bg-slate-50/50 transition-colors cursor-pointer ${
+                        sale.due_date && new Date(sale.due_date) < new Date() && sale.payment_status !== "PAID"
+                          ? "bg-red-50/50 hover:bg-red-100/50"
+                          : ""
+                      }`}
+                      onClick={() => router.push(`/sales/${sale.id}`)}
+                    >
+                      <TableCell className="px-6 py-5">
+                        <div className="flex flex-col">
+                          <span className="font-mono text-sm text-slate-500">{sale.sale_number}</span>
+                          <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                            <Calendar className="h-3 w-3" />
+                            {new Date(sale.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-slate-700">{sale.customer.full_name}</span>
+                          <span className="text-xs text-slate-500">{sale.customer.phone}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-5 text-center">
+                        <Badge variant="secondary" className="bg-slate-100 text-slate-600 rounded-lg">
+                          {sale.sale_items.length} Products
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        <span className="font-black text-slate-900">
+                          {new Intl.NumberFormat("en-NG", {
+                            style: "currency",
+                            currency: "NGN",
+                          }).format(totalAmount)}
                         </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-5">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-slate-700">{sale.customer.full_name}</span>
-                        <span className="text-xs text-slate-500">{sale.customer.phone}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-5 text-center">
-                      <Badge variant="secondary" className="bg-slate-100 text-slate-600 rounded-lg">
-                        {sale.sale_items.length} Products
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-6 py-5">
-                      <span className="font-black text-slate-900">
-                        {new Intl.NumberFormat("en-NG", {
-                          style: "currency",
-                          currency: "NGN",
-                        }).format(calculateTotal(sale.sale_items))}
-                      </span>
-                    </TableCell>
-                    <TableCell className="px-6 py-5">
-                      <Badge
-                        className={`rounded-lg px-3 py-1 font-bold ${sale.status === "COMPLETED"
-                          ? "bg-emerald-50 text-emerald-600 border-none"
-                          : "bg-slate-100 text-slate-500 border-none"
-                          }`}
-                      >
-                        {sale.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-6 py-5 text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="rounded-xl">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
-                          <DropdownMenuItem
-                            onClick={async () => {
-                              try {
-                                const res = await fetch(`/api/receipt?saleId=${sale.id}`)
-                                if (!res.ok) throw new Error("Failed to fetch receipt")
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-bold text-slate-700">
+                            {new Intl.NumberFormat("en-NG", {
+                              style: "currency",
+                              currency: "NGN",
+                            }).format(totalPaid)}
+                          </span>
+                          {outstanding > 0 && (
+                            <span className="text-xs text-amber-600 font-medium">
+                              {new Intl.NumberFormat("en-NG", {
+                                style: "currency",
+                                currency: "NGN",
+                              }).format(outstanding)} outstanding
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        {sale.due_date ? (
+                          <div className={`flex flex-col gap-1 ${
+                            new Date(sale.due_date) < new Date() && sale.payment_status !== "PAID"
+                              ? "text-red-600"
+                              : "text-slate-500"
+                          }`}>
+                            <span className="text-xs font-medium">
+                              {new Date(sale.due_date).toLocaleDateString()}
+                            </span>
+                            {new Date(sale.due_date) < new Date() && sale.payment_status !== "PAID" && (
+                              <span className="text-[10px] font-bold text-red-500">OVERDUE</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-slate-400">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        {getPaymentStatusBadge(sale.payment_status)}
+                      </TableCell>
+                      <TableCell className="px-6 py-5 text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="rounded-xl" onClick={(e) => e.stopPropagation()}>
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`/api/receipt?saleId=${sale.id}`)
+                                  if (!res.ok) throw new Error("Failed to fetch receipt")
 
-                                const blob = await res.blob()
-                                const url = URL.createObjectURL(blob)
-                                const iframe = document.createElement('iframe')
-                                iframe.src = url
-                                iframe.style.display = 'none'
-                                document.body.appendChild(iframe)
-                                iframe.onload = () => {
-                                  iframe.contentWindow?.print()
+                                  const blob = await res.blob()
+                                  const url = URL.createObjectURL(blob)
+                                  const iframe = document.createElement('iframe')
+                                  iframe.src = url
+                                  iframe.style.display = 'none'
+                                  document.body.appendChild(iframe)
+                                  iframe.onload = () => {
+                                    iframe.contentWindow?.print()
+                                  }
+                                } catch (error) {
+                                  console.error("Error printing receipt:", error)
+                                  toast.error("Failed to print receipt")
                                 }
-                              } catch (error) {
-                                console.error("Error printing receipt:", error)
-                                toast.error("Failed to print receipt")
-                              }
-                            }}
-                            className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                            <Printer className="h-4 w-4 text-slate-400" />
-                            Print Receipt
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={async () => {
-                              try {
-                                const res = await fetch(`/api/receipt?saleId=${sale.id}`)
-                                if (!res.ok) throw new Error("Failed to fetch receipt")
+                              }}
+                              className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                              <Printer className="h-4 w-4 text-slate-400" />
+                              Print Receipt
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`/api/receipt?saleId=${sale.id}`)
+                                  if (!res.ok) throw new Error("Failed to fetch receipt")
 
-                                const blob = await res.blob()
-                                const url = window.URL.createObjectURL(blob)
-                                const a = document.createElement('a')
-                                a.href = url
-                                a.download = `receipt-${sale.sale_number}.pdf`
-                                document.body.appendChild(a)
-                                a.click()
-                                window.URL.revokeObjectURL(url)
-                                document.body.removeChild(a)
-                              } catch (error) {
-                                console.error("Error downloading receipt:", error)
-                                toast.error("Failed to download receipt")
-                              }
-                            }}
-                            className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                            <Download className="h-4 w-4 text-slate-400" />
-                            Download Receipt
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
+                                  const blob = await res.blob()
+                                  const url = window.URL.createObjectURL(blob)
+                                  const a = document.createElement('a')
+                                  a.href = url
+                                  a.download = `receipt-${sale.sale_number}.pdf`
+                                  document.body.appendChild(a)
+                                  a.click()
+                                  window.URL.revokeObjectURL(url)
+                                  document.body.removeChild(a)
+                                } catch (error) {
+                                  console.error("Error downloading receipt:", error)
+                                  toast.error("Failed to download receipt")
+                                }
+                              }}
+                              className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                              <Download className="h-4 w-4 text-slate-400" />
+                              Download Receipt
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>

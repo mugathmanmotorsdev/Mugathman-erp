@@ -48,6 +48,7 @@ export default function NewProductPage() {
         { label: "Truck Head", value: "TRUCK_HEAD" },
         { label: "Tipper", value: "TIPPER" },
         { label: "Tractor", value: "TRACTOR" },
+        { label: "Car", value: "CAR" },
     ];
 
     const handleSubmit = async (e: React.FormEvent) => {

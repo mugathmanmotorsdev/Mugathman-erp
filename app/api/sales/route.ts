@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth();
     const body = await request.json();
-    const { customer_id, customer_details, items, status = "COMPLETED" } = body;
+    const { customer_id, customer_details, items, status = "COMPLETED", due_date = null } = body;
 
     if (
       (!customer_id && !customer_details) ||
@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
           customer_id: final_customer_id,
           created_by: user.id,
           status: status,
+          due_date: due_date ? new Date(due_date) : null,
         },
       });
 

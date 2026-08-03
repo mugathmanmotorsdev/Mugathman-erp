@@ -85,6 +85,11 @@ export type InvoiceItem = Prisma.InvoiceItemModel
  */
 export type SaleItem = Prisma.SaleItemModel
 /**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
  * Model UserActivationToken
  * 
  */

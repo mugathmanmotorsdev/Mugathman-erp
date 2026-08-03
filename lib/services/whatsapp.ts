@@ -1,3 +1,7 @@
+function normalizePhone(phone: string): string {
+  return phone.replace(/^\+/, "").replace(/[\s\-\(\)\.]/g, "").trim();
+}
+
 export async function sendWhatsappThankMsg(
   name: string,
   phoneNo: string,
@@ -5,6 +9,8 @@ export async function sendWhatsappThankMsg(
   totalAmount: number,
   mediaId: string,
 ) {
+  const to = normalizePhone(phoneNo);
+
   try {
     const res = await fetch(
       `https://graph.facebook.com/v23.0/${process.env.WHATSAPP_PHONE_NO_ID}/messages`,
@@ -17,7 +23,7 @@ export async function sendWhatsappThankMsg(
         body: JSON.stringify({
           messaging_product: "whatsapp",
           recipient_type: "individual",
-          to: phoneNo,
+          to: to,
           type: "template",
           template: {
             name: "sales_completion",

@@ -30,6 +30,8 @@ export type SaleMinAggregateOutputType = {
   customer_id: string | null
   created_by: string | null
   status: $Enums.SaleStatus | null
+  payment_status: $Enums.PaymentStatus | null
+  due_date: Date | null
   created_at: Date | null
 }
 
@@ -39,6 +41,8 @@ export type SaleMaxAggregateOutputType = {
   customer_id: string | null
   created_by: string | null
   status: $Enums.SaleStatus | null
+  payment_status: $Enums.PaymentStatus | null
+  due_date: Date | null
   created_at: Date | null
 }
 
@@ -48,6 +52,8 @@ export type SaleCountAggregateOutputType = {
   customer_id: number
   created_by: number
   status: number
+  payment_status: number
+  due_date: number
   created_at: number
   _all: number
 }
@@ -59,6 +65,8 @@ export type SaleMinAggregateInputType = {
   customer_id?: true
   created_by?: true
   status?: true
+  payment_status?: true
+  due_date?: true
   created_at?: true
 }
 
@@ -68,6 +76,8 @@ export type SaleMaxAggregateInputType = {
   customer_id?: true
   created_by?: true
   status?: true
+  payment_status?: true
+  due_date?: true
   created_at?: true
 }
 
@@ -77,6 +87,8 @@ export type SaleCountAggregateInputType = {
   customer_id?: true
   created_by?: true
   status?: true
+  payment_status?: true
+  due_date?: true
   created_at?: true
   _all?: true
 }
@@ -159,6 +171,8 @@ export type SaleGroupByOutputType = {
   customer_id: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status: $Enums.PaymentStatus
+  due_date: Date | null
   created_at: Date
   _count: SaleCountAggregateOutputType | null
   _min: SaleMinAggregateOutputType | null
@@ -189,10 +203,13 @@ export type SaleWhereInput = {
   customer_id?: Prisma.StringFilter<"Sale"> | string
   created_by?: Prisma.StringFilter<"Sale"> | string
   status?: Prisma.EnumSaleStatusFilter<"Sale"> | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFilter<"Sale"> | $Enums.PaymentStatus
+  due_date?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Sale"> | Date | string
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   sale_items?: Prisma.SaleItemListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type SaleOrderByWithRelationInput = {
@@ -201,10 +218,13 @@ export type SaleOrderByWithRelationInput = {
   customer_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  payment_status?: Prisma.SortOrder
+  due_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   customer?: Prisma.CustomerOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   sale_items?: Prisma.SaleItemOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type SaleWhereUniqueInput = Prisma.AtLeast<{
@@ -216,10 +236,13 @@ export type SaleWhereUniqueInput = Prisma.AtLeast<{
   customer_id?: Prisma.StringFilter<"Sale"> | string
   created_by?: Prisma.StringFilter<"Sale"> | string
   status?: Prisma.EnumSaleStatusFilter<"Sale"> | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFilter<"Sale"> | $Enums.PaymentStatus
+  due_date?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Sale"> | Date | string
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   sale_items?: Prisma.SaleItemListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "sale_number">
 
 export type SaleOrderByWithAggregationInput = {
@@ -228,6 +251,8 @@ export type SaleOrderByWithAggregationInput = {
   customer_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  payment_status?: Prisma.SortOrder
+  due_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.SaleCountOrderByAggregateInput
   _max?: Prisma.SaleMaxOrderByAggregateInput
@@ -243,6 +268,8 @@ export type SaleScalarWhereWithAggregatesInput = {
   customer_id?: Prisma.StringWithAggregatesFilter<"Sale"> | string
   created_by?: Prisma.StringWithAggregatesFilter<"Sale"> | string
   status?: Prisma.EnumSaleStatusWithAggregatesFilter<"Sale"> | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusWithAggregatesFilter<"Sale"> | $Enums.PaymentStatus
+  due_date?: Prisma.DateTimeNullableWithAggregatesFilter<"Sale"> | Date | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Sale"> | Date | string
 }
 
@@ -250,10 +277,13 @@ export type SaleCreateInput = {
   id?: string
   sale_number: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   customer: Prisma.CustomerCreateNestedOneWithoutSalesInput
   user: Prisma.UserCreateNestedOneWithoutSalesInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutSaleInput
 }
 
 export type SaleUncheckedCreateInput = {
@@ -262,18 +292,24 @@ export type SaleUncheckedCreateInput = {
   customer_id: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSaleInput
 }
 
 export type SaleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneRequiredWithoutSalesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSalesNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateInput = {
@@ -282,8 +318,11 @@ export type SaleUncheckedUpdateInput = {
   customer_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleCreateManyInput = {
@@ -292,6 +331,8 @@ export type SaleCreateManyInput = {
   customer_id: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
 }
 
@@ -299,6 +340,8 @@ export type SaleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -308,6 +351,8 @@ export type SaleUncheckedUpdateManyInput = {
   customer_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -327,6 +372,8 @@ export type SaleCountOrderByAggregateInput = {
   customer_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  payment_status?: Prisma.SortOrder
+  due_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -336,6 +383,8 @@ export type SaleMaxOrderByAggregateInput = {
   customer_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  payment_status?: Prisma.SortOrder
+  due_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -345,6 +394,8 @@ export type SaleMinOrderByAggregateInput = {
   customer_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  payment_status?: Prisma.SortOrder
+  due_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -441,6 +492,14 @@ export type EnumSaleStatusFieldUpdateOperationsInput = {
   set?: $Enums.SaleStatus
 }
 
+export type EnumPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentStatus
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type SaleCreateNestedOneWithoutSale_itemsInput = {
   create?: Prisma.XOR<Prisma.SaleCreateWithoutSale_itemsInput, Prisma.SaleUncheckedCreateWithoutSale_itemsInput>
   connectOrCreate?: Prisma.SaleCreateOrConnectWithoutSale_itemsInput
@@ -455,13 +514,30 @@ export type SaleUpdateOneRequiredWithoutSale_itemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SaleUpdateToOneWithWhereWithoutSale_itemsInput, Prisma.SaleUpdateWithoutSale_itemsInput>, Prisma.SaleUncheckedUpdateWithoutSale_itemsInput>
 }
 
+export type SaleCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutPaymentsInput, Prisma.SaleUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.SaleWhereUniqueInput
+}
+
+export type SaleUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutPaymentsInput, Prisma.SaleUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.SaleUpsertWithoutPaymentsInput
+  connect?: Prisma.SaleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SaleUpdateToOneWithWhereWithoutPaymentsInput, Prisma.SaleUpdateWithoutPaymentsInput>, Prisma.SaleUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type SaleCreateWithoutUserInput = {
   id?: string
   sale_number: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   customer: Prisma.CustomerCreateNestedOneWithoutSalesInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutSaleInput
 }
 
 export type SaleUncheckedCreateWithoutUserInput = {
@@ -469,8 +545,11 @@ export type SaleUncheckedCreateWithoutUserInput = {
   sale_number: string
   customer_id: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSaleInput
 }
 
 export type SaleCreateOrConnectWithoutUserInput = {
@@ -508,6 +587,8 @@ export type SaleScalarWhereInput = {
   customer_id?: Prisma.StringFilter<"Sale"> | string
   created_by?: Prisma.StringFilter<"Sale"> | string
   status?: Prisma.EnumSaleStatusFilter<"Sale"> | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFilter<"Sale"> | $Enums.PaymentStatus
+  due_date?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"Sale"> | Date | string
 }
 
@@ -515,9 +596,12 @@ export type SaleCreateWithoutCustomerInput = {
   id?: string
   sale_number: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSalesInput
   sale_items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutSaleInput
 }
 
 export type SaleUncheckedCreateWithoutCustomerInput = {
@@ -525,8 +609,11 @@ export type SaleUncheckedCreateWithoutCustomerInput = {
   sale_number: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSaleInput
 }
 
 export type SaleCreateOrConnectWithoutCustomerInput = {
@@ -559,9 +646,12 @@ export type SaleCreateWithoutSale_itemsInput = {
   id?: string
   sale_number: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
   customer: Prisma.CustomerCreateNestedOneWithoutSalesInput
   user: Prisma.UserCreateNestedOneWithoutSalesInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutSaleInput
 }
 
 export type SaleUncheckedCreateWithoutSale_itemsInput = {
@@ -570,7 +660,10 @@ export type SaleUncheckedCreateWithoutSale_itemsInput = {
   customer_id: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutSaleInput
 }
 
 export type SaleCreateOrConnectWithoutSale_itemsInput = {
@@ -593,9 +686,12 @@ export type SaleUpdateWithoutSale_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneRequiredWithoutSalesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSalesNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutSale_itemsInput = {
@@ -604,7 +700,74 @@ export type SaleUncheckedUpdateWithoutSale_itemsInput = {
   customer_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutSaleNestedInput
+}
+
+export type SaleCreateWithoutPaymentsInput = {
+  id?: string
+  sale_number: string
+  status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
+  created_at?: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutSalesInput
+  user: Prisma.UserCreateNestedOneWithoutSalesInput
+  sale_items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
+}
+
+export type SaleUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  sale_number: string
+  customer_id: string
+  created_by: string
+  status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
+  created_at?: Date | string
+  sale_items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
+}
+
+export type SaleCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.SaleWhereUniqueInput
+  create: Prisma.XOR<Prisma.SaleCreateWithoutPaymentsInput, Prisma.SaleUncheckedCreateWithoutPaymentsInput>
+}
+
+export type SaleUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.SaleUpdateWithoutPaymentsInput, Prisma.SaleUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.SaleCreateWithoutPaymentsInput, Prisma.SaleUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.SaleWhereInput
+}
+
+export type SaleUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.SaleWhereInput
+  data: Prisma.XOR<Prisma.SaleUpdateWithoutPaymentsInput, Prisma.SaleUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type SaleUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sale_number?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutSalesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSalesNestedInput
+  sale_items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
+}
+
+export type SaleUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sale_number?: Prisma.StringFieldUpdateOperationsInput | string
+  customer_id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_by?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleCreateManyUserInput = {
@@ -612,6 +775,8 @@ export type SaleCreateManyUserInput = {
   sale_number: string
   customer_id: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
 }
 
@@ -619,9 +784,12 @@ export type SaleUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneRequiredWithoutSalesNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutUserInput = {
@@ -629,8 +797,11 @@ export type SaleUncheckedUpdateWithoutUserInput = {
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   customer_id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateManyWithoutUserInput = {
@@ -638,6 +809,8 @@ export type SaleUncheckedUpdateManyWithoutUserInput = {
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   customer_id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -646,6 +819,8 @@ export type SaleCreateManyCustomerInput = {
   sale_number: string
   created_by: string
   status: $Enums.SaleStatus
+  payment_status?: $Enums.PaymentStatus
+  due_date?: Date | string | null
   created_at?: Date | string
 }
 
@@ -653,9 +828,12 @@ export type SaleUpdateWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSalesNestedInput
   sale_items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutCustomerInput = {
@@ -663,8 +841,11 @@ export type SaleUncheckedUpdateWithoutCustomerInput = {
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sale_items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutSaleNestedInput
 }
 
 export type SaleUncheckedUpdateManyWithoutCustomerInput = {
@@ -672,6 +853,8 @@ export type SaleUncheckedUpdateManyWithoutCustomerInput = {
   sale_number?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  payment_status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  due_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -682,10 +865,12 @@ export type SaleUncheckedUpdateManyWithoutCustomerInput = {
 
 export type SaleCountOutputType = {
   sale_items: number
+  payments: number
 }
 
 export type SaleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sale_items?: boolean | SaleCountOutputTypeCountSale_itemsArgs
+  payments?: boolean | SaleCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -705,6 +890,13 @@ export type SaleCountOutputTypeCountSale_itemsArgs<ExtArgs extends runtime.Types
   where?: Prisma.SaleItemWhereInput
 }
 
+/**
+ * SaleCountOutputType without action
+ */
+export type SaleCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type SaleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -712,10 +904,13 @@ export type SaleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   customer_id?: boolean
   created_by?: boolean
   status?: boolean
+  payment_status?: boolean
+  due_date?: boolean
   created_at?: boolean
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   sale_items?: boolean | Prisma.Sale$sale_itemsArgs<ExtArgs>
+  payments?: boolean | Prisma.Sale$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.SaleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
@@ -725,6 +920,8 @@ export type SaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   customer_id?: boolean
   created_by?: boolean
   status?: boolean
+  payment_status?: boolean
+  due_date?: boolean
   created_at?: boolean
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -736,6 +933,8 @@ export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   customer_id?: boolean
   created_by?: boolean
   status?: boolean
+  payment_status?: boolean
+  due_date?: boolean
   created_at?: boolean
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -747,14 +946,17 @@ export type SaleSelectScalar = {
   customer_id?: boolean
   created_by?: boolean
   status?: boolean
+  payment_status?: boolean
+  due_date?: boolean
   created_at?: boolean
 }
 
-export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sale_number" | "customer_id" | "created_by" | "status" | "created_at", ExtArgs["result"]["sale"]>
+export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sale_number" | "customer_id" | "created_by" | "status" | "payment_status" | "due_date" | "created_at", ExtArgs["result"]["sale"]>
 export type SaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   sale_items?: boolean | Prisma.Sale$sale_itemsArgs<ExtArgs>
+  payments?: boolean | Prisma.Sale$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.SaleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SaleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -772,6 +974,7 @@ export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     customer: Prisma.$CustomerPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
     sale_items: Prisma.$SaleItemPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -779,6 +982,8 @@ export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     customer_id: string
     created_by: string
     status: $Enums.SaleStatus
+    payment_status: $Enums.PaymentStatus
+    due_date: Date | null
     created_at: Date
   }, ExtArgs["result"]["sale"]>
   composites: {}
@@ -1177,6 +1382,7 @@ export interface Prisma__SaleClient<T, Null = never, ExtArgs extends runtime.Typ
   customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sale_items<T extends Prisma.Sale$sale_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Sale$sale_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Sale$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Sale$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1211,6 +1417,8 @@ export interface SaleFieldRefs {
   readonly customer_id: Prisma.FieldRef<"Sale", 'String'>
   readonly created_by: Prisma.FieldRef<"Sale", 'String'>
   readonly status: Prisma.FieldRef<"Sale", 'SaleStatus'>
+  readonly payment_status: Prisma.FieldRef<"Sale", 'PaymentStatus'>
+  readonly due_date: Prisma.FieldRef<"Sale", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"Sale", 'DateTime'>
 }
     
@@ -1629,6 +1837,30 @@ export type Sale$sale_itemsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
+}
+
+/**
+ * Sale.payments
+ */
+export type Sale$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

@@ -14,7 +14,8 @@ export type Sale = Prisma.SaleGetPayload<{
           }
         }
       }
-    }
+    },
+    payments: true,
   }
 }>
 
@@ -24,4 +25,13 @@ export interface SaleItem extends Omit<SaleItemPrisma, 'sale_id' | 'unit_price'>
   product_name: string;
   tracking_type: string;
   vin?: string;  // Add vin property for SERIAL tracking items
+}
+
+export interface Payment {
+  id: string;
+  sale_id: string;
+  amount: number;
+  method: string;
+  notes: string | null;
+  created_at: Date;
 }

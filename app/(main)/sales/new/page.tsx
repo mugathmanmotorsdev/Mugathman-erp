@@ -16,6 +16,12 @@ import {
   Phone,
   Mail,
   Home,
+  CreditCard,
+  Banknote,
+  Building2,
+  Smartphone,
+  CheckCircle,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +67,18 @@ export default function NewSalePage() {
 
   // Sale Items State
   const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
+
+  // Payment State
+  const [saleCreated, setSaleCreated] = useState(false);
+  const [createdSaleId, setCreatedSaleId] = useState("");
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("CASH");
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentNotes, setPaymentNotes] = useState("");
+  const [recordingPayment, setRecordingPayment] = useState(false);
+
+  // Due Date State
+  const [dueDate, setDueDate] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -185,6 +203,7 @@ export default function NewSalePage() {
           quantity: item.quantity,
           unit_price: item.unit_price,
         })),
+        due_date: dueDate || null,
       };
 
       const res = await fetch("/api/sales", {
@@ -194,8 +213,11 @@ export default function NewSalePage() {
       });
 
       if (res.ok) {
+        const data = await res.json();
         toast.success("Sale completed successfully");
-        router.push("/sales");
+        setCreatedSaleId(data.id);
+        setSaleCreated(true);
+        setShowPaymentForm(true);
       } else {
         const error = await res.json();
         toast.error(error.error || "Failed to create sale");
@@ -210,6 +232,50 @@ export default function NewSalePage() {
 
   const calculateTotal = () => {
     return saleItems.reduce((acc, item) => acc + item.quantity * Number(item.unit_price), 0);
+  };
+
+  const handleRecordPayment = async () => {
+    const amount = parseFloat(paymentAmount);
+    if (!amount || amount <= 0) {
+      toast.error("Please enter a valid payment amount");
+      return;
+    }
+
+    setRecordingPayment(true);
+    try {
+      const res = await fetch("/api/payments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sale_id: createdSaleId,
+          amount,
+          method: paymentMethod,
+          notes: paymentNotes || null,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Payment recorded successfully");
+        router.push("/sales");
+      } else {
+        const error = await res.json();
+        toast.error(error.error || "Failed to record payment");
+      }
+    } catch (error) {
+      console.error("Error recording payment:", error);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setRecordingPayment(false);
+    }
+  };
+
+  const handleDone = () => {
+    setSaleCreated(false);
+    setCreatedSaleId("");
+    setShowPaymentForm(false);
+    setPaymentAmount("");
+    setPaymentNotes("");
+    router.push("/sales");
   };
 
   if (fetchingData) {
@@ -491,52 +557,167 @@ export default function NewSalePage() {
         {/* Right Column - Summary */}
         <div className="space-y-6">
           <Card className="border-none shadow-2xl shadow-indigo-200/50 bg-[#150150] text-white rounded-2xl overflow-hidden sticky top-6">
-            <CardHeader className="pb-8 pt-12 px-10">
-              <div className="flex items-center gap-2 text-indigo-200 text-[10px] font-black uppercase tracking-[0.2em]">
-                <CircleDollarSign className="h-4 w-4" />
-                Transaction Total
-              </div>
-              <div className="mt-4">
-                <h3 className="text-5xl font-black tabular-nums tracking-tighter">
-                  ${calculateTotal().toLocaleString()}
-                </h3>
-                <p className="text-indigo-300/60 text-xs mt-2 font-medium">Inclusive of all items and processing</p>
-              </div>
-            </CardHeader>
-            <CardContent className="px-10 pb-10 space-y-8">
-              <div className="space-y-4 border-t border-white/5 pt-8">
-                <div className="flex justify-between items-center">
-                  <span className="text-indigo-200/60 text-sm font-bold uppercase tracking-widest text-[10px]">Total Line Items</span>
-                  <span className="font-black text-xl">{saleItems.length}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-indigo-200/60 text-sm font-bold uppercase tracking-widest text-[10px]">Net Quantities</span>
-                  <span className="font-black text-xl">{saleItems.reduce((acc, i) => acc + i.quantity, 0)}</span>
-                </div>
-              </div>
-
-              <div className="bg-white/5 rounded-3xl p-6 border border-white/5 space-y-3">
-                <p className="text-[10px] text-indigo-200/80 leading-relaxed font-bold uppercase tracking-widest">
-                  Compliance Check
-                </p>
-                <div className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-indigo-400/20 flex items-center justify-center shrink-0">
-                    <Barcode className="h-3 w-3 text-indigo-300" />
+            {saleCreated ? (
+              <>
+                <CardHeader className="pb-8 pt-12 px-10">
+                  <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CheckCircle className="h-4 w-4" />
+                    Sale Created
                   </div>
-                  <p className="text-[10px] text-indigo-100/60 leading-relaxed">
-                    By confirming, you verify that products and VINs have been physically inspected and the sale is legally binding.
-                  </p>
-                </div>
-              </div>
+                  <div className="mt-4">
+                    <h3 className="text-3xl font-black tabular-nums tracking-tighter">
+                      ${calculateTotal().toLocaleString()}
+                    </h3>
+                    <p className="text-indigo-300/60 text-xs mt-2 font-medium">Sale total — record payment below</p>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-10 pb-10 space-y-4">
+                  {!showPaymentForm ? (
+                    <>
+                      <div className="bg-white/5 rounded-3xl p-4 border border-white/5 space-y-2">
+                        <p className="text-xs text-indigo-200/80 font-bold uppercase tracking-widest">
+                          What's next?
+                        </p>
+                        <p className="text-xs text-indigo-100/60 leading-relaxed">
+                          Record a payment now, or come back to it later from the sale detail page.
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => setShowPaymentForm(true)}
+                        className="w-full h-14 rounded-2xl bg-white text-[#150150] hover:bg-emerald-50 hover:text-emerald-900 font-black text-base uppercase tracking-widest shadow-2xl transition-all active:scale-95"
+                      >
+                        <CreditCard className="h-5 w-5 mr-2" />
+                        Record Payment
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleDone}
+                        className="w-full h-12 rounded-2xl border-white/20 text-white font-bold uppercase tracking-widest"
+                      >
+                        Done
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <Label className="text-indigo-200 font-bold text-xs uppercase tracking-widest">Amount</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            max={calculateTotal()}
+                            placeholder="0.00"
+                            value={paymentAmount}
+                            onChange={(e) => setPaymentAmount(e.target.value)}
+                            className="h-12 border-white/20 bg-white/5 rounded-xl text-white placeholder:text-indigo-300/40"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-indigo-200 font-bold text-xs uppercase tracking-widest">Method</Label>
+                          <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                            <SelectTrigger className="h-12 border-white/20 bg-white/5 rounded-xl text-white">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-xl">
+                              <SelectItem value="CASH">Cash</SelectItem>
+                              <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
+                              <SelectItem value="CHEQUE">Cheque</SelectItem>
+                              <SelectItem value="MOBILE_MONEY">Mobile Money</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-indigo-200 font-bold text-xs uppercase tracking-widest">Notes (Optional)</Label>
+                          <Input
+                            placeholder="Payment reference or notes"
+                            value={paymentNotes}
+                            onChange={(e) => setPaymentNotes(e.target.value)}
+                            className="h-12 border-white/20 bg-white/5 rounded-xl text-white placeholder:text-indigo-300/40"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        disabled={recordingPayment}
+                        onClick={handleRecordPayment}
+                        className="w-full h-14 rounded-2xl bg-white text-[#150150] hover:bg-emerald-50 hover:text-emerald-900 font-black text-base uppercase tracking-widest shadow-2xl transition-all active:scale-95"
+                      >
+                        {recordingPayment ? "Recording..." : "Record Payment"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleDone}
+                        className="w-full h-12 rounded-2xl border-white/20 text-black hover:bg-gray-300 font-bold uppercase tracking-widest"
+                      >
+                        Skip
+                      </Button>
+                    </>
+                  )}
+                </CardContent>
+              </>
+            ) : (
+              <>
+                <CardHeader className="pb-8 pt-12 px-10">
+                  <div className="flex items-center gap-2 text-indigo-200 text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CircleDollarSign className="h-4 w-4" />
+                    Transaction Total
+                  </div>
+                  <div className="mt-4">
+                    <h3 className="text-5xl font-black tabular-nums tracking-tighter">
+                      ${calculateTotal().toLocaleString()}
+                    </h3>
+                    <p className="text-indigo-300/60 text-xs mt-2 font-medium">Inclusive of all items and processing</p>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-10 pb-10 space-y-8">
+                  <div className="space-y-4 border-t border-white/5 pt-8">
+                    <div className="flex justify-between items-center">
+                      <span className="text-indigo-200/60 text-sm font-bold uppercase tracking-widest text-[10px]">Total Line Items</span>
+                      <span className="font-black text-xl">{saleItems.length}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-indigo-200/60 text-sm font-bold uppercase tracking-widest text-[10px]">Net Quantities</span>
+                      <span className="font-black text-xl">{saleItems.reduce((acc, i) => acc + i.quantity, 0)}</span>
+                    </div>
+                  </div>
 
-              <Button
-                disabled={loading || saleItems.length === 0}
-                onClick={handleSubmit}
-                className="w-full h-16 rounded-2xl bg-white text-[#150150] hover:bg-emerald-50 hover:text-emerald-900 font-black text-base uppercase tracking-widest shadow-2xl transition-all active:scale-95 group"
-              >
-                {loading ? "Processing Order..." : "Finalize & Record Sale"}
-              </Button>
-            </CardContent>
+                  <div className="bg-white/5 rounded-3xl p-6 border border-white/5 space-y-3">
+                    <p className="text-[10px] text-indigo-200/80 leading-relaxed font-bold uppercase tracking-widest">
+                      Compliance Check
+                    </p>
+                    <div className="flex items-start gap-3">
+                      <div className="h-5 w-5 rounded-full bg-indigo-400/20 flex items-center justify-center shrink-0">
+                        <Barcode className="h-3 w-3 text-indigo-300" />
+                      </div>
+                      <p className="text-[10px] text-indigo-100/60 leading-relaxed">
+                        By confirming, you verify that products and VINs have been physically inspected and the sale is legally binding.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-indigo-200 font-bold text-xs uppercase tracking-widest">Due Date (Optional)</Label>
+                    <Input
+                      type="date"
+                      value={dueDate}
+                      onChange={(e) => setDueDate(e.target.value)}
+                      className="h-12 border-white/20 bg-white/5 rounded-xl text-white placeholder:text-indigo-300/40"
+                    />
+                    <p className="text-[10px] text-indigo-300/60">
+                      Leave empty for immediate payment. Set a date to track outstanding balances.
+                    </p>
+                  </div>
+
+                  <Button
+                    disabled={loading || saleItems.length === 0}
+                    onClick={handleSubmit}
+                    className="w-full h-16 rounded-2xl bg-white text-[#150150] hover:bg-emerald-50 hover:text-emerald-900 font-black text-base uppercase tracking-widest shadow-2xl transition-all active:scale-95 group"
+                  >
+                    {loading ? "Processing Order..." : "Finalize & Record Sale"}
+                  </Button>
+                </CardContent>
+              </>
+            )}
           </Card>
 
           <Card className="border-none shadow-xl shadow-slate-200/50 bg-white rounded-2xl p-6 overflow-hidden relative">
