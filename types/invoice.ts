@@ -1,7 +1,6 @@
 import type { Prisma, InvoiceItem as InvoiceItemPrisma } from "@/generated/prisma/client"
-import type { InvoiceGetPayload } from "@/generated/prisma/models/Invoice"
 
-export type Invoice = InvoiceGetPayload<{
+export type Invoice = Prisma.InvoiceGetPayload<{
   include: {
     customer: true
     user: {
