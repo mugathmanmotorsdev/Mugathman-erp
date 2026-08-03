@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient, Category } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "@/lib/utils/password";
 
@@ -59,12 +59,12 @@ async function main() {
   // 3. Sample Products (BATCH tracked)
   // -------------------------------------------------------
   const batchProducts = [
-    { name: "Toyota Spare Tire", sku: "TOY-TIRE-001", category: "PARTS", unit_price: 15000, unit: "piece", tracking_type: "BATCH" as const, reorder_level: 10, description: "Genuine Toyota spare tire for Hiace and Land Cruiser models" },
-    { name: "Engine Oil 20W-50", sku: "ENG-OIL-20W", category: "PARTS", unit_price: 3500, unit: "liter", tracking_type: "BATCH" as const, reorder_level: 20, description: "Premium engine oil 20W-50 for diesel engines" },
-    { name: "Brake Pad Set", sku: "BRK-PAD-001", category: "PARTS", unit_price: 8500, unit: "set", tracking_type: "BATCH" as const, reorder_level: 15, description: "Brake pad set for light commercial vehicles" },
-    { name: "Diesel Fuel Filter", sku: "DFL-200", category: "PARTS", unit_price: 4200, unit: "piece", tracking_type: "BATCH" as const, reorder_level: 25, description: "Primary diesel fuel filter for truck engines" },
-    { name: "NPK Fertilizer 50kg", sku: "FERT-NPK-50", category: "FERTILIZER", unit_price: 5500, unit: "bag", tracking_type: "BATCH" as const, reorder_level: 5, description: "NPK compound fertilizer 50kg bag for crops" },
-    { name: "Urea Fertilizer 50kg", sku: "FERT-UREA-50", category: "FERTILIZER", unit_price: 4800, unit: "bag", tracking_type: "BATCH" as const, reorder_level: 5, description: "Granular urea fertilizer 50kg bag" },
+    { name: "Toyota Spare Tire", sku: "TOY-TIRE-001", category: Category.PARTS, unit_price: 15000, unit: "piece", tracking_type: "BATCH" as const, reorder_level: 10, description: "Genuine Toyota spare tire for Hiace and Land Cruiser models" },
+    { name: "Engine Oil 20W-50", sku: "ENG-OIL-20W", category: Category.PARTS, unit_price: 3500, unit: "liter", tracking_type: "BATCH" as const, reorder_level: 20, description: "Premium engine oil 20W-50 for diesel engines" },
+    { name: "Brake Pad Set", sku: "BRK-PAD-001", category: Category.PARTS, unit_price: 8500, unit: "set", tracking_type: "BATCH" as const, reorder_level: 15, description: "Brake pad set for light commercial vehicles" },
+    { name: "Diesel Fuel Filter", sku: "DFL-200", category: Category.PARTS, unit_price: 4200, unit: "piece", tracking_type: "BATCH" as const, reorder_level: 25, description: "Primary diesel fuel filter for truck engines" },
+    { name: "NPK Fertilizer 50kg", sku: "FERT-NPK-50", category: Category.FERTILIZER, unit_price: 5500, unit: "bag", tracking_type: "BATCH" as const, reorder_level: 5, description: "NPK compound fertilizer 50kg bag for crops" },
+    { name: "Urea Fertilizer 50kg", sku: "FERT-UREA-50", category: Category.FERTILIZER, unit_price: 4800, unit: "bag", tracking_type: "BATCH" as const, reorder_level: 5, description: "Granular urea fertilizer 50kg bag" },
   ];
 
   for (const product of batchProducts) {
@@ -81,10 +81,10 @@ async function main() {
   // 4. Sample Products (SERIAL tracked)
   // -------------------------------------------------------
   const serialProducts = [
-    { name: "Toyota Hiace Van (2023)", sku: "TOY-HIACE-2023", category: "TRUCK_HEAD", unit_price: 25000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Toyota Hiace 2023 model, white, 13-seater" },
-    { name: "Hino Truck Head", sku: "HINO-TH-2024", category: "TRUCK_HEAD", unit_price: 45000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Hino FH series truck head, 2024 model" },
-    { name: "Mitsubishi Tipper", sku: "MITS-TIP-2023", category: "TIPPER", unit_price: 18000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Mitsubishi L200 tipper, 2023 model" },
-    { name: "Iveco Tractor Head", sku: "IVECO-TR-2023", category: "TRACTOR", unit_price: 35000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Iveco Tector tractor head, 2023 model" },
+    { name: "Toyota Hiace Van (2023)", sku: "TOY-HIACE-2023", category: Category.TRUCK_HEAD, unit_price: 25000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Toyota Hiace 2023 model, white, 13-seater" },
+    { name: "Hino Truck Head", sku: "HINO-TH-2024", category: Category.TRUCK_HEAD, unit_price: 45000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Hino FH series truck head, 2024 model" },
+    { name: "Mitsubishi Tipper", sku: "MITS-TIP-2023", category: Category.TIPPER, unit_price: 18000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Mitsubishi L200 tipper, 2023 model" },
+    { name: "Iveco Tractor Head", sku: "IVECO-TR-2023", category: Category.TRACTOR, unit_price: 35000000, unit: "piece", tracking_type: "SERIAL" as const, reorder_level: 0, description: "Iveco Tector tractor head, 2023 model" },
   ];
 
   for (const product of serialProducts) {
@@ -206,7 +206,7 @@ async function main() {
   ];
 
   for (const lead of leads) {
-    const existing = await prisma.lead.findUnique({ where: { email: lead.email } });
+    const existing = await prisma.lead.findFirst({ where: { email: lead.email } });
     if (!existing) {
       await prisma.lead.create({ data: lead });
       console.log(`✅ Lead created: ${lead.full_name}`);
