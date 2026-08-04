@@ -26,7 +26,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -52,6 +51,28 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useFetchProduct } from "@/hooks/usefetchproducts";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
+import FilterSelect from "@/components/ui/FilterSelect";
+import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
+
+const categories = [
+  { label: "All Categories", value: "all" },
+  { label: "Heavy Duty", value: "HEAVY_DUTY" },
+  { label: "Fertilizer", value: "FERTILIZER" },
+  { label: "Parts", value: "PARTS" },
+  { label: "Truck Head", value: "TRUCK_HEAD" },
+  { label: "Tipper", value: "TIPPER" },
+  { label: "Tractor", value: "TRACTOR" },
+  { label: "Dozer", value: "DOZER" },
+  { label: "Car", value: "CAR" },
+];
+
+const warehouseOptions = [
+  { label: "All Warehouses", value: "all" },
+  { label: "Main Warehouse", value: "main" },
+  { label: "Sector-G", value: "sector-g" },
+];
 
 export default function ProductsPage() {
   const router = useRouter();
@@ -106,18 +127,6 @@ export default function ProductsPage() {
     }
   };
 
-  const categories = [
-    { label: "All Categories", value: "all" },
-    { label: "Heavy Duty", value: "HEAVY_DUTY" },
-    { label: "Fertilizer", value: "FERTILIZER" },
-    { label: "Parts", value: "PARTS" },
-    { label: "Truck Head", value: "TRUCK_HEAD" },
-    { label: "Tipper", value: "TIPPER" },
-    { label: "Tractor", value: "TRACTOR" },
-    { label: "Dozer", value: "DOZER" },
-    { label: "Car", value: "CAR" },
-  ];
-
   return (
     <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header Section */}
@@ -136,55 +145,37 @@ export default function ProductsPage() {
       </div>
 
       {/* Filters Section */}
-      <div className="grid grid-cols-1 md:flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <div className="relative flex-1 group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#150150] transition-colors" />
-          <Input
-            placeholder="Search by SKU, Name or Category..."
-            className="pl-10 bg-slate-50/50 border-slate-200 focus-visible:ring-[#150150] focus-visible:bg-white transition-all"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-3">
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-[180px] bg-slate-50/50 border-slate-200">
-              <SelectValue placeholder="Category: All" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((cat) => (
-                <SelectItem key={cat.value} value={cat.value}>
-                  {cat.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="w-[180px] bg-slate-50/50 border-slate-200 text-slate-600">
-              <SelectValue placeholder="Warehouse: All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Warehouse: All</SelectItem>
-              <SelectItem value="main">Main Warehouse</SelectItem>
-              <SelectItem value="sector-g">Sector-G</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 border border-red-100 rounded-full text-xs font-semibold uppercase tracking-wider">
-            Status: Low Stock
-            <X className="h-3 w-3 cursor-pointer hover:bg-red-100 rounded-full transition-colors" />
-          </div>
-
-          <Button
-            variant="outline"
-            className="gap-2 border-slate-200 text-slate-600 hover:bg-slate-50"
-          >
+      <FilterBar>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Search by SKU, Name or Category..."
+        />
+        <FilterSelect
+          options={categories}
+          value={category}
+          onValueChange={setCategory}
+          triggerClassName="w-[180px] bg-slate-50/50 border-slate-200"
+          placeholder="Category"
+        />
+        <FilterSelect
+          options={warehouseOptions}
+          value="all"
+          onValueChange={() => {}}
+          triggerClassName="w-[180px] bg-slate-50/50 border-slate-200 text-slate-600"
+          placeholder="Warehouse"
+        />
+        <CollapsibleFilterPanel>
+          <Button variant="outline" className="gap-2 border-slate-200 text-slate-600 hover:bg-slate-50">
             <Filter className="h-4 w-4" />
-            More Filters
+            Low Stock
           </Button>
-        </div>
-      </div>
+          <Button variant="outline" className="gap-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+            <Filter className="h-4 w-4" />
+            Out of Stock
+          </Button>
+        </CollapsibleFilterPanel>
+      </FilterBar>
 
       {/* Table Section */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">

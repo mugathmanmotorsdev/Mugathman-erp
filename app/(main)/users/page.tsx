@@ -9,7 +9,6 @@ import {
   Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -38,7 +37,25 @@ import StatCard from "@/components/StatCard";
 import NewUserDialog from "@/components/NewUserDialog";
 import UserRow from "@/components/UserRow";
 import SkeletonUi from "@/components/SkeletonUi";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
+import FilterSelect from "@/components/ui/FilterSelect";
+import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
 import { User, Role, UserStatus } from "@generated/prisma/client";
+
+const roleOptions = [
+  { label: "All Roles", value: "all" },
+  { label: "ADMIN", value: "ADMIN" },
+  { label: "EDITOR", value: "EDITOR" },
+  { label: "VIEWER", value: "VIEWER" },
+];
+
+const statusOptions = [
+  { label: "Any Status", value: "all" },
+  { label: "ACTIVE", value: "ACTIVE" },
+  { label: "PENDING", value: "PENDING" },
+  { label: "INACTIVE", value: "INACTIVE" },
+];
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -68,7 +85,6 @@ export default function UsersPage() {
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
       if (data.users) {
-        // Convert date strings to Date objects
         const formattedUsers = data.users.map((user: User) => ({
           ...user,
           created_at: new Date(user.created_at),
@@ -194,8 +210,7 @@ export default function UsersPage() {
 
   const getTimeAgo = (date: Date) => {
     const now = new Date();
-    const past = date; // Already a Date object
-    const diff = now.getTime() - past.getTime();
+    const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
@@ -254,76 +269,43 @@ export default function UsersPage() {
         </div>
 
         {/* Filters & Search Section */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6">
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="relative flex-1 min-w-[340px]">
-              <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                size={20}
-              />
-              <Input
-                placeholder="Search employees by name, email or role..."
-                className="pl-12 bg-[#F1F3F9] border-none h-[52px] rounded-xl text-[15px] placeholder:text-slate-400 placeholder:font-medium focus-visible:ring-1 focus-visible:ring-indigo-100 transition-all"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[150px] border-slate-200 h-[52px] rounded-xl text-[13px] font-bold text-slate-700 transition-all hover:bg-slate-50 border shadow-none">
-                <div className="flex items-center gap-1.5 uppercase tracking-tighter">
-                  <span className="text-slate-400 font-bold">Role:</span>
-                  <SelectValue placeholder="All" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="all" className="font-bold text-xs">
-                  ALL
-                </SelectItem>
-                <SelectItem value="ADMIN" className="font-bold text-xs">
-                  ADMIN
-                </SelectItem>
-                <SelectItem value="EDITOR" className="font-bold text-xs">
-                  EDITOR
-                </SelectItem>
-                <SelectItem value="VIEWER" className="font-bold text-xs">
-                  VIEWER
-                </SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[170px] border-slate-200 h-[52px] rounded-xl text-[13px] font-bold text-slate-700 uppercase tracking-tighter transition-all hover:bg-slate-50 border shadow-none">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-400 font-bold">Status:</span>
-                  <SelectValue placeholder="Any" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="all" className="font-bold text-xs">
-                  ANY
-                </SelectItem>
-                <SelectItem value="ACTIVE" className="font-bold text-xs">
-                  ACTIVE
-                </SelectItem>
-                <SelectItem value="PENDING" className="font-bold text-xs">
-                  PENDING
-                </SelectItem>
-                <SelectItem value="INACTIVE" className="font-bold text-xs">
-                  INACTIVE
-                </SelectItem>
-              </SelectContent>
-            </Select>
-
+        <FilterBar>
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search employees by name, email or role..."
+          />
+          <FilterSelect
+            options={roleOptions}
+            value={roleFilter}
+            onValueChange={setRoleFilter}
+            triggerClassName="w-[150px] h-12 border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 transition-all hover:bg-slate-50 border shadow-none"
+            placeholder="Role"
+          />
+          <FilterSelect
+            options={statusOptions}
+            value={statusFilter}
+            onValueChange={setStatusFilter}
+            triggerClassName="w-[170px] h-12 border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 uppercase tracking-tighter transition-all hover:bg-slate-50 border shadow-none"
+            placeholder="Status"
+          />
+          <CollapsibleFilterPanel>
             <Button
               variant="outline"
-              className="h-[52px] px-6 gap-2.5 border-slate-200 text-slate-700 font-bold text-[13px] uppercase tracking-wider rounded-xl hover:bg-slate-50 bg-white shadow-none transition-all"
+              className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
             >
-              <Filter size={18} />
-              More Filters
+              <Filter size={16} className="mr-2" />
+              Active
             </Button>
-          </div>
-        </div>
+            <Button
+              variant="outline"
+              className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
+            >
+              <Filter size={16} className="mr-2" />
+              Admin
+            </Button>
+          </CollapsibleFilterPanel>
+        </FilterBar>
 
         {/* Users Table Card */}
         <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
