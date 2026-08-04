@@ -26,7 +26,7 @@ import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
-import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
+import FilterSelect from "@/components/ui/FilterSelect";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Sale } from "@/types/sale";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
@@ -38,6 +38,7 @@ export default function SalesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("ALL");
 
   const fetchSales = async () => {
     try {
@@ -67,9 +68,10 @@ export default function SalesPage() {
 
   const filteredSales = sales.filter(
     (s) =>
-      s.sale_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.customer.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.customer.phone.includes(searchQuery),
+      (paymentStatusFilter === "ALL" || s.payment_status === paymentStatusFilter) &&
+      (s.sale_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.customer.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.customer.phone.includes(searchQuery)),
   );
 
   const totalRevenue = sales.reduce((acc, s) => acc + calculateTotal(s.sale_items), 0);
@@ -170,24 +172,18 @@ export default function SalesPage() {
           onChange={setSearchQuery}
           placeholder="Search by order #, customer name or phone..."
         />
-        <CollapsibleFilterPanel>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <Calendar className="h-4 w-4 mr-2" />
-            Past 30 Days
-          </Button>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <Calendar className="h-4 w-4 mr-2" />
-            Past 90 Days
-          </Button>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <CheckCircle className="h-4 w-4 mr-2" />
-            Paid
-          </Button>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <AlertTriangle className="h-4 w-4 mr-2" />
-            Overdue
-          </Button>
-        </CollapsibleFilterPanel>
+        <FilterSelect
+          options={[
+            { label: "All Status", value: "ALL" },
+            { label: "Paid", value: "PAID" },
+            { label: "Partially Paid", value: "PARTIALLY_PAID" },
+            { label: "Pending", value: "PENDING" },
+          ]}
+          value={paymentStatusFilter}
+          onValueChange={setPaymentStatusFilter}
+          triggerClassName="w-[170px] h-12 border-slate-200 rounded-xl text-sm font-bold text-slate-700 bg-white shadow-none"
+          placeholder="Payment Status"
+        />
       </FilterBar>
 
       {/* Sales Table */}

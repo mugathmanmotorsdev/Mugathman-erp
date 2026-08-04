@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Search,
-  Filter,
   Users,
   Check,
   Clock,
@@ -40,7 +39,6 @@ import SkeletonUi from "@/components/SkeletonUi";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
 import FilterSelect from "@/components/ui/FilterSelect";
-import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
 import { User, Role, UserStatus } from "@generated/prisma/client";
 
 const roleOptions = [
@@ -289,22 +287,6 @@ export default function UsersPage() {
             triggerClassName="w-[170px] h-12 border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 uppercase tracking-tighter transition-all hover:bg-slate-50 border shadow-none"
             placeholder="Status"
           />
-          <CollapsibleFilterPanel>
-            <Button
-              variant="outline"
-              className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
-            >
-              <Filter size={16} className="mr-2" />
-              Active
-            </Button>
-            <Button
-              variant="outline"
-              className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
-            >
-              <Filter size={16} className="mr-2" />
-              Admin
-            </Button>
-          </CollapsibleFilterPanel>
         </FilterBar>
 
         {/* Users Table Card */}
