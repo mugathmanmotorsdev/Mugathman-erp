@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import {
   Plus,
   FileText,
-  Calendar,
   MoreVertical,
   Download,
-  Filter,
   Printer,
   DollarSign,
   Clock,
@@ -26,7 +24,7 @@ import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
-import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
+import FilterSelect from "@/components/ui/FilterSelect";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Invoice } from "@/types/invoice";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
@@ -36,6 +34,7 @@ export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [invoiceStatusFilter, setInvoiceStatusFilter] = useState("ALL");
 
   const fetchInvoices = async () => {
     try {
@@ -65,9 +64,10 @@ export default function InvoicesPage() {
 
   const filteredInvoices = invoices.filter(
     (inv) =>
-      inv.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inv.customer.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inv.customer.phone.includes(searchQuery),
+      (invoiceStatusFilter === "ALL" || inv.status === invoiceStatusFilter) &&
+      (inv.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        inv.customer.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        inv.customer.phone.includes(searchQuery)),
   );
 
   const totalInvoiceValue = invoices.reduce(
@@ -196,20 +196,18 @@ export default function InvoicesPage() {
           onChange={setSearchQuery}
           placeholder="Search by invoice #, customer name or phone..."
         />
-        <CollapsibleFilterPanel>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <Calendar className="h-4 w-4 mr-2" />
-            Past 30 Days
-          </Button>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <Filter className="h-4 w-4 mr-2" />
-            Pending
-          </Button>
-          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
-            <Filter className="h-4 w-4 mr-2" />
-            Paid
-          </Button>
-        </CollapsibleFilterPanel>
+        <FilterSelect
+          options={[
+            { label: "All Status", value: "ALL" },
+            { label: "Pending", value: "PENDING" },
+            { label: "Paid", value: "PAID" },
+            { label: "Cancelled", value: "CANCELLED" },
+          ]}
+          value={invoiceStatusFilter}
+          onValueChange={setInvoiceStatusFilter}
+          triggerClassName="w-[170px] h-12 border-slate-200 rounded-xl text-sm font-bold text-slate-700 bg-white shadow-none"
+          placeholder="Invoice Status"
+        />
       </FilterBar>
 
       {/* Invoices Table */}

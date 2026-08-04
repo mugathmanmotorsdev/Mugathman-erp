@@ -7,7 +7,6 @@ import {
   Search,
   Plus,
   MoreHorizontal,
-  Filter,
   ChevronLeft,
   ChevronRight,
   Package,
@@ -54,7 +53,6 @@ import { useFetchProduct } from "@/hooks/usefetchproducts";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
 import FilterSelect from "@/components/ui/FilterSelect";
-import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
 
 const categories = [
   { label: "All Categories", value: "all" },
@@ -165,16 +163,6 @@ export default function ProductsPage() {
           triggerClassName="w-[180px] bg-slate-50/50 border-slate-200 text-slate-600"
           placeholder="Warehouse"
         />
-        <CollapsibleFilterPanel>
-          <Button variant="outline" className="gap-2 border-slate-200 text-slate-600 hover:bg-slate-50">
-            <Filter className="h-4 w-4" />
-            Low Stock
-          </Button>
-          <Button variant="outline" className="gap-2 border-slate-200 text-slate-600 hover:bg-slate-50">
-            <Filter className="h-4 w-4" />
-            Out of Stock
-          </Button>
-        </CollapsibleFilterPanel>
       </FilterBar>
 
       {/* Table Section */}
