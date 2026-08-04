@@ -39,7 +39,18 @@ export function useFetchProduct() {
         const data = await response.json();
         if (data.products) {
             setProducts(data.products);
-            if (data.pagination) setPagination(data.pagination);
+            if (data.pagination) {
+                setPagination((prev) => {
+                    if (
+                        prev.total === data.pagination.total &&
+                        prev.skip === data.pagination.skip &&
+                        prev.take === data.pagination.take
+                    ) {
+                        return prev;
+                    }
+                    return data.pagination;
+                });
+            }
         }
         } catch (error) {
         console.error("Failed to fetch products", error);
@@ -68,7 +79,7 @@ export function useFetchProduct() {
     return {
         products,
         loading,
-        error: null,
+        error,
         search,
         setSearch,
         category,
