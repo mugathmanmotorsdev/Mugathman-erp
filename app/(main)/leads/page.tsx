@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   UserCheck,
-  Search,
   Clock,
   CheckCircle,
   XCircle,
@@ -12,7 +11,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import PageHeading from "@/components/PageHeading";
@@ -31,6 +29,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
+import StatusFilter from "@/components/ui/StatusFilter";
 import { MoreVertical } from "lucide-react";
 
 interface Lead {
@@ -59,6 +60,13 @@ const statusIcons = {
   DISQUALIFIED: XCircle,
 };
 
+const statusOptions = [
+  { label: "All", value: "ALL" },
+  { label: "New", value: "NEW" },
+  { label: "Qualified", value: "QUALIFIED" },
+  { label: "Disqualified", value: "DISQUALIFIED" },
+];
+
 export default function LeadsPage() {
   const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -71,6 +79,7 @@ export default function LeadsPage() {
     try {
       const params = new URLSearchParams();
       if (statusFilter !== "ALL") params.set("status", statusFilter);
+      if (searchQuery) params.set("search", searchQuery);
 
       const res = await fetch(`/api/leads?${params.toString()}`);
       if (res.ok) {
@@ -85,11 +94,31 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter]);
+  }, [statusFilter, searchQuery]);
 
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
+
+  // Sync filters to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (statusFilter !== "ALL") params.set("status", statusFilter);
+    if (searchQuery) params.set("search", searchQuery);
+    const newUrl = params.toString()
+      ? `${window.location.pathname}?${params.toString()}`
+      : window.location.pathname;
+    window.history.replaceState(null, "", newUrl);
+  }, [statusFilter, searchQuery]);
+
+  // Read initial filters from URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlStatus = params.get("status");
+    const urlSearch = params.get("search");
+    if (urlStatus) setStatusFilter(urlStatus);
+    if (urlSearch) setSearchQuery(urlSearch);
+  }, []);
 
   const filteredLeads = leads.filter(
     (lead) =>
@@ -193,35 +222,18 @@ export default function LeadsPage() {
       </div>
 
       {/* Search & Filter */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              placeholder="Search by name, email, phone, or organization..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 pl-12 bg-slate-50/50 border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100"
-            />
-          </div>
-          <div className="flex gap-2">
-            {["ALL", "NEW", "QUALIFIED", "DISQUALIFIED"].map((status) => (
-              <Button
-                key={status}
-                variant={statusFilter === status ? "default" : "outline"}
-                className={`h-12 px-4 rounded-xl font-bold text-sm ${
-                  statusFilter === status
-                    ? "bg-[#150150] hover:bg-[#150150]/90 text-white"
-                    : "border-slate-200 text-slate-600"
-                }`}
-                onClick={() => setStatusFilter(status)}
-              >
-                {status}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <FilterBar>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by name, email, phone, or organization..."
+        />
+        <StatusFilter
+          options={statusOptions}
+          value={statusFilter}
+          onChange={setStatusFilter}
+        />
+      </FilterBar>
 
       {/* Leads Table */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">

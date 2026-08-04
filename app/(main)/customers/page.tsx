@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Users,
-  Search,
   Plus,
   ArrowRight,
   Phone,
@@ -15,7 +14,6 @@ import {
   Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -25,6 +23,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import StatCard from "@/components/StatCard";
 import PageHeading from "@/components/PageHeading";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
 import type { Customer } from "@generated/prisma/client";
 
 
@@ -91,26 +91,20 @@ export default function CustomersPage() {
         />
       </div>
 
-      {/* Filter Bar */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              placeholder="Search by name, phone or email..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 pl-12 bg-slate-50/50 border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100 transition-all"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-bold text-slate-600">
-              <Download className="h-4 w-4 mr-2" />
-              Export List
-            </Button>
-          </div>
+      {/* Search & Filter */}
+      <FilterBar>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by name, phone or email..."
+        />
+        <div className="flex gap-2">
+          <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-bold text-slate-600">
+            <Download className="h-4 w-4 mr-2" />
+            Export List
+          </Button>
         </div>
-      </div>
+      </FilterBar>
 
       {/* Customers Table */}
       <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">

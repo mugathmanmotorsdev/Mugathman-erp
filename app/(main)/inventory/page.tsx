@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Search,
   ArrowLeftRight,
   Package,
   AlertTriangle,
@@ -23,7 +22,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -47,7 +45,17 @@ import StatCard from "@/components/StatCard";
 import { useAuth } from "@/hooks/useauth";
 import { useFetchProduct } from "@/hooks/usefetchproducts";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
+import FilterSelect from "@/components/ui/FilterSelect";
 import type { Product, StockStatus } from "@/types/product";
+
+const statusOptions = [
+  { label: "All Status", value: "all" },
+  { label: "In Stock", value: "IN_STOCK" },
+  { label: "Low Stock", value: "LOW_STOCK" },
+  { label: "Out of Stock", value: "OUT_OF_STOCK" },
+];
 
 export default function InventoryPage() {
   useAuth();
@@ -89,7 +97,7 @@ export default function InventoryPage() {
       const response = await fetch(
         `/api/products/${deleteDialog.productId}`,
         {
-          method: "DELETE",
+          method: "DELETE"
         }
       );
 
@@ -263,120 +271,30 @@ export default function InventoryPage() {
             icon={<Heart className="h-6 w-6" />}
             iconBg="bg-green-100"
           />
-
-
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Search Input */}
-            <div className="relative flex-1 min-w-[320px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-              <Input
-                placeholder="Search by SKU, product name or serial number..."
-                className="pl-12 h-12 bg-slate-50/50 border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-indigo-200 focus-visible:bg-white transition-all"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-
-            {/* Category Filters */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant={category === "all" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-semibold text-sm transition-all ${category === "all"
-                  ? "bg-[#150150] text-white shadow-md"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                onClick={() => setCategory("all")}
-              >
-                All Categories
-                <ChevronDown className="h-4 w-4 ml-1.5" />
-              </Button>
-              <Button
-                variant={category === "PARTS" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "PARTS"
-                  ? "bg-slate-900 text-white"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                onClick={() => setCategory("PARTS")}
-              >
-                Parts
-                <ChevronDown className="h-4 w-4 ml-1.5" />
-              </Button>
-              <Button
-                variant={category === "FERTILIZER" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "FERTILIZER"
-                  ? "bg-slate-900 text-white"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                onClick={() => setCategory("FERTILIZER")}
-              >
-                Fertilizer
-                <ChevronDown className="h-4 w-4 ml-1.5" />
-              </Button>
-              <Button
-                variant={category === "HEAVY_DUTY" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "HEAVY_DUTY"
-                  ? "bg-slate-900 text-white"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                onClick={() => setCategory("HEAVY_DUTY")}
-              >
-                Accessories
-                <ChevronDown className="h-4 w-4 ml-1.5" />
-              </Button>
-              <Button
-                variant={category === "CAR" ? "default" : "outline"}
-                className={`h-10 px-4 rounded-full font-medium text-sm transition-all ${category === "CAR"
-                  ? "bg-slate-900 text-white"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                onClick={() => setCategory("CAR")}
-              >
-                Car
-                <ChevronDown className="h-4 w-4 ml-1.5" />
-              </Button>
-            </div>
-
-            {/* Status Filter */}
-            <div className="flex items-center gap-3 ml-auto">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[150px] h-10 border-slate-200 rounded-full text-sm font-medium bg-white shadow-none">
-                  <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-slate-400" />
-                    <SelectValue placeholder="Status: All" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  <SelectItem value="all" className="font-medium">
-                    All Status
-                  </SelectItem>
-                  <SelectItem value="IN_STOCK" className="font-medium">
-                    In Stock
-                  </SelectItem>
-                  <SelectItem value="LOW_STOCK" className="font-medium">
-                    Low Stock
-                  </SelectItem>
-                  <SelectItem value="OUT_OF_STOCK" className="font-medium">
-                    Out of Stock
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <span className="text-sm text-slate-500">
-                Displaying <span className="font-semibold text-slate-700">{pagination.total}</span> items
-              </span>
-            </div>
-          </div>
-        </div>
+        <FilterBar>
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search by SKU, product name or serial number..."
+          />
+          <FilterSelect
+            options={statusOptions}
+            value={statusFilter}
+            onValueChange={setStatusFilter}
+            triggerClassName="w-[150px] h-10 border-slate-200 rounded-full text-sm font-medium bg-white shadow-none"
+            placeholder="Status"
+          />
+        </FilterBar>
 
         {/* Table Section */}
         <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader className="bg-slate-50/60 border-b border-slate-100">
-                <TableRow className="hover:bg-transparent">
+                <TableRow className="hover:bg-transparent border-none">
                   <TableHead className="w-[120px] text-[12px] font-bold text-slate-500 uppercase tracking-[0.08em] py-4 pl-6">
                     SKU
                   </TableHead>
@@ -517,7 +435,6 @@ export default function InventoryPage() {
               <div className="flex items-center gap-1">
                 {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
                   let pageNum = i + 1;
-                  // Smart pagination display
                   if (totalPages > 5) {
                     if (currentPage <= 3) {
                       pageNum = i + 1;

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Plus,
-  Search,
   ShoppingCart,
   Calendar,
   MoreVertical,
@@ -15,7 +14,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
@@ -26,6 +24,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PageHeading from "@/components/PageHeading";
 import StatCard from "@/components/StatCard";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterBar from "@/components/ui/FilterBar";
+import CollapsibleFilterPanel from "@/components/ui/CollapsibleFilterPanel";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Sale } from "@/types/sale";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
@@ -110,6 +111,7 @@ export default function SalesPage() {
       </Badge>
     );
   };
+
   return (
     <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
@@ -161,30 +163,32 @@ export default function SalesPage() {
         />
       </div>
 
-      {/* Search & Filter Bar */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              placeholder="Search by order #, customer name or phone..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 pl-12 bg-slate-50/50 border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100 transition-all"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-bold text-slate-600">
-              <Calendar className="h-4 w-4 mr-2" />
-              Past 30 Days
-            </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-bold text-slate-600">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-          </div>
-        </div>
-      </div>
+      {/* Search & Filter */}
+      <FilterBar>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by order #, customer name or phone..."
+        />
+        <CollapsibleFilterPanel>
+          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
+            <Calendar className="h-4 w-4 mr-2" />
+            Past 30 Days
+          </Button>
+          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
+            <Calendar className="h-4 w-4 mr-2" />
+            Past 90 Days
+          </Button>
+          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Paid
+          </Button>
+          <Button variant="outline" className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600">
+            <AlertTriangle className="h-4 w-4 mr-2" />
+            Overdue
+          </Button>
+        </CollapsibleFilterPanel>
+      </FilterBar>
 
       {/* Sales Table */}
       <div className="border-none shadow-sm bg-white rounded-2xl overflow-hidden">
@@ -205,7 +209,7 @@ export default function SalesPage() {
             <TableBody className="divide-y divide-slate-50">
               {error ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="px-6 py-20 text-center">
+                  <TableCell colSpan={8} className="px-6 py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-400">
                         <AlertTriangle className="h-8 w-8" />
@@ -226,12 +230,12 @@ export default function SalesPage() {
               ) : loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
-                    <TableCell colSpan={6} className="px-6 py-4"><div className="h-12 w-full bg-slate-100 animate-pulse rounded-xl" /></TableCell>
+                    <TableCell colSpan={8} className="px-6 py-4"><div className="h-12 w-full bg-slate-100 animate-pulse rounded-xl" /></TableCell>
                   </TableRow>
                 ))
               ) : filteredSales.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="px-6 py-20 text-center text-slate-400">
+                  <TableCell colSpan={8} className="px-6 py-20 text-center text-slate-400">
                     <ShoppingCart className="h-16 w-16 mx-auto mb-4 opacity-5" />
                     <p className="text-lg font-medium">No sales orders found</p>
                     <Button variant="link" onClick={() => router.push("/sales/new")} className="text-indigo-600 font-bold mt-2">
