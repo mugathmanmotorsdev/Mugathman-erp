@@ -54,6 +54,7 @@ export default function InventoryPage() {
   const {
     products,
     loading,
+    error,
     search,
     setSearch,
     category,
@@ -397,7 +398,27 @@ export default function InventoryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {loading ? (
+                {error ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="h-48 text-center">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-400">
+                          <AlertTriangle className="h-8 w-8" />
+                        </div>
+                        <p className="text-red-600 font-semibold">Failed to load inventory</p>
+                        <p className="text-slate-400 text-sm">{error}</p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-2 rounded-full"
+                          onClick={fetchProducts}
+                        >
+                          Retry
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : loading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <TableRow key={i} className="border-b border-slate-50">
                       {Array.from({ length: 7 }).map((_, j) => (

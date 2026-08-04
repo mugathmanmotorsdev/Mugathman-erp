@@ -12,6 +12,7 @@ import {
   PlusCircle,
   MoveUpRight,
   MoveDownLeft,
+  AlertTriangle,
 } from "lucide-react";
 import {
   Card,
@@ -57,6 +58,7 @@ interface Activity {
 export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
 
@@ -71,16 +73,18 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await fetch("/api/dashboard/stats");
-        if (res.ok) {
-          const data = await res.json();
-          setStats(data.stats);
-          setActivities(data.recentActivity);
-        } else {
-          toast.error("Failed to load dashboard data");
+        setError(null);
+        const res = await fetch("/api/dashboard/stats", { credentials: "include" });
+        if (!res.ok) {
+          throw new Error(`HTTP error: ${res.status}`);
         }
+        const data = await res.json();
+        setStats(data.stats);
+        setActivities(data.recentActivity);
       } catch (error) {
         console.error("Dashboard error:", error);
+        setError(error instanceof Error ? error.message : "Failed to load dashboard data");
+        toast.error("Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
@@ -93,6 +97,27 @@ export default function Dashboard() {
 
   if (loading) {
     <SkeletonUi />
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-8 p-8 bg-[#EFF3F4] min-h-screen">
+        <div className="flex flex-col items-center justify-center py-20">
+          <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-400 mb-4">
+            <AlertTriangle className="h-8 w-8" />
+          </div>
+          <p className="text-red-600 font-semibold text-lg">Failed to load dashboard</p>
+          <p className="text-slate-400 text-sm mb-4">{error}</p>
+          <Button
+            variant="outline"
+            onClick={() => window.location.reload()}
+            className="rounded-full"
+          >
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (

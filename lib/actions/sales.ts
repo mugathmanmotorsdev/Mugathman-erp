@@ -76,7 +76,7 @@ export const createPayment = async (saleId: string, amount: number, method: stri
         const totalAmount = sale.sale_items.reduce(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (acc: number, item: any) => acc + Number(item.product?.unit_price || 0) * item.quantity,
-            0
+            0,
         );
         const newTotalPaid = totalPaid + amount;
 
@@ -107,6 +107,6 @@ export const createPayment = async (saleId: string, amount: number, method: stri
 export const getPaymentsBySale = async (saleId: string) => {
     return await prisma.payment.findMany({
         where: { sale_id: saleId },
-        orderBy: { created_at: 'desc' },
+        orderBy: { created_at: "desc" },
     });
 };

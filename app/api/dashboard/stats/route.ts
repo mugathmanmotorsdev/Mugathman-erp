@@ -29,7 +29,7 @@ export async function GET() {
 
         const totalRevenue = recentSales.reduce((acc, sale) => {
             return acc + sale.sale_items.reduce((itemAcc, item) => {
-                return itemAcc + (item.quantity * Number(item.unit_price));
+                return itemAcc + (item.quantity * (Number(item.unit_price) || 0));
             }, 0);
         }, 0);
 
@@ -48,7 +48,7 @@ export async function GET() {
 
         const lastMonthRevenue = lastMonthSales.reduce((acc, sale) => {
             return acc + sale.sale_items.reduce((itemAcc, item) => {
-                return itemAcc + (item.quantity * Number(item.unit_price));
+                return itemAcc + (item.quantity * (Number(item.unit_price) || 0));
             }, 0);
         }, 0);
 

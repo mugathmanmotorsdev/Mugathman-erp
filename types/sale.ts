@@ -3,20 +3,24 @@ import type { Prisma, SaleItem as SaleItemPrisma } from "@/generated/prisma/clie
 export type Sale = Prisma.SaleGetPayload<{
   include: {
     customer: true,
-    user: true,
+    user: {
+      select: {
+        full_name: true,
+      },
+    },
     sale_items: {
       include: {
         product: true,
         vehicle: {
           select: {
             vin: true,
-            color: true
-          }
-        }
-      }
+            color: true,
+          },
+        },
+      },
     },
     payments: true,
-  }
+  },
 }>
 
 export interface SaleItem extends Omit<SaleItemPrisma, 'sale_id' | 'unit_price'> {

@@ -35,20 +35,22 @@ export default function SalesPage() {
   const router = useRouter();
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchSales = async () => {
     try {
-      const res = await fetch("/api/sales");
-      if (res.ok) {
-        const data = await res.json();
-        setSales(data);
-      } else {
-        toast.error("Failed to load sales");
+      setError(null);
+      const res = await fetch("/api/sales", { credentials: "include" });
+      if (!res.ok) {
+        throw new Error(`HTTP error: ${res.status}`);
       }
+      const data = await res.json();
+      setSales(data);
     } catch (error) {
       console.error("Error fetching sales", error);
-      toast.error("Internal server error");
+      setError(error instanceof Error ? error.message : "Failed to load sales");
+      toast.error("Failed to load sales");
     } finally {
       setLoading(false);
     }
@@ -201,7 +203,27 @@ export default function SalesPage() {
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-slate-50">
-              {loading ? (
+              {error ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-400">
+                        <AlertTriangle className="h-8 w-8" />
+                      </div>
+                      <p className="text-red-600 font-semibold">Failed to load sales</p>
+                      <p className="text-slate-400 text-sm">{error}</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 rounded-full"
+                        onClick={fetchSales}
+                      >
+                        Retry
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
                     <TableCell colSpan={6} className="px-6 py-4"><div className="h-12 w-full bg-slate-100 animate-pulse rounded-xl" /></TableCell>
