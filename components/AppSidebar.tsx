@@ -37,7 +37,6 @@ export function AppSidebar() {
     { href: "/customers", label: "Customers", icon: Users, external: false, adminOnly: false },
     { href: "/leads", label: "Leads", icon: UserCheck, external: false, adminOnly: false },
     { href: "/users", label: "Users", icon: User, external: false, adminOnly: true },
-    { href: "/reports", label: "Reports", icon: FileText, external: false, adminOnly: false },
   ]
 
   return (
