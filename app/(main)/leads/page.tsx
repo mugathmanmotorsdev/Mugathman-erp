@@ -9,6 +9,7 @@ import {
   XCircle,
   ArrowRight,
   RefreshCw,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -189,6 +190,19 @@ export default function LeadsPage() {
           >
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
+          </Button>
+          <Button
+            variant="outline"
+            className="h-12 rounded-2xl border-slate-200 font-bold text-slate-600"
+            onClick={() => {
+              const params = new URLSearchParams()
+              if (searchQuery) params.set("search", searchQuery)
+              if (statusFilter !== "ALL") params.set("status", statusFilter)
+              window.open(`/api/export/leads?${params.toString()}`, "_blank")
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export PDF
           </Button>
         </div>
       </div>
