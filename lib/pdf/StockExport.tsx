@@ -96,17 +96,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1e293b",
   },
-  summaryValueNew: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#64748b",
-  },
-  summaryValueQualified: {
+  summaryValuePositive: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#16a34a",
   },
-  summaryValueDisqualified: {
+  summaryValueNegative: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#dc2626",
@@ -134,12 +129,12 @@ const styles = StyleSheet.create({
     color: "#334155",
     alignItems: "flex-start",
   },
-  col1: { flex: 3, paddingRight: 16 },
+  col1: { flex: 2, paddingRight: 16 },
   col2: { flex: 1, textAlign: "right" },
   col3: { flex: 1, textAlign: "center" },
   col4: { flex: 1, textAlign: "center" },
-  col5: { flex: 2, textAlign: "left" },
-  leadName: {
+  col5: { flex: 1, textAlign: "center" },
+  productName: {
     fontWeight: "bold",
     color: "#0f172a",
     marginBottom: 2,
@@ -159,17 +154,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
   },
-  statusNew: {
-    backgroundColor: "#f1f5f9",
-    color: "#475569",
-  },
-  statusQualified: {
+  statusInStock: {
     backgroundColor: "#d1fae5",
     color: "#065f46",
   },
-  statusDisqualified: {
+  statusLowStock: {
     backgroundColor: "#fee2e2",
     color: "#991b1b",
+  },
+  statusOutOfStock: {
+    backgroundColor: "#f1f5f9",
+    color: "#64748b",
   },
   footer: {
     flexDirection: "row",
@@ -202,40 +197,51 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Lead {
+interface Product {
   id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  organization: string | null;
-  product_of_interest: string | null;
-  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
-  created_at: string;
+  name: string;
+  sku: string;
+  category: string;
+  unit_price: number;
+  currentStock: number;
+  reorder_level: number;
+  tracking_type: string;
 }
 
-interface LeadReportProps {
-  summary: {
-    totalLeads: number;
-    newCount: number;
-    qualifiedCount: number;
-    disqualifiedCount: number;
-  };
-  leads: Lead[];
+interface StockExportProps {
+  products: Product[];
+  totalStockValue: number;
+  lowStockCount: number;
   dateFrom?: string;
   dateTo?: string;
 }
 
-export function LeadReportPDF({ summary, leads, dateFrom, dateTo }: LeadReportProps) {
+export function StockExportPDF({
+  products,
+  totalStockValue,
+  lowStockCount,
+  dateFrom,
+  dateTo,
+}: StockExportProps) {
   const logoUrl = getLogoBase64();
+
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(amount);
+
+  const getStockStatus = (product: Product) => {
+    if (product.currentStock === 0) return "OUT_OF_STOCK";
+    if (product.currentStock <= product.reorder_level * 0.5) return "LOW_STOCK";
+    return "IN_STOCK";
+  };
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case "QUALIFIED":
-        return styles.statusQualified;
-      case "DISQUALIFIED":
-        return styles.statusDisqualified;
+      case "IN_STOCK":
+        return styles.statusInStock;
+      case "LOW_STOCK":
+        return styles.statusLowStock;
       default:
-        return styles.statusNew;
+        return styles.statusOutOfStock;
     }
   };
 
@@ -256,7 +262,7 @@ export function LeadReportPDF({ summary, leads, dateFrom, dateTo }: LeadReportPr
             </View>
           </View>
           <View style={{ textAlign: "right" }}>
-            <Text style={styles.reportTitle}>Leads Report</Text>
+            <Text style={styles.reportTitle}>Stock Export</Text>
             <Text style={styles.reportMeta}>
               {dateFrom && dateTo
                 ? `${new Date(dateFrom).toLocaleDateString()} — ${new Date(dateTo).toLocaleDateString()}`
@@ -269,62 +275,60 @@ export function LeadReportPDF({ summary, leads, dateFrom, dateTo }: LeadReportPr
         {/* Summary Cards */}
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Total Leads</Text>
-            <Text style={styles.summaryValue}>{summary.totalLeads}</Text>
+            <Text style={styles.summaryLabel}>Total Products</Text>
+            <Text style={styles.summaryValue}>{products.length}</Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>New</Text>
-            <Text style={styles.summaryValueNew}>{summary.newCount}</Text>
+            <Text style={styles.summaryLabel}>Total Stock Value</Text>
+            <Text style={styles.summaryValue}>{formatCurrency(totalStockValue)}</Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Qualified</Text>
-            <Text style={styles.summaryValueQualified}>{summary.qualifiedCount}</Text>
-          </View>
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Disqualified</Text>
-            <Text style={styles.summaryValueDisqualified}>{summary.disqualifiedCount}</Text>
+            <Text style={styles.summaryLabel}>Low Stock Alerts</Text>
+            <Text style={lowStockCount > 0 ? styles.summaryValueNegative : styles.summaryValuePositive}>
+              {lowStockCount}
+            </Text>
           </View>
         </View>
 
-        {/* Leads Table */}
+        {/* Products Table */}
         <View style={styles.table}>
           <View style={styles.tableHeader}>
-            <Text style={styles.col1}>Lead</Text>
-            <Text style={styles.col2}>Organization</Text>
-            <Text style={styles.col3}>Interest</Text>
-            <Text style={styles.col4}>Status</Text>
-            <Text style={styles.col5}>Date</Text>
+            <Text style={styles.col1}>Product</Text>
+            <Text style={styles.col2}>SKU</Text>
+            <Text style={styles.col3}>Category</Text>
+            <Text style={styles.col4}>Stock</Text>
+            <Text style={styles.col5}>Status</Text>
           </View>
 
-          {leads.map((lead) => (
-            <View key={lead.id} style={styles.tableRow}>
-              <View style={styles.col1}>
-                <Text style={styles.leadName}>{lead.full_name}</Text>
-                <Text style={styles.textMuted}>{lead.email}</Text>
-                <Text style={styles.textMuted}>{lead.phone}</Text>
-              </View>
-              <Text style={styles.col2}>
-                {lead.organization ? (
-                  lead.organization
-                ) : (
-                  <Text style={styles.textMuted}>—</Text>
-                )}
-              </Text>
-              <Text style={styles.col3}>
-                {lead.product_of_interest ? (
-                  lead.product_of_interest
-                ) : (
-                  <Text style={styles.textMuted}>—</Text>
-                )}
-              </Text>
-              <Text style={styles.col4}>
-                <Text style={{ ...styles.statusBadge, ...getStatusStyle(lead.status) }}>
-                  {lead.status}
+          {products.map((product) => {
+            const status = getStockStatus(product);
+            return (
+              <View key={product.id} style={styles.tableRow}>
+                <View style={styles.col1}>
+                  <Text style={styles.productName}>{product.name}</Text>
+                  <Text style={styles.textMuted}>{product.tracking_type} tracking</Text>
+                </View>
+                <Text style={styles.col2}>{product.sku}</Text>
+                <Text style={styles.col3}>{product.category.replace("_", " ")}</Text>
+                <Text style={styles.col4}>
+                  <Text
+                    className={
+                      status === "LOW_STOCK" || status === "OUT_OF_STOCK"
+                        ? "text-red-600 font-bold"
+                        : "text-slate-900 font-bold"
+                    }
+                  >
+                    {product.currentStock}
+                  </Text>
                 </Text>
-              </Text>
-              <Text style={styles.col5}>{new Date(lead.created_at).toLocaleDateString()}</Text>
-            </View>
-          ))}
+                <Text style={styles.col5}>
+                  <Text style={{ ...styles.statusBadge, ...getStatusStyle(status) }}>
+                    {status === "IN_STOCK" ? "In Stock" : status === "LOW_STOCK" ? "Low Stock" : "Out of Stock"}
+                  </Text>
+                </Text>
+              </View>
+            );
+          })}
         </View>
 
         {/* Footer */}

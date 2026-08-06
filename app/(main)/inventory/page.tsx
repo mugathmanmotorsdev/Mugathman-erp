@@ -12,6 +12,7 @@ import {
   Filter,
   DollarSign,
   Heart,
+  Download,
 } from "lucide-react";
 import {
   Table,
@@ -247,6 +248,20 @@ export default function InventoryPage() {
                   Stock In/Out
                 </Button>
               </Link>
+              <Button
+                variant="outline"
+                className="h-11 px-5 gap-2.5 text-[#150150] font-semibold rounded-xl border-slate-200"
+                onClick={() => {
+                  const params = new URLSearchParams()
+                  if (search) params.set("search", search)
+                  if (category && category !== "all") params.set("category", category)
+                  if (statusFilter !== "all") params.set("statusFilter", statusFilter)
+                  window.open(`/api/export/stock?${params.toString()}`, "_blank")
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export PDF
+              </Button>
             </div>
           </div>
         </div>

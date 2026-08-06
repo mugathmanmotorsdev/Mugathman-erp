@@ -96,12 +96,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1e293b",
   },
-  summaryValuePositive: {
+  summaryValueNew: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#64748b",
+  },
+  summaryValueQualified: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#16a34a",
   },
-  summaryValueNegative: {
+  summaryValueDisqualified: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#dc2626",
@@ -133,8 +138,8 @@ const styles = StyleSheet.create({
   col2: { flex: 1, textAlign: "right" },
   col3: { flex: 1, textAlign: "center" },
   col4: { flex: 1, textAlign: "center" },
-  col5: { flex: 1, textAlign: "center" },
-  productName: {
+  col5: { flex: 2, textAlign: "left" },
+  leadName: {
     fontWeight: "bold",
     color: "#0f172a",
     marginBottom: 2,
@@ -143,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: "#64748b",
   },
-  typeBadge: {
+  statusBadge: {
     alignSelf: "flex-start",
     paddingLeft: 6,
     paddingRight: 6,
@@ -154,11 +159,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
   },
-  typeIn: {
+  statusNew: {
+    backgroundColor: "#f1f5f9",
+    color: "#475569",
+  },
+  statusQualified: {
     backgroundColor: "#d1fae5",
     color: "#065f46",
   },
-  typeOut: {
+  statusDisqualified: {
     backgroundColor: "#fee2e2",
     color: "#991b1b",
   },
@@ -193,37 +202,45 @@ const styles = StyleSheet.create({
   },
 });
 
-interface StockMovement {
+interface Lead {
   id: string;
-  quantity: number;
-  type: "IN" | "OUT";
-  reason: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  organization: string | null;
+  product_of_interest: string | null;
+  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
   created_at: string;
-  product: { name: string; sku: string; category: string };
-  vehicle?: { vin: string; color?: string | null } | null;
-  user: { full_name: string };
 }
 
-interface StockMovementReportProps {
-  summary: {
-    totalMovements: number;
-    totalIn: number;
-    totalOut: number;
-    netStock: number;
-  };
-  movements: StockMovement[];
+interface LeadsExportProps {
+  leads: Lead[];
+  newCount: number;
+  qualifiedCount: number;
+  disqualifiedCount: number;
   dateFrom?: string;
   dateTo?: string;
 }
 
-export function StockMovementReportPDF({ summary, movements, dateFrom, dateTo }: StockMovementReportProps) {
+export function LeadsExportPDF({
+  leads,
+  newCount,
+  qualifiedCount,
+  disqualifiedCount,
+  dateFrom,
+  dateTo,
+}: LeadsExportProps) {
   const logoUrl = getLogoBase64();
 
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(amount);
-
-  const getTypeStyle = (type: string) => {
-    return type === "IN" ? styles.typeIn : styles.typeOut;
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case "QUALIFIED":
+        return styles.statusQualified;
+      case "DISQUALIFIED":
+        return styles.statusDisqualified;
+      default:
+        return styles.statusNew;
+    }
   };
 
   return (
@@ -243,7 +260,7 @@ export function StockMovementReportPDF({ summary, movements, dateFrom, dateTo }:
             </View>
           </View>
           <View style={{ textAlign: "right" }}>
-            <Text style={styles.reportTitle}>Stock Movement Report</Text>
+            <Text style={styles.reportTitle}>Leads Export</Text>
             <Text style={styles.reportMeta}>
               {dateFrom && dateTo
                 ? `${new Date(dateFrom).toLocaleDateString()} — ${new Date(dateTo).toLocaleDateString()}`
@@ -256,61 +273,52 @@ export function StockMovementReportPDF({ summary, movements, dateFrom, dateTo }:
         {/* Summary Cards */}
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Total Movements</Text>
-            <Text style={styles.summaryValue}>{summary.totalMovements}</Text>
+            <Text style={styles.summaryLabel}>Total Leads</Text>
+            <Text style={styles.summaryValue}>{leads.length}</Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Total Stock In</Text>
-            <Text style={styles.summaryValuePositive}>{summary.totalIn} units</Text>
+            <Text style={styles.summaryLabel}>New</Text>
+            <Text style={styles.summaryValueNew}>{newCount}</Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Total Stock Out</Text>
-            <Text style={styles.summaryValueNegative}>{summary.totalOut} units</Text>
+            <Text style={styles.summaryLabel}>Qualified</Text>
+            <Text style={styles.summaryValueQualified}>{qualifiedCount}</Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Net Stock</Text>
-            <Text style={summary.netStock >= 0 ? styles.summaryValuePositive : styles.summaryValueNegative}>
-              {summary.netStock > 0 ? "+" : ""}{summary.netStock} units
-            </Text>
+            <Text style={styles.summaryLabel}>Disqualified</Text>
+            <Text style={styles.summaryValueDisqualified}>{disqualifiedCount}</Text>
           </View>
         </View>
 
-        {/* Movements Table */}
+        {/* Leads Table */}
         <View style={styles.table}>
           <View style={styles.tableHeader}>
-            <Text style={styles.col1}>Product</Text>
-            <Text style={styles.col2}>VIN / Vehicle</Text>
-            <Text style={styles.col3}>Type</Text>
-            <Text style={styles.col4}>Qty</Text>
-            <Text style={styles.col5}>Reason</Text>
+            <Text style={styles.col1}>Lead</Text>
+            <Text style={styles.col2}>Organization</Text>
+            <Text style={styles.col3}>Interest</Text>
+            <Text style={styles.col4}>Status</Text>
+            <Text style={styles.col5}>Date</Text>
           </View>
 
-          {movements.map((movement) => (
-            <View key={movement.id} style={styles.tableRow}>
+          {leads.map((lead) => (
+            <View key={lead.id} style={styles.tableRow}>
               <View style={styles.col1}>
-                <Text style={styles.productName}>{movement.product.name}</Text>
-                <Text style={styles.textMuted}>{movement.product.sku}</Text>
+                <Text style={styles.leadName}>{lead.full_name}</Text>
+                <Text style={styles.textMuted}>{lead.email}</Text>
+                <Text style={styles.textMuted}>{lead.phone}</Text>
               </View>
-              <View style={styles.col2}>
-                {movement.vehicle ? (
-                  <Text style={{ fontWeight: "bold" }}>{movement.vehicle.vin}</Text>
-                ) : (
-                  <Text style={styles.textMuted}>—</Text>
-                )}
-                {movement.vehicle?.color && (
-                  <Text style={styles.textMuted}>Color: {movement.vehicle.color}</Text>
-                )}
-              </View>
+              <Text style={styles.col2}>
+                {lead.organization ? lead.organization : <Text style={styles.textMuted}>—</Text>}
+              </Text>
               <Text style={styles.col3}>
-                <Text style={{ ...styles.typeBadge, ...getTypeStyle(movement.type) }}>
-                  {movement.type === "IN" ? "Stock In" : "Stock Out"}
-                </Text>
+                {lead.product_of_interest ? lead.product_of_interest : <Text style={styles.textMuted}>—</Text>}
               </Text>
               <Text style={styles.col4}>
-                {movement.type === "IN" ? "+" : "-"}
-                {Math.abs(movement.quantity)}
+                <Text style={{ ...styles.statusBadge, ...getStatusStyle(lead.status) }}>
+                  {lead.status}
+                </Text>
               </Text>
-              <Text style={styles.col5}>{movement.reason}</Text>
+              <Text style={styles.col5}>{new Date(lead.created_at).toLocaleDateString()}</Text>
             </View>
           ))}
         </View>

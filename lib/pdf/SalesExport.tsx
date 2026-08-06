@@ -216,22 +216,29 @@ interface Sale {
   status: string;
 }
 
-interface SalesReportProps {
-  summary: {
-    totalSales: number;
-    totalRevenue: number;
-    totalPaid: number;
-    totalOutstanding: number;
-    paidCount: number;
-    partiallyPaidCount: number;
-    pendingCount: number;
-  };
+interface SalesExportProps {
   sales: Sale[];
+  totalRevenue: number;
+  totalPaid: number;
+  totalOutstanding: number;
+  paidCount: number;
+  partiallyPaidCount: number;
+  pendingCount: number;
   dateFrom?: string;
   dateTo?: string;
 }
 
-export function SalesReportPDF({ summary, sales, dateFrom, dateTo }: SalesReportProps) {
+export function SalesExportPDF({
+  sales,
+  totalRevenue,
+  totalPaid,
+  totalOutstanding,
+  paidCount,
+  partiallyPaidCount,
+  pendingCount,
+  dateFrom,
+  dateTo,
+}: SalesExportProps) {
   const logoUrl = getLogoBase64();
 
   const formatCurrency = (amount: number) =>
@@ -265,7 +272,7 @@ export function SalesReportPDF({ summary, sales, dateFrom, dateTo }: SalesReport
             </View>
           </View>
           <View style={{ textAlign: "right" }}>
-            <Text style={styles.reportTitle}>Sales Report</Text>
+            <Text style={styles.reportTitle}>Sales Export</Text>
             <Text style={styles.reportMeta}>
               {dateFrom && dateTo
                 ? `${new Date(dateFrom).toLocaleDateString()} — ${new Date(dateTo).toLocaleDateString()}`
@@ -278,27 +285,23 @@ export function SalesReportPDF({ summary, sales, dateFrom, dateTo }: SalesReport
         {/* Summary Cards */}
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Total Sales</Text>
-            <Text style={styles.summaryValue}>{summary.totalSales}</Text>
-          </View>
-          <View style={styles.summaryCard}>
             <Text style={styles.summaryLabel}>Total Revenue</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(summary.totalRevenue)}</Text>
+            <Text style={styles.summaryValue}>{formatCurrency(totalRevenue)}</Text>
           </View>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryLabel}>Total Paid</Text>
-            <Text style={styles.summaryValuePositive}>{formatCurrency(summary.totalPaid)}</Text>
+            <Text style={styles.summaryValuePositive}>{formatCurrency(totalPaid)}</Text>
           </View>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryLabel}>Outstanding</Text>
-            <Text style={summary.totalOutstanding > 0 ? styles.summaryValueNegative : styles.summaryValue}>
-              {formatCurrency(summary.totalOutstanding)}
+            <Text style={totalOutstanding > 0 ? styles.summaryValueNegative : styles.summaryValue}>
+              {formatCurrency(totalOutstanding)}
             </Text>
           </View>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryLabel}>Paid / Partial / Pending</Text>
             <Text style={styles.summaryValue}>
-              {summary.paidCount} / {summary.partiallyPaidCount} / {summary.pendingCount}
+              {paidCount} / {partiallyPaidCount} / {pendingCount}
             </Text>
           </View>
         </View>

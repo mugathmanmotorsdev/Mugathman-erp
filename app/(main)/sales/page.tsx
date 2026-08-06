@@ -124,6 +124,19 @@ export default function SalesPage() {
         />
         <div className="flex items-center gap-3">
           <Button
+            variant="outline"
+            className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
+            onClick={() => {
+              const params = new URLSearchParams()
+              if (searchQuery) params.set("search", searchQuery)
+              if (paymentStatusFilter !== "ALL") params.set("paymentStatus", paymentStatusFilter)
+              window.open(`/api/export/sales?${params.toString()}`, "_blank")
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export PDF
+          </Button>
+          <Button
             onClick={() => router.push("/sales/new")}
             className="bg-[#150150] hover:bg-[#150150]/90 text-white px-6 h-12 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
