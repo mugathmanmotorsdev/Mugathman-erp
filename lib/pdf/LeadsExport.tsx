@@ -8,6 +8,7 @@ import {
 } from "@react-pdf/renderer";
 import fs from "fs";
 import path from "path";
+import { LeadStatus } from "@generated/prisma/client";
 
 const styles = StyleSheet.create({
   page: {
@@ -209,7 +210,7 @@ interface Lead {
   phone: string;
   organization: string | null;
   product_of_interest: string | null;
-  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
+  status: LeadStatus;
   created_at: string;
 }
 

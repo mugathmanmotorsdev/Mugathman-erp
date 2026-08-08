@@ -8,6 +8,8 @@ import {
 } from "@react-pdf/renderer";
 import fs from "fs";
 import path from "path";
+import { PaymentStatus } from "@generated/prisma/client";
+import { Decimal } from "@prisma/client-runtime-utils";
 
 const styles = StyleSheet.create({
   page: {
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
 interface SaleItem {
   id: string;
   quantity: number;
-  unit_price: number;
+  unit_price: number | Decimal;
   product: { name: string; sku: string };
   vehicle?: { vin: string; color?: string | null } | null;
 }
@@ -212,7 +214,7 @@ interface Sale {
   customer: { full_name: string; phone: string };
   sale_items: SaleItem[];
   payments: { amount: number }[];
-  payment_status: "PENDING" | "PARTIALLY_PAID" | "PAID";
+  payment_status: PaymentStatus;
   status: string;
 }
 
@@ -243,17 +245,6 @@ export function SalesExportPDF({
 
   const formatCurrency = (amount: number) =>
     `NGN ${amount}`;
-
-  const getPaymentStatusStyle = (status: string) => {
-    switch (status) {
-      case "PAID":
-        return styles.statusPaid;
-      case "PARTIALLY_PAID":
-        return styles.statusPartiallyPaid;
-      default:
-        return styles.statusPending;
-    }
-  };
 
   return (
     <Document>

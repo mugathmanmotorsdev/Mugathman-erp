@@ -1,10 +1,12 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { SalesExportPDF } from "./SalesExport";
+import { PaymentStatus } from "@generated/prisma/client";
+import { Decimal } from "@prisma/client-runtime-utils";
 
 interface SaleItem {
   id: string;
   quantity: number;
-  unit_price: number;
+  unit_price: number | Decimal;
   product: { name: string; sku: string };
   vehicle?: { vin: string; color?: string | null } | null;
 }
@@ -16,7 +18,7 @@ interface Sale {
   customer: { full_name: string; phone: string };
   sale_items: SaleItem[];
   payments: { amount: number }[];
-  payment_status: "PENDING" | "PARTIALLY_PAID" | "PAID";
+  payment_status: PaymentStatus;
   status: string;
 }
 

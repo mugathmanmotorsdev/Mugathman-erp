@@ -44,28 +44,26 @@ export async function GET(request: NextRequest) {
       const stockStatus = statusFilter === "LOW_STOCK"
         ? "LOW_STOCK"
         : statusFilter;
-      products = products.filter(p => {
-        const stock = (p.stock_movements || []).reduce((acc, mov) => acc + mov.quantity, 0);
+      products = products.filter((p: any) => {
+        const stock = (p.stock_movements || []).reduce((acc: any, mov: any) => acc + mov.quantity, 0);
         if (stock === 0) return stockStatus === "OUT_OF_STOCK";
         if (stock <= p.reorder_level * 0.5) return stockStatus === "LOW_STOCK";
         return stockStatus === "IN_STOCK";
       });
     }
 
-    const productsWithStock = products.sort((a, b) => {
+    const productsWithStock = products.map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      sku: p.sku,
+      category: p.category,
+      unit_price: Number(p.unit_price),
+      currentStock: (p.stock_movements || []).reduce((acc: any, mov: any) => acc + mov.quantity, 0),
+      reorder_level: p.reorder_level,
+      tracking_type: p.tracking_type,
+      created_at: p.created_at?.toISOString(),
+    })).sort((a, b) => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    }).map((p) => {
-      const currentStock = (p.stock_movements || []).reduce((acc, mov) => acc + mov.quantity, 0);
-      return {
-        id: p.id,
-        name: p.name,
-        sku: p.sku,
-        category: p.category,
-        unit_price: Number(p.unit_price),
-        currentStock,
-        reorder_level: p.reorder_level,
-        tracking_type: p.tracking_type,
-      };
     });
 
     const totalStockValue = productsWithStock.reduce(

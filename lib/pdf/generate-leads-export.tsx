@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { LeadsExportPDF } from "./LeadsExport";
+import { LeadStatus } from "@generated/prisma/client";
 
 interface Lead {
   id: string;
@@ -8,7 +9,7 @@ interface Lead {
   phone: string;
   organization: string | null;
   product_of_interest: string | null;
-  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
+  status: LeadStatus;
   created_at: string;
 }
 

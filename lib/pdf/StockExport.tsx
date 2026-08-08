@@ -226,7 +226,7 @@ export function StockExportPDF({
   const logoUrl = getLogoBase64();
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(amount);
+    `NGN ${amount}`;
 
   const getStockStatus = (product: Product) => {
     if (product.currentStock === 0) return "OUT_OF_STOCK";
@@ -312,10 +312,10 @@ export function StockExportPDF({
                 <Text style={styles.col3}>{product.category.replace("_", " ")}</Text>
                 <Text style={styles.col4}>
                   <Text
-                    className={
+                    style={
                       status === "LOW_STOCK" || status === "OUT_OF_STOCK"
-                        ? "text-red-600 font-bold"
-                        : "text-slate-900 font-bold"
+                        ? styles.statusLowStock
+                        : styles.statusInStock
                     }
                   >
                     {product.currentStock}

@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { StockExportPDF } from "./StockExport";
+import { Decimal } from "@prisma/client-runtime-utils";
 
 interface Product {
   id: string;

@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { generateSalesExport } from "@/lib/pdf/generate-sales-export";
 import { NextRequest, NextResponse } from "next/server";
-import { SaleStatus, PaymentStatus } from "@generated/prisma/client";
+import { PaymentStatus } from "@generated/prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,6 +45,22 @@ export async function GET(request: NextRequest) {
       orderBy: { created_at: "desc" },
     });
 
+    const salesWithDateStr = sales.map((s) => ({
+      ...s,
+      created_at: s.created_at.toISOString(),
+      sale_items: s.sale_items.map((item) => ({
+        ...item,
+        product: {
+          ...item.product,
+          unit_price: Number(item.product.unit_price),
+        },
+      })),
+      payments: s.payments.map((p) => ({
+        ...p,
+        amount: Number(p.amount),
+      })),
+    }));
+
     const totalRevenue = sales.reduce(
       (acc, s) => acc + s.sale_items.reduce((itemAcc, item) => itemAcc + Number(item.unit_price) * item.quantity, 0),
       0
@@ -66,7 +82,7 @@ export async function GET(request: NextRequest) {
       pendingCount: sales.filter((s) => s.payment_status === "PENDING").length,
     };
 
-    const buffer = await generateSalesExport(sales as any, summary, dateFrom, dateTo);
+    const buffer = await generateSalesExport(salesWithDateStr, summary, dateFrom, dateTo);
 
     return new NextResponse(buffer as unknown as BodyInit, {
       headers: {

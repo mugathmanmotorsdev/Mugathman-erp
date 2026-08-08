@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { generateLeadsExport } from "@/lib/pdf/generate-leads-export";
 import { NextRequest, NextResponse } from "next/server";
-import { LeadStatus } from "@generated/prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,8 +21,8 @@ export async function GET(request: NextRequest) {
       if (dateTo) (where.created_at as Record<string, unknown>).lte = new Date(dateTo);
     }
 
-    if (status && Object.values(LeadStatus).includes(status as LeadStatus)) {
-      where.status = status as LeadStatus;
+    if (status && ["NEW", "QUALIFIED", "DISQUALIFIED"].includes(status)) {
+      where.status = status as unknown as typeof where.status;
     }
 
     if (search) {
@@ -40,13 +39,18 @@ export async function GET(request: NextRequest) {
       orderBy: { created_at: "desc" },
     });
 
+    const leadsWithDateStr = leads.map((l) => ({
+      ...l,
+      created_at: l.created_at.toISOString(),
+    }));
+
     const summary = {
-      newCount: leads.filter((l) => l.status === "NEW").length,
-      qualifiedCount: leads.filter((l) => l.status === "QUALIFIED").length,
-      disqualifiedCount: leads.filter((l) => l.status === "DISQUALIFIED").length,
+      newCount: leadsWithDateStr.filter((l) => l.status === "NEW").length,
+      qualifiedCount: leadsWithDateStr.filter((l) => l.status === "QUALIFIED").length,
+      disqualifiedCount: leadsWithDateStr.filter((l) => l.status === "DISQUALIFIED").length,
     };
 
-    const buffer = await generateLeadsExport(leads as any, summary, dateFrom, dateTo);
+    const buffer = await generateLeadsExport(leadsWithDateStr, summary, dateFrom, dateTo);
 
     return new NextResponse(buffer as unknown as BodyInit, {
       headers: {
