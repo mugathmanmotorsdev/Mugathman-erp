@@ -33,15 +33,28 @@ export async function GET(request: NextRequest) {
       where.category = category;
     }
 
-    const products = await prisma.product.findMany({
+    let products = await prisma.product.findMany({
       where,
       include: {
         stock_movements: { select: { quantity: true } },
       },
-      orderBy: { created_at: "desc" },
     });
 
-    const productsWithStock = products.map((p) => {
+    if (statusFilter && statusFilter !== "all") {
+      const stockStatus = statusFilter === "LOW_STOCK"
+        ? "LOW_STOCK"
+        : statusFilter;
+      products = products.filter(p => {
+        const stock = (p.stock_movements || []).reduce((acc, mov) => acc + mov.quantity, 0);
+        if (stock === 0) return stockStatus === "OUT_OF_STOCK";
+        if (stock <= p.reorder_level * 0.5) return stockStatus === "LOW_STOCK";
+        return stockStatus === "IN_STOCK";
+      });
+    }
+
+    const productsWithStock = products.sort((a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    }).map((p) => {
       const currentStock = (p.stock_movements || []).reduce((acc, mov) => acc + mov.quantity, 0);
       return {
         id: p.id,

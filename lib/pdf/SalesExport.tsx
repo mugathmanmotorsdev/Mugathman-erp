@@ -242,7 +242,7 @@ export function SalesExportPDF({
   const logoUrl = getLogoBase64();
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(amount);
+    `NGN ${amount}`;
 
   const getPaymentStatusStyle = (status: string) => {
     switch (status) {
@@ -312,8 +312,8 @@ export function SalesExportPDF({
             <Text style={styles.col1}>Order</Text>
             <Text style={styles.col2}>Customer</Text>
             <Text style={styles.col3}>Items</Text>
-            <Text style={styles.col4}>Amount</Text>
-            <Text style={styles.col5}>Status</Text>
+            <Text style={styles.col4}>Amount NGN</Text>
+            <Text style={styles.col5}>Outstanding</Text>
           </View>
 
           {sales.map((sale) => {
@@ -335,14 +335,15 @@ export function SalesExportPDF({
                   <Text style={styles.textMuted}>{sale.customer.phone}</Text>
                 </View>
                 <Text style={styles.col3}>{sale.sale_items.length}</Text>
-                <Text style={styles.col4}>{formatCurrency(totalAmount)}</Text>
+                <Text style={styles.col4}>{totalAmount}</Text>
                 <Text style={styles.col5}>
-                  <Text style={{ ...styles.statusBadge, ...getPaymentStatusStyle(sale.payment_status) }}>
-                    {sale.payment_status.replace("_", " ")}
-                  </Text>
-                  {outstanding > 0 && (
+                  {outstanding > 0 ? (
                     <Text style={{ fontSize: 7, color: "#dc2626", marginTop: 2 }}>
-                      {formatCurrency(outstanding)} outstanding
+                      {outstanding}
+                    </Text>
+                  ) : (
+                    <Text style={{ fontSize: 7, marginTop: 2 }}>
+                      ---
                     </Text>
                   )}
                 </Text>
