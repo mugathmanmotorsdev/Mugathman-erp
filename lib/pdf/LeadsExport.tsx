@@ -327,15 +327,7 @@ export function LeadsExportPDF({
         {/* Footer */}
         <View style={styles.footer}>
           <View style={styles.footerCol}>
-            <Text style={styles.footerTitle}>Questions?</Text>
-            <View style={styles.footerRow}>
-              <Text style={styles.footerLabel}>Email us</Text>
-              <Text style={styles.footerValue}> : info@mugathmanmotors.com</Text>
-            </View>
-            <View style={styles.footerRow}>
-              <Text style={styles.footerLabel}>Call us</Text>
-              <Text style={styles.footerValue}> : +2348067957545</Text>
-            </View>
+            <Text style={styles.footerTitle}>Report by: Digital Sales & Support Office</Text>
           </View>
         </View>
       </Page>

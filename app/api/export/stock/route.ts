@@ -69,8 +69,7 @@ export async function GET(request: NextRequest) {
       }) as any[];
     }
 
-    // TEMPORATY FIX: there is no created at in the product schema but the create_at-
-    //property is used which make an error, I will look back to this
+    
     const productsWithStock = products.map((p) => {
       const currentStock = (p.stock_movements || []).reduce((acc: number, mov: { quantity: number }) => acc + mov.quantity, 0);
       return {
@@ -82,12 +81,8 @@ export async function GET(request: NextRequest) {
         currentStock,
         reorder_level: p.reorder_level,
         tracking_type: p.tracking_type,
-        // created_at: p.created_at?.toISOString(),
       };
     })
-    // .sort((a, b) => {
-    //   return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    // });
 
     const totalStockValue = productsWithStock.reduce(
       (acc, p) => acc + p.currentStock * p.unit_price,
