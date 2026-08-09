@@ -35,8 +35,23 @@ export async function GET(request: NextRequest) {
 
     let products = await prisma.product.findMany({
       where,
-      include: {
-        stock_movements: { select: { quantity: true } },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        category: true,
+        unit_price: true,
+        reorder_level: true,
+        tracking_type: true,
+        is_active: true,
+        description: true,
+        unit: true,
+        // created_at: true,
+        stock_movements: {
+          select: {
+            quantity: true,
+          },
+        },
       },
     });
 
@@ -44,27 +59,35 @@ export async function GET(request: NextRequest) {
       const stockStatus = statusFilter === "LOW_STOCK"
         ? "LOW_STOCK"
         : statusFilter;
-      products = products.filter((p: any) => {
-        const stock = (p.stock_movements || []).reduce((acc: any, mov: any) => acc + mov.quantity, 0);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      products = products.filter((p) => {
+        const stock = (p.stock_movements || []).reduce((acc: number, mov: { quantity: number }) => acc + mov.quantity, 0);
         if (stock === 0) return stockStatus === "OUT_OF_STOCK";
         if (stock <= p.reorder_level * 0.5) return stockStatus === "LOW_STOCK";
         return stockStatus === "IN_STOCK";
-      });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      }) as any[];
     }
 
-    const productsWithStock = products.map((p: any) => ({
-      id: p.id,
-      name: p.name,
-      sku: p.sku,
-      category: p.category,
-      unit_price: Number(p.unit_price),
-      currentStock: (p.stock_movements || []).reduce((acc: any, mov: any) => acc + mov.quantity, 0),
-      reorder_level: p.reorder_level,
-      tracking_type: p.tracking_type,
-      created_at: p.created_at?.toISOString(),
-    })).sort((a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    });
+    // TEMPORATY FIX: there is no created at in the product schema but the create_at-
+    //property is used which make an error, I will look back to this
+    const productsWithStock = products.map((p) => {
+      const currentStock = (p.stock_movements || []).reduce((acc: number, mov: { quantity: number }) => acc + mov.quantity, 0);
+      return {
+        id: p.id,
+        name: p.name,
+        sku: p.sku,
+        category: p.category,
+        unit_price: Number(p.unit_price),
+        currentStock,
+        reorder_level: p.reorder_level,
+        tracking_type: p.tracking_type,
+        // created_at: p.created_at?.toISOString(),
+      };
+    })
+    // .sort((a, b) => {
+    //   return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    // });
 
     const totalStockValue = productsWithStock.reduce(
       (acc, p) => acc + p.currentStock * p.unit_price,
