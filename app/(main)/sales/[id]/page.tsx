@@ -12,7 +12,6 @@ import {
   DollarSign,
   CheckCircle,
   AlertTriangle,
-  Plus,
   CreditCard,
   Banknote,
   Building2,
@@ -20,30 +19,21 @@ import {
   FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sale } from "@/types/sale";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
+import { RecordPaymentDialog } from "@/components/RecordPaymentDialog";
 
 const methodIcons = {
   CASH: <Banknote className="h-4 w-4" />,
@@ -93,10 +83,6 @@ export default function SaleDetailPage({ params }: { params: Promise<{ id: strin
   const router = useRouter();
   const [sale, setSale] = useState<Sale | null>(null);
   const [loading, setLoading] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState("CASH");
-  const [paymentAmount, setPaymentAmount] = useState("");
-  const [paymentNotes, setPaymentNotes] = useState("");
-  const [submittingPayment, setSubmittingPayment] = useState(false);
 
   useEffect(() => {
     const fetchSale = async () => {
@@ -119,48 +105,6 @@ export default function SaleDetailPage({ params }: { params: Promise<{ id: strin
 
     fetchSale();
   }, [params]);
-
-  const handleRecordPayment = async () => {
-    const amount = parseFloat(paymentAmount);
-    if (!amount || amount <= 0) {
-      toast.error("Please enter a valid payment amount");
-      return;
-    }
-
-    setSubmittingPayment(true);
-    try {
-      const { id } = await params;
-      const res = await fetch("/api/payments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sale_id: id,
-          amount,
-          method: paymentMethod,
-          notes: paymentNotes || null,
-        }),
-      });
-
-      if (res.ok) {
-        toast.success("Payment recorded successfully");
-        setPaymentAmount("");
-        setPaymentNotes("");
-        // Refresh sale data
-        const saleRes = await fetch(`/api/sales/${id}`);
-        if (saleRes.ok) {
-          setSale(await saleRes.json());
-        }
-      } else {
-        const error = await res.json();
-        toast.error(error.error || "Failed to record payment");
-      }
-    } catch (error) {
-      console.error("Error recording payment:", error);
-      toast.error("An unexpected error occurred");
-    } finally {
-      setSubmittingPayment(false);
-    }
-  };
 
   const calculateTotal = (items: Sale["sale_items"]) => {
     return items.reduce((acc, item) => acc + item.quantity * Number(item.unit_price), 0);
@@ -245,80 +189,19 @@ export default function SaleDetailPage({ params }: { params: Promise<{ id: strin
             <Printer className="h-4 w-4 mr-2" />
             Print Receipt
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-[#150150] hover:bg-[#150150]/90 text-white rounded-xl font-bold">
-                <Plus className="h-4 w-4 mr-2" />
-                Record Payment
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="rounded-2xl">
-              <DialogHeader>
-                <DialogTitle>Record Payment</DialogTitle>
-                <DialogDescription>
-                  Record a payment against this sale. Outstanding balance:{" "}
-                  <span className="font-bold">{formattedOutstanding}</span>
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <Label>Amount</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    max={outstanding}
-                    placeholder="0.00"
-                    value={paymentAmount}
-                    onChange={(e) => setPaymentAmount(e.target.value)}
-                    className="h-12 border-slate-200 rounded-xl"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Method</Label>
-                  <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                    <SelectTrigger className="h-12 border-slate-200 rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      <SelectItem value="CASH">Cash</SelectItem>
-                      <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
-                      <SelectItem value="CHEQUE">Cheque</SelectItem>
-                      <SelectItem value="MOBILE_MONEY">Mobile Money</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Notes (Optional)</Label>
-                  <Input
-                    placeholder="Payment reference or notes"
-                    value={paymentNotes}
-                    onChange={(e) => setPaymentNotes(e.target.value)}
-                    className="h-12 border-slate-200 rounded-xl"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end gap-3">
-                <Button
-                  variant="outline"
-                  className="rounded-xl"
-                  onClick={() => {
-                    setPaymentAmount("");
-                    setPaymentNotes("");
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="bg-[#150150] hover:bg-[#150150]/90 text-white rounded-xl"
-                  onClick={handleRecordPayment}
-                  disabled={submittingPayment}
-                >
-                  {submittingPayment ? "Recording..." : "Record Payment"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <RecordPaymentDialog
+            saleId={sale.id}
+            outstanding={outstanding}
+            onPaymentSuccess={() => {
+              const fetchSale = async () => {
+                const saleRes = await fetch(`/api/sales/${sale.id}`);
+                if (saleRes.ok) {
+                  setSale(await saleRes.json());
+                }
+              };
+              fetchSale();
+            }}
+          />
         </div>
       </div>
 

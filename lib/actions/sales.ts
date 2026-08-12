@@ -75,7 +75,7 @@ export const createPayment = async (saleId: string, amount: number, method: stri
         const totalPaid = sale.payments.reduce((acc: number, p) => acc + Number(p.amount), 0);
         const totalAmount = sale.sale_items.reduce(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (acc: number, item: any) => acc + Number(item.product?.unit_price || 0) * item.quantity,
+            (acc: number, item: any) => acc + Number(item.unit_price || 0) * item.quantity,
             0,
         );
         const newTotalPaid = totalPaid + amount;

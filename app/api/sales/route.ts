@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
     // calculate total amount
     const totalAmount = sale?.sale_items.reduce(
       (acc, item) =>
-        acc + Number(item?.product?.unit_price || 0) * item.quantity,
+        acc + Number(item.unit_price || 0) * item.quantity,
       0,
     );
 
