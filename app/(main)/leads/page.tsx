@@ -4,15 +4,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   UserCheck,
-  Clock,
-  CheckCircle,
-  XCircle,
-  ArrowRight,
   RefreshCw,
   Download,
+  ArrowRight,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import PageHeading from "@/components/PageHeading";
 import {
@@ -24,62 +21,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
-import StatusFilter from "@/components/ui/StatusFilter";
 import { MoreVertical } from "lucide-react";
 
 interface Lead {
   id: string;
   full_name: string;
-  email: string;
   phone: string;
-  organization: string | null;
   product_of_interest: string | null;
   message: string | null;
-  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
-  meta_conversion_id: string | null;
+  source: string | null;
   created_at: string;
   updated_at: string;
 }
-
-const statusColors = {
-  NEW: "bg-slate-100 text-slate-600 border-slate-200",
-  QUALIFIED: "bg-emerald-50 text-emerald-600 border-emerald-200",
-  DISQUALIFIED: "bg-rose-50 text-rose-600 border-rose-200",
-};
-
-const statusIcons = {
-  NEW: Clock,
-  QUALIFIED: CheckCircle,
-  DISQUALIFIED: XCircle,
-};
-
-const statusOptions = [
-  { label: "All", value: "ALL" },
-  { label: "New", value: "NEW" },
-  { label: "Qualified", value: "QUALIFIED" },
-  { label: "Disqualified", value: "DISQUALIFIED" },
-];
 
 export default function LeadsPage() {
   const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const fetchLeads = useCallback(async () => {
     try {
       const params = new URLSearchParams();
-      if (statusFilter !== "ALL") params.set("status", statusFilter);
       if (searchQuery) params.set("search", searchQuery);
 
       const res = await fetch(`/api/leads?${params.toString()}`);
@@ -95,84 +61,36 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter, searchQuery]);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
 
-  // Sync filters to URL
   useEffect(() => {
     const params = new URLSearchParams();
-    if (statusFilter !== "ALL") params.set("status", statusFilter);
     if (searchQuery) params.set("search", searchQuery);
     const newUrl = params.toString()
       ? `${window.location.pathname}?${params.toString()}`
       : window.location.pathname;
     window.history.replaceState(null, "", newUrl);
-  }, [statusFilter, searchQuery]);
+  }, [searchQuery]);
 
-  // Read initial filters from URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const urlStatus = params.get("status");
     const urlSearch = params.get("search");
-    if (urlStatus) setStatusFilter(urlStatus);
     if (urlSearch) setSearchQuery(urlSearch);
   }, []);
 
   const filteredLeads = leads.filter(
     (lead) =>
       lead.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       lead.phone.includes(searchQuery) ||
-      (lead.organization &&
-        lead.organization.toLowerCase().includes(searchQuery.toLowerCase()))
+      (lead.product_of_interest &&
+        lead.product_of_interest.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (lead.source &&
+        lead.source.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
-  const handleQualify = async (id: string) => {
-    setActionLoading(id);
-    try {
-      const res = await fetch(`/api/leads/${id}/qualify`, {
-        method: "POST",
-      });
-      if (res.ok) {
-        toast.success("Lead marked as qualified — Meta conversion queued");
-        fetchLeads();
-      } else {
-        const error = await res.json();
-        toast.error(error.error || "Failed to qualify lead");
-      }
-    } catch (error) {
-      console.error("Error qualifying lead:", error);
-      toast.error("Failed to qualify lead");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleDisqualify = async (id: string) => {
-    setActionLoading(id);
-    try {
-      const res = await fetch(`/api/leads/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "DISQUALIFIED" }),
-      });
-      if (res.ok) {
-        toast.success("Lead disqualified");
-        fetchLeads();
-      } else {
-        const error = await res.json();
-        toast.error(error.error || "Failed to update lead");
-      }
-    } catch (error) {
-      console.error("Error disqualifying lead:", error);
-      toast.error("Failed to disqualify lead");
-    } finally {
-      setActionLoading(null);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
@@ -180,7 +98,7 @@ export default function LeadsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <PageHeading
           title="Leads"
-          description="Manage and qualify visitor inquiries from the website."
+          description="Manage visitor inquiries from the website."
         />
         <div className="flex items-center gap-3">
           <Button
@@ -197,7 +115,6 @@ export default function LeadsPage() {
             onClick={() => {
               const params = new URLSearchParams()
               if (searchQuery) params.set("search", searchQuery)
-              if (statusFilter !== "ALL") params.set("status", statusFilter)
               window.open(`/api/export/leads?${params.toString()}`, "_blank")
             }}
           >
@@ -208,44 +125,23 @@ export default function LeadsPage() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-            New Leads
+            Total Leads
           </p>
           <h3 className="text-3xl font-black text-slate-900 mt-1">
-            {leads.filter((l) => l.status === "NEW").length}
-          </h3>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-            Qualified
-          </p>
-          <h3 className="text-3xl font-black text-emerald-600 mt-1">
-            {leads.filter((l) => l.status === "QUALIFIED").length}
-          </h3>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-            Disqualified
-          </p>
-          <h3 className="text-3xl font-black text-rose-600 mt-1">
-            {leads.filter((l) => l.status === "DISQUALIFIED").length}
+            {leads.length}
           </h3>
         </div>
       </div>
 
-      {/* Search & Filter */}
+      {/* Search */}
       <FilterBar>
         <SearchInput
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="Search by name, email, phone, or organization..."
-        />
-        <StatusFilter
-          options={statusOptions}
-          value={statusFilter}
-          onChange={setStatusFilter}
+          placeholder="Search by name, phone, product, or source..."
         />
       </FilterBar>
 
@@ -259,13 +155,13 @@ export default function LeadsPage() {
                   Lead
                 </TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
-                  Organization
+                  Phone
                 </TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
                   Interest
                 </TableHead>
-                <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">
-                  Status
+                <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  Source
                 </TableHead>
                 <TableHead className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-right">
                   Actions
@@ -292,88 +188,54 @@ export default function LeadsPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredLeads.map((lead) => {
-                  const StatusIcon = statusIcons[lead.status];
-                  return (
-                    <TableRow
-                      key={lead.id}
-                      className="group hover:bg-slate-50/50 transition-colors cursor-pointer"
-                      onClick={() => router.push(`/leads/${lead.id}`)}
-                    >
-                      <TableCell className="px-6 py-4">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-700 group-hover:text-slate-900">
-                            {lead.full_name}
-                          </span>
-                          <span className="text-xs text-slate-500">
-                            {lead.email} · {lead.phone}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {lead.organization ? (
-                          <span className="text-slate-600">{lead.organization}</span>
-                        ) : (
-                          <span className="text-slate-400 italic">—</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {lead.product_of_interest ? (
-                          <span className="text-slate-600">{lead.product_of_interest}</span>
-                        ) : (
-                          <span className="text-slate-400 italic">—</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 text-center">
-                        <Badge
-                          variant="outline"
-                          className={`font-bold ${statusColors[lead.status]}`}
-                        >
-                          <StatusIcon className="h-3 w-3 mr-1" />
-                          {lead.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="px-6 py-4 text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-xl">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="rounded-2xl border-slate-200">
-                            {lead.status === "NEW" && (
-                              <DropdownMenuItem
-                                onClick={() => handleQualify(lead.id)}
-                                disabled={actionLoading === lead.id}
-                                className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer text-emerald-600 font-bold"
-                              >
-                                <CheckCircle className="h-4 w-4" />
-                                {actionLoading === lead.id ? "Processing..." : "Qualify"}
-                              </DropdownMenuItem>
-                            )}
-                            {lead.status !== "DISQUALIFIED" && (
-                              <DropdownMenuItem
-                                onClick={() => handleDisqualify(lead.id)}
-                                disabled={actionLoading === lead.id}
-                                className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer text-rose-600 font-bold"
-                              >
-                                <XCircle className="h-4 w-4" />
-                                Disqualify
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuItem
-                              onClick={() => router.push(`/leads/${lead.id}`)}
-                              className="py-2.5 rounded-xl flex items-center gap-2 cursor-pointer text-slate-600"
-                            >
-                              <ArrowRight className="h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
+                filteredLeads.map((lead) => (
+                  <TableRow
+                    key={lead.id}
+                    className="group hover:bg-slate-50/50 transition-colors cursor-pointer"
+                    onClick={() => router.push(`/leads/${lead.id}`)}
+                  >
+                    <TableCell className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-700 group-hover:text-slate-900">
+                          {lead.full_name}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <span className="text-slate-600">{lead.phone}</span>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      {lead.product_of_interest ? (
+                        <span className="text-slate-600">{lead.product_of_interest}</span>
+                      ) : (
+                        <span className="text-slate-400 italic">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      {lead.source ? (
+                        <span className="text-slate-600 flex items-center gap-1">
+                          <Globe className="h-3 w-3" />
+                          {lead.source}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 italic">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="px-6 py-4 text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="rounded-xl"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/leads/${lead.id}`);
+                        }}
+                      >
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>

@@ -1,28 +1,16 @@
 import prisma from "@/lib/prisma";
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
-import { LeadStatus } from "@generated/prisma/client";
 
 // POST /api/leads — Public endpoint for website visitor submissions
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { full_name, email, phone, organization, product_of_interest, message } =
-      body;
+    const { full_name, phone, product_of_interest, message, source } = body;
 
-    // Validate required fields
-    if (!full_name || !email || !phone) {
+    if (!full_name || !phone) {
       return NextResponse.json(
-        { error: "Missing required fields: full_name, email, phone" },
-        { status: 400 }
-      );
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Invalid email format" },
+        { error: "Missing required fields: full_name, phone" },
         { status: 400 }
       );
     }
@@ -30,12 +18,10 @@ export async function POST(request: NextRequest) {
     const lead = await prisma.lead.create({
       data: {
         full_name,
-        email,
         phone,
-        organization: organization || null,
         product_of_interest: product_of_interest || null,
         message: message || null,
-        status: LeadStatus.NEW,
+        source: source || null,
       },
     });
 
@@ -49,22 +35,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET /api/leads — Authenticated, list leads with optional status filter
+// GET /api/leads — Authenticated, list leads
 export async function GET(request: NextRequest) {
   try {
     await requireAuth();
 
     const searchParams = request.nextUrl.searchParams;
-    const status = searchParams.get("status");
     const skip = Number(searchParams.get("skip")) || 0;
     const take = Number(searchParams.get("take")) || 100;
 
-    const where = status
-      ? { status: status as LeadStatus }
-      : {};
-
     const leads = await prisma.lead.findMany({
-      where,
       orderBy: { created_at: "desc" },
       skip,
       take,

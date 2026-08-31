@@ -254,14 +254,10 @@ export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobSca
 export const LeadScalarFieldEnum = {
   id: 'id',
   full_name: 'full_name',
-  email: 'email',
   phone: 'phone',
-  organization: 'organization',
   product_of_interest: 'product_of_interest',
   message: 'message',
-  notes: 'notes',
-  status: 'status',
-  meta_conversion_id: 'meta_conversion_id',
+  source: 'source',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const

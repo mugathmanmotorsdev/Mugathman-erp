@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
     const dateFrom = searchParams.get("dateFrom") || undefined;
     const dateTo = searchParams.get("dateTo") || undefined;
     const search = searchParams.get("search") || undefined;
-    const status = searchParams.get("status") || undefined;
 
     const where: Record<string, unknown> = {};
 
@@ -21,16 +20,12 @@ export async function GET(request: NextRequest) {
       if (dateTo) (where.created_at as Record<string, unknown>).lte = new Date(dateTo);
     }
 
-    if (status && ["NEW", "QUALIFIED", "DISQUALIFIED"].includes(status)) {
-      where.status = status as unknown as typeof where.status;
-    }
-
     if (search) {
       where.OR = [
         { full_name: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
         { phone: { contains: search } },
-        { organization: { contains: search, mode: "insensitive" } },
+        { product_of_interest: { contains: search, mode: "insensitive" } },
+        { source: { contains: search, mode: "insensitive" } },
       ];
     }
 
@@ -45,9 +40,7 @@ export async function GET(request: NextRequest) {
     }));
 
     const summary = {
-      newCount: leadsWithDateStr.filter((l) => l.status === "NEW").length,
-      qualifiedCount: leadsWithDateStr.filter((l) => l.status === "QUALIFIED").length,
-      disqualifiedCount: leadsWithDateStr.filter((l) => l.status === "DISQUALIFIED").length,
+      totalCount: leadsWithDateStr.length,
     };
 
     const buffer = await generateLeadsExport(leadsWithDateStr, summary, dateFrom, dateTo);

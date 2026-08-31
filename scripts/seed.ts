@@ -200,13 +200,13 @@ async function main() {
   // 8. Sample Leads
   // -------------------------------------------------------
   const leads = [
-    { full_name: "Sani Musa", email: "sani@email.com", phone: "+2348061111111", organization: "Musa Motors Kano", product_of_interest: "Truck Head", message: "Interested in purchasing 2 Hino truck heads for our fleet." },
-    { full_name: "Grace Ejike", email: "grace@email.com", phone: "+2348072222222", organization: null, product_of_interest: "Spare Parts", message: "Looking for Toyota spare tires in bulk." },
-    { full_name: "Muhammad Ali", email: "muhammad@email.com", phone: "+2348083333333", organization: "Ali Transport Ltd", product_of_interest: "Tipper", message: "Need to replace 3 Mitsubishi tipper beds." },
+    { full_name: "Sani Musa", phone: "+2348061111111", product_of_interest: "Truck Head", message: "Interested in purchasing 2 Hino truck heads for our fleet.", source: "Website" },
+    { full_name: "Grace Ejike", phone: "+2348072222222", organization: null, product_of_interest: "Spare Parts", message: "Looking for Toyota spare tires in bulk." },
+    { full_name: "Muhammad Ali", phone: "+2348083333333", organization: "Ali Transport Ltd", product_of_interest: "Tipper", message: "Need to replace 3 Mitsubishi tipper beds.", source: "Referral" },
   ];
 
   for (const lead of leads) {
-    const existing = await prisma.lead.findFirst({ where: { email: lead.email } });
+    const existing = await prisma.lead.findFirst({ where: { phone: lead.phone } });
     if (!existing) {
       await prisma.lead.create({ data: lead });
       console.log(`✅ Lead created: ${lead.full_name}`);

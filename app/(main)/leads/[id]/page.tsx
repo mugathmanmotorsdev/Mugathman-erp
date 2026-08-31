@@ -4,20 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  Mail,
   Phone,
-  Building2,
   Package,
   MessageSquare,
-  UserCheck,
-  XCircle,
+  Globe,
   Save,
-  Send,
-  Clock,
-  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,23 +19,13 @@ import SkeletonUi from "@/components/SkeletonUi";
 interface Lead {
   id: string;
   full_name: string;
-  email: string;
   phone: string;
-  organization: string | null;
   product_of_interest: string | null;
   message: string | null;
-  notes: string | null;
-  status: "NEW" | "QUALIFIED" | "DISQUALIFIED";
-  meta_conversion_id: string | null;
+  source: string | null;
   created_at: string;
   updated_at: string;
 }
-
-const statusBadges = {
-  NEW: { color: "bg-slate-100 text-slate-600 border-slate-200", icon: Clock },
-  QUALIFIED: { color: "bg-emerald-50 text-emerald-600 border-emerald-200", icon: CheckCircle2 },
-  DISQUALIFIED: { color: "bg-rose-50 text-rose-600 border-rose-200", icon: XCircle },
-};
 
 export default function LeadDetailPage({
   params,
@@ -53,8 +36,8 @@ export default function LeadDetailPage({
   const [lead, setLead] = useState<Lead | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [notes, setNotes] = useState("");
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
+  const [source, setSource] = useState("");
 
   useEffect(() => {
     const fetchLead = async () => {
@@ -64,7 +47,8 @@ export default function LeadDetailPage({
         if (res.ok) {
           const data = await res.json();
           setLead(data);
-          setNotes(data.notes || "");
+          setMessage(data.message || "");
+          setSource(data.source || "");
         } else {
           toast.error("Failed to load lead");
           router.push("/leads");
@@ -80,57 +64,28 @@ export default function LeadDetailPage({
     fetchLead();
   }, [params, router]);
 
-  const handleStatusChange = async (newStatus: string) => {
-    if (!lead) return;
-    setActionLoading(newStatus);
-    try {
-      const res = await fetch(`/api/leads/${lead.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        setLead(updated);
-        toast.success(`Lead marked as ${newStatus.toLowerCase()}`);
-        if (newStatus === "QUALIFIED") {
-          // Trigger Meta conversion
-          await fetch(`/api/leads/${lead.id}/qualify`, { method: "POST" });
-          toast.success("Meta conversion queued");
-          const refreshed = await fetch(`/api/leads/${lead.id}`);
-          if (refreshed.ok) {
-            setLead(await refreshed.json());
-          }
-        }
-      } else {
-        const error = await res.json();
-        toast.error(error.error || "Failed to update status");
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-      toast.error("Failed to update status");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleSaveNotes = async () => {
+  const handleSave = async () => {
     if (!lead) return;
     setSaving(true);
     try {
       const res = await fetch(`/api/leads/${lead.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify({ message, source }),
       });
       if (res.ok) {
-        toast.success("Notes saved");
+        toast.success("Changes saved");
+        const refreshed = await fetch(`/api/leads/${lead.id}`);
+        if (refreshed.ok) {
+          setLead(await refreshed.json());
+        }
       } else {
-        toast.error("Failed to save notes");
+        const error = await res.json();
+        toast.error(error.error || "Failed to save changes");
       }
     } catch (error) {
-      console.error("Error saving notes:", error);
-      toast.error("Failed to save notes");
+      console.error("Error saving lead:", error);
+      toast.error("Failed to save changes");
     } finally {
       setSaving(false);
     }
@@ -155,9 +110,6 @@ export default function LeadDetailPage({
     );
   }
 
-  const badge = statusBadges[lead.status];
-  const StatusIcon = badge.icon;
-
   return (
     <div className="flex flex-col gap-6 p-6 bg-[#EFF3F4] min-h-screen">
       {/* Header */}
@@ -181,10 +133,6 @@ export default function LeadDetailPage({
             </p>
           </div>
         </div>
-        <Badge variant="outline" className={`font-bold ${badge.color}`}>
-          <StatusIcon className="h-4 w-4 mr-1" />
-          {lead.status}
-        </Badge>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -195,9 +143,9 @@ export default function LeadDetailPage({
             <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                  <UserCheck className="h-5 w-5" />
+                  <Phone className="h-5 w-5" />
                 </div>
-                <CardTitle className="text-lg">Contact Information</CardTitle>
+                <CardTitle className="text-lg">Contact</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -209,29 +157,11 @@ export default function LeadDetailPage({
               </div>
               <div className="space-y-1">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  Email
-                </p>
-                <p className="text-slate-800 font-medium flex items-center gap-2">
-                  <Mail className="h-3 w-3 text-slate-400" />
-                  {lead.email}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   Phone
                 </p>
                 <p className="text-slate-800 font-medium flex items-center gap-2">
                   <Phone className="h-3 w-3 text-slate-400" />
                   {lead.phone}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  Organization
-                </p>
-                <p className="text-slate-800 font-medium flex items-center gap-2">
-                  <Building2 className="h-3 w-3 text-slate-400" />
-                  {lead.organization || "—"}
                 </p>
               </div>
             </CardContent>
@@ -268,127 +198,72 @@ export default function LeadDetailPage({
             </CardContent>
           </Card>
 
-          {/* Internal Notes */}
+          {/* Source */}
           <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
-                  <Save className="h-5 w-5" />
+                  <Globe className="h-5 w-5" />
                 </div>
-                <CardTitle className="text-lg">Internal Notes</CardTitle>
+                <CardTitle className="text-lg">Source</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Lead Source
+                </p>
+                {lead.source ? (
+                  <p className="text-slate-800 font-medium">{lead.source}</p>
+                ) : (
+                  <p className="text-slate-400 italic">No source specified</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Edit Fields */}
+          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+            <CardHeader className="bg-slate-50 border-b border-slate-100">
+              <CardTitle className="text-lg">Edit Lead</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Message
+                </p>
+                <Textarea
+                  placeholder="Update the lead message..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="min-h-[100px] border-slate-200 rounded-2xl bg-slate-50/50 focus:ring-2 focus:ring-indigo-100 resize-none"
+                />
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Source
+                </p>
+                <input
+                  type="text"
+                  placeholder="e.g. Website, Referral, Social Media..."
+                  value={source}
+                  onChange={(e) => setSource(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2 text-sm text-slate-800 focus:ring-2 focus:ring-indigo-100 focus:border-transparent outline-none"
+                />
               </div>
               <Button
-                size="sm"
-                onClick={handleSaveNotes}
+                onClick={handleSave}
                 disabled={saving}
                 className="bg-[#150150] hover:bg-[#150150]/90 text-white rounded-xl"
               >
-                {saving ? "Saving..." : "Save Notes"}
+                {saving ? "Saving..." : "Save Changes"}
               </Button>
-            </CardHeader>
-            <CardContent className="p-6">
-              <Textarea
-                placeholder="Add notes about this lead — discuss with the sales team..."
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="min-h-[120px] border-slate-200 rounded-2xl bg-slate-50/50 focus:ring-2 focus:ring-indigo-100 resize-none"
-              />
             </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Status Actions */}
-          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
-            <CardHeader className="bg-slate-50 border-b border-slate-100">
-              <CardTitle className="text-lg">Status Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-3">
-              <Button
-                variant={lead.status === "NEW" ? "default" : "outline"}
-                className={`w-full h-12 rounded-xl font-bold ${
-                  lead.status === "NEW"
-                    ? "bg-slate-800 hover:bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-600"
-                }`}
-                onClick={() => handleStatusChange("NEW")}
-                disabled={actionLoading === "NEW" || lead.status === "NEW"}
-              >
-                <Clock className="h-4 w-4 mr-2" />
-                {actionLoading === "NEW" ? "Updating..." : "Mark New"}
-              </Button>
-              <Button
-                variant={lead.status === "QUALIFIED" ? "default" : "outline"}
-                className={`w-full h-12 rounded-xl font-bold ${
-                  lead.status === "QUALIFIED"
-                    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    : "border-slate-200 text-slate-600"
-                }`}
-                onClick={() => handleStatusChange("QUALIFIED")}
-                disabled={
-                  actionLoading === "QUALIFIED" || lead.status === "QUALIFIED"
-                }
-              >
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                {actionLoading === "QUALIFIED"
-                  ? "Qualifying..."
-                  : "Qualify Lead"}
-              </Button>
-              <Button
-                variant={lead.status === "DISQUALIFIED" ? "default" : "outline"}
-                className={`w-full h-12 rounded-xl font-bold ${
-                  lead.status === "DISQUALIFIED"
-                    ? "bg-rose-600 hover:bg-rose-700 text-white"
-                    : "border-slate-200 text-slate-600"
-                }`}
-                onClick={() => handleStatusChange("DISQUALIFIED")}
-                disabled={
-                  actionLoading === "DISQUALIFIED" ||
-                  lead.status === "DISQUALIFIED"
-                }
-              >
-                <XCircle className="h-4 w-4 mr-2" />
-                {actionLoading === "DISQUALIFIED"
-                  ? "Updating..."
-                  : "Disqualify"}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Meta Conversion Status */}
-          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
-            <CardHeader className="bg-slate-50 border-b border-slate-100">
-              <CardTitle className="text-lg">Meta Conversion</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              {lead.status === "QUALIFIED" ? (
-                lead.meta_conversion_id ? (
-                  <div className="flex items-center gap-3 text-emerald-600">
-                    <Send className="h-5 w-5" />
-                    <div>
-                      <p className="font-bold text-sm">Sent to Meta</p>
-                      <p className="text-xs text-slate-500 font-mono">
-                        {lead.meta_conversion_id}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-3 text-amber-600">
-                    <Clock className="h-5 w-5" />
-                    <p className="text-sm font-medium">
-                      Conversion queued — pending delivery
-                    </p>
-                  </div>
-                )
-              ) : (
-                <p className="text-sm text-slate-400">
-                  Meta conversion will be sent when lead is qualified.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Metadata */}
           <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
             <CardHeader className="bg-slate-50 border-b border-slate-100">

@@ -1,22 +1,18 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { LeadsExportPDF } from "./LeadsExport";
-import { LeadStatus } from "@generated/prisma/client";
 
 interface Lead {
   id: string;
   full_name: string;
-  email: string;
   phone: string;
-  organization: string | null;
   product_of_interest: string | null;
-  status: LeadStatus;
+  message: string | null;
+  source: string | null;
   created_at: string;
 }
 
 interface Summary {
-  newCount: number;
-  qualifiedCount: number;
-  disqualifiedCount: number;
+  totalCount: number;
 }
 
 export async function generateLeadsExport(
@@ -28,9 +24,7 @@ export async function generateLeadsExport(
   const buffer = await renderToBuffer(
     <LeadsExportPDF
       leads={leads}
-      newCount={summary.newCount}
-      qualifiedCount={summary.qualifiedCount}
-      disqualifiedCount={summary.disqualifiedCount}
+      totalCount={summary.totalCount}
       dateFrom={dateFrom}
       dateTo={dateTo}
     />

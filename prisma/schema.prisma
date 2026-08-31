@@ -291,23 +291,13 @@ enum JobStatus {
   FAILED
 }
 
-enum LeadStatus {
-  NEW
-  QUALIFIED
-  DISQUALIFIED
-}
-
 model Lead {
   id                  String     @id @default(uuid())
   full_name           String
-  email               String
   phone               String
-  organization        String?
   product_of_interest String?
   message             String?
-  notes               String?
-  status              LeadStatus @default(NEW)
-  meta_conversion_id  String?
+  source              String?
   created_at          DateTime   @default(now())
   updated_at          DateTime   @updatedAt
 
