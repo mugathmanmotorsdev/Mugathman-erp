@@ -1667,6 +1667,8 @@ export const LeadScalarFieldEnum = {
   product_of_interest: 'product_of_interest',
   message: 'message',
   source: 'source',
+  status: 'status',
+  meta_conversion_id: 'meta_conversion_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -1962,6 +1964,20 @@ export type EnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'JobStatus[]'
  */
 export type ListEnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadStatus'
+ */
+export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadStatus[]'
+ */
+export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus[]'>
     
 
 

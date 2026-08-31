@@ -1,13 +1,16 @@
 import prisma from "@/lib/prisma";
 import { requireAuth, AppError } from "@/lib/utils/auth-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { LeadStatus } from "@generated/prisma/client";
 
 // POST /api/leads — Public endpoint for website visitor submissions
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { full_name, phone, product_of_interest, message, source } = body;
+    const { full_name, phone, product_of_interest, message, source } =
+      body;
 
+// Validate required fields
     if (!full_name || !phone) {
       return NextResponse.json(
         { error: "Missing required fields: full_name, phone" },
@@ -22,6 +25,7 @@ export async function POST(request: NextRequest) {
         product_of_interest: product_of_interest || null,
         message: message || null,
         source: source || null,
+        status: LeadStatus.NEW,
       },
     });
 
@@ -35,16 +39,22 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET /api/leads — Authenticated, list leads
+// GET /api/leads — Authenticated, list leads with optional status filter
 export async function GET(request: NextRequest) {
   try {
     await requireAuth();
 
     const searchParams = request.nextUrl.searchParams;
+    const status = searchParams.get("status");
     const skip = Number(searchParams.get("skip")) || 0;
     const take = Number(searchParams.get("take")) || 100;
 
+    const where = status
+      ? { status: status as LeadStatus }
+      : {};
+
     const leads = await prisma.lead.findMany({
+      where,
       orderBy: { created_at: "desc" },
       skip,
       take,

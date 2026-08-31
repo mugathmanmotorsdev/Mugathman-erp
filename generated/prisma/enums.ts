@@ -120,3 +120,12 @@ export const JobStatus = {
 } as const
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
+
+export const LeadStatus = {
+  NEW: 'NEW',
+  QUALIFIED: 'QUALIFIED',
+  DISQUALIFIED: 'DISQUALIFIED'
+} as const
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]

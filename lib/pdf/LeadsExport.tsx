@@ -8,6 +8,7 @@ import {
 } from "@react-pdf/renderer";
 import fs from "fs";
 import path from "path";
+import { LeadStatus } from "@generated/prisma/client";
 
 const styles = StyleSheet.create({
   page: {
@@ -96,6 +97,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1e293b",
   },
+  summaryValueNew: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#64748b",
+  },
+  summaryValueQualified: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#16a34a",
+  },
+  summaryValueDisqualified: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#dc2626",
+  },
   table: {
     marginBottom: 30,
   },
@@ -121,9 +137,9 @@ const styles = StyleSheet.create({
   },
   col1: { flex: 3, paddingRight: 16 },
   col2: { flex: 1, textAlign: "right" },
-  col3: { flex: 1, textAlign: "left" },
-  col4: { flex: 2, textAlign: "left" },
-  col5: { flex: 1, textAlign: "center" },
+  col3: { flex: 1, textAlign: "center" },
+  col4: { flex: 1, textAlign: "center" },
+  col5: { flex: 2, textAlign: "left" },
   leadName: {
     fontWeight: "bold",
     color: "#0f172a",
@@ -132,6 +148,29 @@ const styles = StyleSheet.create({
   textMuted: {
     fontSize: 8,
     color: "#64748b",
+  },
+  statusBadge: {
+    alignSelf: "flex-start",
+    paddingLeft: 6,
+    paddingRight: 6,
+    paddingTop: 2,
+    paddingBottom: 2,
+    borderRadius: 4,
+    fontSize: 7,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  statusNew: {
+    backgroundColor: "#f1f5f9",
+    color: "#475569",
+  },
+  statusQualified: {
+    backgroundColor: "#d1fae5",
+    color: "#065f46",
+  },
+  statusDisqualified: {
+    backgroundColor: "#fee2e2",
+    color: "#991b1b",
   },
   footer: {
     flexDirection: "row",
@@ -169,25 +208,39 @@ interface Lead {
   full_name: string;
   phone: string;
   product_of_interest: string | null;
-  message: string | null;
-  source: string | null;
+  status: LeadStatus;
   created_at: string;
 }
 
 interface LeadsExportProps {
   leads: Lead[];
-  totalCount: number;
+  newCount: number;
+  qualifiedCount: number;
+  disqualifiedCount: number;
   dateFrom?: string;
   dateTo?: string;
 }
 
 export function LeadsExportPDF({
   leads,
-  totalCount,
+  newCount,
+  qualifiedCount,
+  disqualifiedCount,
   dateFrom,
   dateTo,
 }: LeadsExportProps) {
   const logoUrl = getLogoBase64();
+
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case "QUALIFIED":
+        return styles.statusQualified;
+      case "DISQUALIFIED":
+        return styles.statusDisqualified;
+      default:
+        return styles.statusNew;
+    }
+  };
 
   return (
     <Document>
@@ -220,7 +273,19 @@ export function LeadsExportPDF({
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryLabel}>Total Leads</Text>
-            <Text style={styles.summaryValue}>{totalCount}</Text>
+            <Text style={styles.summaryValue}>{leads.length}</Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryLabel}>New</Text>
+            <Text style={styles.summaryValueNew}>{newCount}</Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryLabel}>Qualified</Text>
+            <Text style={styles.summaryValueQualified}>{qualifiedCount}</Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryLabel}>Disqualified</Text>
+            <Text style={styles.summaryValueDisqualified}>{disqualifiedCount}</Text>
           </View>
         </View>
 
@@ -230,7 +295,7 @@ export function LeadsExportPDF({
             <Text style={styles.col1}>Lead</Text>
             <Text style={styles.col2}>Phone</Text>
             <Text style={styles.col3}>Interest</Text>
-            <Text style={styles.col4}>Source</Text>
+            <Text style={styles.col4}>Status</Text>
             <Text style={styles.col5}>Date</Text>
           </View>
 
@@ -245,7 +310,9 @@ export function LeadsExportPDF({
                 {lead.product_of_interest ? lead.product_of_interest : <Text style={styles.textMuted}>—</Text>}
               </Text>
               <Text style={styles.col4}>
-                {lead.source ? lead.source : <Text style={styles.textMuted}>—</Text>}
+                <Text style={{ ...styles.statusBadge, ...getStatusStyle(lead.status) }}>
+                  {lead.status}
+                </Text>
               </Text>
               <Text style={styles.col5}>{new Date(lead.created_at).toLocaleDateString()}</Text>
             </View>

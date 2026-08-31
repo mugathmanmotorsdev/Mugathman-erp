@@ -291,6 +291,12 @@ enum JobStatus {
   FAILED
 }
 
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  DISQUALIFIED
+}
+
 model Lead {
   id                  String     @id @default(uuid())
   full_name           String
@@ -298,6 +304,8 @@ model Lead {
   product_of_interest String?
   message             String?
   source              String?
+  status              LeadStatus @default(NEW)
+  meta_conversion_id  String?
   created_at          DateTime   @default(now())
   updated_at          DateTime   @updatedAt
 
