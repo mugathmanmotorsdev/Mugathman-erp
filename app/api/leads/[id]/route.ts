@@ -53,6 +53,7 @@ export async function PATCH(
       where: { id },
       data: {
         status: status ? (status as LeadStatus) : lead.status,
+        notes: notes !== undefined ? notes : lead.notes,
         product_of_interest: product_of_interest !== undefined ? product_of_interest : lead.product_of_interest,
         message: message !== undefined ? message : lead.message,
         source: source !== undefined ? source : lead.source,

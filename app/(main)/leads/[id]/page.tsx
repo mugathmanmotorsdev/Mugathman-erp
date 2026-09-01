@@ -9,12 +9,14 @@ import {
   MessageSquare,
   UserCheck,
   XCircle,
+  Save,
   Send,
   Clock,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SkeletonUi from "@/components/SkeletonUi";
@@ -46,6 +48,8 @@ export default function LeadDetailPage({
   const router = useRouter();
   const [lead, setLead] = useState<Lead | null>(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [notes, setNotes] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
@@ -56,6 +60,7 @@ export default function LeadDetailPage({
         if (res.ok) {
           const data = await res.json();
           setLead(data);
+          setNotes(data.notes || "");
         } else {
           toast.error("Failed to load lead");
           router.push("/leads");
@@ -102,6 +107,28 @@ export default function LeadDetailPage({
       toast.error("Failed to update status");
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleSaveNotes = async () => {
+    if (!lead) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/leads/${lead.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes }),
+      });
+      if (res.ok) {
+        toast.success("Notes saved");
+      } else {
+        toast.error("Failed to save notes");
+      }
+    } catch (error) {
+      console.error("Error saving notes:", error);
+      toast.error("Failed to save notes");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -216,6 +243,34 @@ export default function LeadDetailPage({
                   {lead.message || "No message provided."}
                 </p>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Internal Notes */}
+          <Card className="rounded-2xl border-none shadow-xl shadow-slate-200/50 bg-white overflow-hidden">
+            <CardHeader className="bg-slate-50 border-b border-slate-100 flex flex-row items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                  <Save className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-lg">Internal Notes</CardTitle>
+              </div>
+              <Button
+                size="sm"
+                onClick={handleSaveNotes}
+                disabled={saving}
+                className="bg-[#150150] hover:bg-[#150150]/90 text-white rounded-xl"
+              >
+                {saving ? "Saving..." : "Save Notes"}
+              </Button>
+            </CardHeader>
+            <CardContent className="p-6">
+              <Textarea
+                placeholder="Add notes about this lead — discuss with the sales team..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="min-h-[120px] border-slate-200 rounded-2xl bg-slate-50/50 focus:ring-2 focus:ring-indigo-100 resize-none"
+              />
             </CardContent>
           </Card>
           </div>
