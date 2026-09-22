@@ -27,6 +27,8 @@ import StatCard from "@/components/StatCard";
 import SearchInput from "@/components/ui/SearchInput";
 import FilterBar from "@/components/ui/FilterBar";
 import FilterSelect from "@/components/ui/FilterSelect";
+import { DateRangePicker } from "@/components/ui/DateRangePicker";
+import { type DateRange } from "react-day-picker";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Sale } from "@/types/sale";
 import { useFormatCurrency } from "@/hooks/use-formatcurrency";
@@ -39,11 +41,26 @@ export default function SalesPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("ALL");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
-  const fetchSales = async () => {
+  const buildQueryParams = () => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("search", searchQuery);
+    if (paymentStatusFilter !== "ALL") params.set("paymentStatus", paymentStatusFilter);
+    if (dateRange?.from) params.set("dateFrom", dateRange.from.toISOString());
+    if (dateRange?.to) params.set("dateTo", dateRange.to.toISOString());
+    return params;
+  };
+
+  const fetchSales = async (range?: DateRange | undefined) => {
     try {
+      setLoading(true);
       setError(null);
-      const res = await fetch("/api/sales", { credentials: "include" });
+      const params = new URLSearchParams();
+      if (range?.from) params.set("dateFrom", range.from.toISOString());
+      if (range?.to) params.set("dateTo", range.to.toISOString());
+      const query = params.toString() ? `?${params.toString()}` : "";
+      const res = await fetch(`/api/sales${query}`, { credentials: "include" });
       if (!res.ok) {
         throw new Error(`HTTP error: ${res.status}`);
       }
@@ -59,8 +76,8 @@ export default function SalesPage() {
   };
 
   useEffect(() => {
-    fetchSales();
-  }, []);
+    fetchSales(dateRange);
+  }, [dateRange]);
 
   const calculateTotal = (items: Sale["sale_items"]) => {
     return items.reduce((acc, item) => acc + item.quantity * Number(item.unit_price), 0);
@@ -127,14 +144,23 @@ export default function SalesPage() {
             variant="outline"
             className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
             onClick={() => {
-              const params = new URLSearchParams()
-              if (searchQuery) params.set("search", searchQuery)
-              if (paymentStatusFilter !== "ALL") params.set("paymentStatus", paymentStatusFilter)
+              const params = buildQueryParams()
               window.open(`/api/export/sales?${params.toString()}`, "_blank")
             }}
           >
             <Download className="h-4 w-4 mr-2" />
             Export PDF
+          </Button>
+          <Button
+            variant="outline"
+            className="h-10 px-4 rounded-xl border-slate-200 font-bold text-sm text-slate-600"
+            onClick={() => {
+              const params = buildQueryParams()
+              window.open(`/api/export/regulatory-sales?${params.toString()}`, "_blank")
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Regulatory Export (EFCC)
           </Button>
           <Button
             onClick={() => router.push("/sales/new")}
@@ -197,6 +223,7 @@ export default function SalesPage() {
           triggerClassName="w-[170px] h-12 border-slate-200 rounded-xl text-sm font-bold text-slate-700 bg-white shadow-none"
           placeholder="Payment Status"
         />
+        <DateRangePicker value={dateRange} onChange={setDateRange} />
       </FilterBar>
 
       {/* Sales Table */}
@@ -229,7 +256,7 @@ export default function SalesPage() {
                         variant="outline"
                         size="sm"
                         className="mt-2 rounded-full"
-                        onClick={fetchSales}
+                        onClick={() => fetchSales(dateRange)}
                       >
                         Retry
                       </Button>

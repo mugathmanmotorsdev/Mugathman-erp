@@ -1,7 +1,34 @@
 import prisma from "@/lib/prisma";
-import { PaymentMethod } from "@generated/prisma/client";
+import { PaymentMethod, PaymentStatus, Prisma } from "@generated/prisma/client";
 
-export const getSales = async (skip = 0, take = 100) => {
+export interface SalesFilters {
+    dateFrom?: Date | string;
+    dateTo?: Date | string;
+    paymentStatus?: PaymentStatus;
+    search?: string;
+}
+
+export const getSales = async (skip = 0, take = 100, filters: SalesFilters = {}) => {
+    const where: Prisma.SaleWhereInput = {};
+
+    if (filters.dateFrom || filters.dateTo) {
+        where.created_at = {};
+        if (filters.dateFrom) where.created_at.gte = new Date(filters.dateFrom);
+        if (filters.dateTo) where.created_at.lte = new Date(filters.dateTo);
+    }
+
+    if (filters.paymentStatus) {
+        where.payment_status = filters.paymentStatus;
+    }
+
+    if (filters.search) {
+        where.OR = [
+            { sale_number: { contains: filters.search, mode: "insensitive" } },
+            { customer: { full_name: { contains: filters.search, mode: "insensitive" } } },
+            { customer: { phone: { contains: filters.search } } },
+        ];
+    }
+
     return await prisma.sale.findMany({
         include: {
             customer: true,
@@ -26,6 +53,7 @@ export const getSales = async (skip = 0, take = 100) => {
         orderBy: {
             created_at: 'desc'
         },
+        where,
         skip,
         take
     });

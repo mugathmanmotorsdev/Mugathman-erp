@@ -8,11 +8,26 @@ import prisma from "@/lib/prisma";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const skip = Number(searchParams.get("skip")) || 0;
-  const take = Number(searchParams.get("take")) || 10;
+  const take = Number(searchParams.get("take")) || 100;
+  const dateFrom = searchParams.get("dateFrom") || undefined;
+  const dateTo = searchParams.get("dateTo") || undefined;
+  const paymentStatusParam = searchParams.get("paymentStatus") || undefined;
+  const search = searchParams.get("search") || undefined;
 
   try {
     await requireAuth();
-    const sales = await getSales(skip, take);
+    const { PaymentStatus } = await import("@generated/prisma/client");
+    const paymentStatus =
+      paymentStatusParam &&
+      (Object.values(PaymentStatus) as string[]).includes(paymentStatusParam)
+        ? (paymentStatusParam as (typeof PaymentStatus)[keyof typeof PaymentStatus])
+        : undefined;
+    const sales = await getSales(skip, take, {
+      dateFrom,
+      dateTo,
+      paymentStatus,
+      search,
+    });
     return NextResponse.json(sales);
   } catch (error) {
     console.error("Error fetching sales:", error);
